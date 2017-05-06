@@ -1,0 +1,30 @@
+#navigation {
+    background-color: #0ABAB5;
+}
+
+#title {
+    font-weight: bolder;
+    color: #DD1D22;
+}
+
+#logo {
+    width: 5vw;
+    background-image: url(/images/Rebel-48.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    transition: width 2s, height 2s, transform 5s;
+}
+
+#logo:hover {
+    transform: rotateY(360deg);
+}
+
+.nav {
+    color: white;
+}
+
+.navbar .active a {
+    color: #0ABAB5;
+    background-color: #FDF8FF;
+}
