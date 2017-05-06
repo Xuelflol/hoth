@@ -1,0 +1,46 @@
+body {
+    margin: 0;
+    background-image: url(/images/Hoth_plains.jpg);
+}
+
+.form {
+    margin: 15px auto;
+    width: 50%;
+    text-align: center;
+}
+
+.inputs {
+    background-color: #2F8DB3;
+    color: #FDF8FF;
+    border: 1px solid #2F8DB3;
+}
+
+.inputs:hover {
+    background-color: #2257BF;
+    border: 1px solid #2257BF;
+}
+
+.buttons {
+    background-color: #333333;
+    color: #FDF8FF;
+    border: 1px solid #333333;
+}
+
+.buttons:hover {
+    background-color: black;
+    border: 1px solid black;
+}
+
+#history {
+    height: 65vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#profile_link {
+    color: #333333;
+}
+
+#cEmail {
+    padding-top: 100px;
+}

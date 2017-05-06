@@ -1,0 +1,42 @@
+body {
+    position: relative;
+    background-color: white;
+    margin: 0;
+}
+
+#cart {
+    background-color: rgba(47,141,179,0.5);
+    height: 88vh;
+    border: 2px solid #333333;
+    margin-top: 1vh;
+    text-align: center;
+    padding:0px;
+}
+
+#appetizers {
+    padding: 100px 25px;
+}
+
+#desserts {
+    padding: 100px 25px;
+}
+
+#drinks {
+    padding: 100px 25px;
+}
+
+#meals {
+    padding: 100px 25px;
+}
+
+#about{
+	padding: 100px 25px;
+}
+
+.imgs {
+    width: 100%;
+    height: 500px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}

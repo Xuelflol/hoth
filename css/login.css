@@ -1,0 +1,43 @@
+body {
+    margin: 0;
+    background-image: url(/images/rendition1.img.jpg);
+}
+
+#register {
+    margin: 100px auto;
+    width: 50%;
+    text-align: center;
+    display: none;
+}
+
+#sign_in {
+    margin: 100px auto;
+    width: 50%;
+    text-align: center;
+}
+
+.buttons {
+    background-color: #333333;
+    color: #FDF8FF;
+    border: 1px solid #333333;
+    margin: 15px auto;
+}
+
+.buttons:hover {
+    background-color: black;
+    border: 1px solid black;
+}
+
+.get {
+    text-align: center;
+    color: #DD1D22;
+    font-weight: bolder;
+    font-size: 150%;
+    margin: 15px auto;
+    width: 35%;
+    cursor:pointer;
+}
+
+.get:hover {
+    color: #f8c899;
+}
