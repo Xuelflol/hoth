@@ -5,6 +5,7 @@ footer{
 .fa-facebook {
   background: #3B5998;
   color: white;
+
 }
 .fa-twitter {
   background: #55ACEE;
@@ -18,10 +19,12 @@ footer{
   background: #ff5700;
   color: white;
 }
-ul {
-    list-style: url(/images/);
+ul {	
+    list-style-type:none;
 	
 }
+
+
 
 
 

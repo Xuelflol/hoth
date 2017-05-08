@@ -1,7 +1,7 @@
 body {
-    position: relative;
-    background-color: white;
-    margin: 0;
+	margin:0;
+	width:100vw;
+	background-image: url(/images/Hoth_plains.jpg);
 }
 
 #cart {
@@ -12,7 +12,6 @@ body {
     text-align: center;
     padding:0px;
 }
-
 #appetizers {
     padding: 100px 25px;
 }
@@ -39,4 +38,13 @@ body {
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
+}
+
+#imghoth{
+	background-size:contain;
+	width:100%;
+}
+#about-right{
+	background-color:azure;
+	padding:2vw 2vh 2vw 2vh;
 }
