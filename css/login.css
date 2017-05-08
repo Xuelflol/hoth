@@ -1,8 +1,12 @@
 body {
     margin: 0;
-    background-image: url(/images/rendition1.img.jpg);
+    background-image: url(/images/login_1.jpg);
+    -webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+    
 }
-
 
 #register {
     margin: 100px auto;
@@ -15,9 +19,7 @@ body {
     margin: 100px auto;
     width: 50%;
     text-align: center;
-	background-color:rgba(240,248,250,0.9);
-	padding:2vw 2vh 2vw 2vh;
-	border-radius: 10vh;
+    
 }
 
 .buttons {
@@ -36,7 +38,7 @@ body {
     text-align: center;
     color: #DD1D22;
     font-weight: bolder;
-    font-size: 90%;
+    font-size: 150%;
     margin: 15px auto;
     width: 35%;
     cursor:pointer;
@@ -44,11 +46,4 @@ body {
 
 .get:hover {
     color: #f8c899;
-}
-
-#logintag{
-	color:rgb(51,51,51);
-	padding-bottom:2vh;
-	font-size:300%;
-	font-family:fantasy;
 }

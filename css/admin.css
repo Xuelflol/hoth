@@ -33,11 +33,3 @@ max-width: 3vw;
 #admin-div{
 	height:auto;
 }
-#imghoth{
-	background-size:contain;
-	width:100%;
-}
-#about-right{
-	background-color:azure;
-	padding:2vw 2vh 2vw 2vh;
-}
