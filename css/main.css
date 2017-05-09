@@ -20,50 +20,83 @@ body {
     /*Fan_end---Background image style*/
 }
 
+/*Fan_start---3 column layout*/
+#container {
+	padding-left: 200px;
+	padding-right: 190px;
+	min-height:100%;
+	position:relative;
+    top: 0;
+}
+/*Fan_end---3 column layhout end*/
+
 #cart {
-    background-color: rgba(47,141,179,0.5);
+    position: fixed;
+    background-color: rgba(150,150,150,0.5);
     height: 88vh;
-    border: 2px solid #333333;
-    margin-top: 1vh;
-    text-align: center;
-    padding:0px;
+    top: 60px;
+    width: 50vw;
+    z-index: 1;
+    right: 0;
 }
 
-#appetizers {
-    padding: 100px 25px;
+#cart_link:hover {
+    background-color: #24292e;
+    color: white;
+}
+
+.cart_items {
+    height: 5%;
+    margin: 1vh;
+    background-color: grey;
+    padding: 0;
+}
+
+#holder {
+    height: 90%;
+    overflow-y: auto;
+}
+
+.remove {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.remove:hover {
+    color: white;
+}
+
+.item {
+    height: 100%;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
-#desserts {
-    padding: 100px 25px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+.price {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-#drinks {
+#appetizers, #desserts, #drinks, #meals, #about {
     padding: 100px 25px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-#meals {
-    padding: 100px 25px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-#about{
-	padding: 100px 25px;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .imgs {
     width: 100%;
-    height: 500px;
+    height: 200px;
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
 }
 
-/*Fan_start------------------------------------------------*/
-/*fix about us pic size*/
+.icon-bar {
+    background-color: white;
+}
+
 #imghoth{
     max-width:100%;
     max-height:100%;
@@ -75,6 +108,7 @@ body {
     width: 150px;
 }
 
+<<<<<<< HEAD
 .item_img {
     width:100%;
 }
@@ -85,4 +119,9 @@ body {
 
 .item_container:nth-child(3n+1) {
     clear:left;
+}
+/*Fan_start------------------------------------------------*/
+/*fix about us text border*/
+#teamhoth_txt {
+    border-bottom-style: solid;
 }
