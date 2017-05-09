@@ -20,9 +20,9 @@ footer{
   background: #ff5700;
   color: white;
 }
+
 ul {
-    list-style: url(/images/);
-	
+    list-style: disc;
 }
 
 
