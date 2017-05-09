@@ -10531,7 +10531,14 @@ return jQuery;
             success:function(resp) {
                 for (var i = 0; i < resp.length; i++) {
                     var container  = document.createElement("div");
-                    panel.clefault text-center";^M
+                    container.className = "col-sm-4 col-xs-12";
+                    var panel = document.createElement("div");
+                    panel.className = "panel panel-default text-center";
+                    var panelHeading = document.createElement("div");
+                    panelHeading.className = "panel-heading";
+                    panelHeading.innerHTML = "<h1>" + resp[i].item_name + "</h1>";
+                    var panelBody = document.createElement("div");
+                    panelBody.className = "panel-body";
                     var newImg = document.createElement("img");
                     newImg.src = "/images/" + resp[i].filename;
                     newImg.className = "item_img";
