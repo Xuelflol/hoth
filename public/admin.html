@@ -17,7 +17,7 @@
 	</head>
     
     <body data-spy="scroll" data-target=".navbar" data-offset="50">
-		        <nav id="navigation" class="navbar navbar-fixed-top">
+        <nav id="navigation" class="navbar navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <div id="logo" class="navbar-brand"></div>
@@ -32,19 +32,24 @@
 
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li><a id="appetizer_link" href="#appetizers">Appetizers</a></li>
-                        <li><a id="dessert_link" href="#desserts">Desserts</a></li>
-                        <li><a id="drink_link" href="#drinks">Drinks</a></li>
-                        <li><a id="meal_link" href="#meals">Meals</a></li>
-						<li><a id="about_link" href="#about">About Us</a></li>
+						<li><a id="appetizer_link" href="#appetizers" >Appetizers</a></li>
+                        <li><a id="dessert_link"  href="#desserts">Desserts</a></li>
+                        <li><a id="drink_link"  href="#drinks">Drinks</a></li>
+                        <li><a id="meal_link"  href="#meals">Meals</a></li>
+						<li><a id="about_link"  href="#about">About Us</a></li>
+						
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-                        <div id="sign_in_stuff">
-                            <li><a id="profile_link" href="/public/profile.html"><span class="glyphicon glyphicon-log-in"></span> Profile</a></li>
-                            <li id="logout"><a href="/logout" class="reg"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
+                        
+                        <!-- If user has id, hide login | signup, else, show sign_in_stuff -->
+                        
+						<div id="sign_in_stuff" class="container-fluid">
+                            <li class="col-lg-6 col-md-6 col-sm-12 col-xs-12"><a id="profile_link" href="/public/profile.html">Profile</a></li>
+                            <li id="logout" class="col-lg-6 col-md-6 col-sm-12 col-xs-12"><a id="logout_link" href="/logout" class="reg">Logout</a></li>
                         </div>
-                        <li id="login"><a href="/signin" class="reg"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        
+                        <li><a id="login" href="/signin" class="reg">Login | Signup</a></li>
                     </ul>
                 </div>
             </div>
