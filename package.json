@@ -1,0 +1,32 @@
+{
+  "name": "hoth",
+  "version": "1.0.0",
+  "description": "**DISCLAIMER**: This website is for a BCIT ACIT-2910 Summer 2017 project course. \r A food ordering web application for the Star Wars Rebel base, on Planet Hoth. This is a term p",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ACIT2910-HOTH/hoth.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ACIT2910-HOTH/hoth/issues"
+  },
+  "homepage": "https://github.com/ACIT2910-HOTH/hoth#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.1",
+    "bootstrap": "^3.3.7",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "jquery": "^3.2.1",
+    "pg": "^6.1.5",
+    "socket.io": "^2.0.1",
+    "webkit": "0.0.0",
+    "webpack": "^2.5.1"
+  }
+}
