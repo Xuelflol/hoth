@@ -10351,7 +10351,7 @@ return jQuery;
     var orders = {};
     var total_price = 0;
     
-    function updateQuantity(item, qty, price) {
+    /* function updateQuantity(item, qty, price) {
         if (!(item in orders)) {
             orders[item] = parseInt(qty);
         } else if (item in orders) {
@@ -10522,9 +10522,61 @@ return jQuery;
                 updateQuantity(item_code, qform.value, price);
             }
         });
+    } */
+    
+    function populateMenu(divname, url) {
+        $.ajax({
+            url:url,
+            type:"post",
+            success:function(resp) {
+                for (var i = 0; i < resp.length; i++) {
+                    var container  = document.createElement("div");
+                    container.className = "col-sm-4 col-xs-12";
+                    var panel = document.createElement("div");
+                    panel.className = "panel panel-default text-center";
+                    var panelHeading = document.createElement("div");
+                    panelHeading.className = "panel-heading";
+                    panelHeading.innerHTML = "<h1>" + resp[i].item_name + "</h1>";
+                    var panelBody = document.createElement("div");
+                    panelBody.className = "panel-body";
+                    var newImg = document.createElement("img");
+                    newImg.src = "/images/" + resp[i].filename;
+                    newImg.className = "item_img";
+                    panelBody.appendChild(newImg);
+                    var panelFooter = document.createElement("div");
+                    panelFooter.className = "panel-footer";
+                    var h4 = document.createElement("h4");
+                    h4.innerHTML = resp[i].description;
+                    var h3 = document.createElement("h3");
+                    h3.innerHTML = resp[i].price;
+                    panelFooter.appendChild(h4);
+                    panelFooter.appendChild(h3);
+
+                    // input
+                    // add button
+
+                    panel.appendChild(panelHeading);
+                    panel.appendChild(panelBody);
+                    panel.appendChild(panelFooter)
+                    container.appendChild(panel);
+                    divname.appendChild(container);
+
+                    var clearDiv = document.createElement("div");
+                    if ((i + 1) % 3 == 0) {
+                        clearDiv.className = "clearfix";
+                        divname.appendChild(clearDiv);
+                    }
+                }
+            }
+        });
     }
     
-    appetizers.addEventListener("click", function() {
+    populateMenu(appetizers, "/appetizers");
+    populateMenu(meals, "/meals");
+    populateMenu(drinks, "/drinks");
+    populateMenu(desserts, "/desserts");
+    
+    /*appetizers.addEventListener("click", function() {
         if (app_digit == 0) {
             $.ajax({
                 url:"/appetizer",
@@ -10612,11 +10664,11 @@ return jQuery;
                 document.getElementById("log_out").style.display = "inline";
             }
         }
-    });
+    });*/
     
-    document.getElementById("log_out").addEventListener("click", function() {
-        location.href = "/logout";
-    });
+    //document.getElementById("log_out").addEventListener("click", function() {
+       // location.href = "/logout";
+    //});
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 

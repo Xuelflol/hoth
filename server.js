@@ -5,9 +5,11 @@ const path = require("path");
 const port = process.env.PORT || 10000;
 const bodyParser = require("body-parser");
 const session = require("express-session");
+const fs = require("fs");
 
 var app = express();
 var pF = path.resolve(__dirname, "public");
+var imgFolder = path.resolve(__dirname, "images");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
@@ -61,7 +63,7 @@ app.post("/login", function(req, resp) {
     });
 });
 
-app.post("/appetizer", function(req, resp) {
+app.post("/appetizers", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_items WHERE category = 'a'", function(err, result) {
             done();
@@ -117,6 +119,18 @@ app.post("/user-cp", function(req, resp) {
         } 
     });
 });
+
+// functions
+
+function readDir(dirname, resp) {
+    fs.readdir(dirname, function(err, filenames) {        
+        if (err) {
+            console.log(err);
+        }
+
+        resp.send(filenames);
+    });
+}
 
 // redirects
 app.use("/scripts", express.static("build"));
