@@ -62,8 +62,10 @@ body {
     background-repeat: no-repeat;
 }
 
-/*Fan_start------------------------------------------------*/
-/*fix about us pic size*/
+.icon-bar {
+    background-color: white;
+}
+
 #imghoth{
     max-width:100%;
     max-height:100%;

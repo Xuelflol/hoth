@@ -43,8 +43,6 @@
 
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-
-
 						<li><a id="appetizer_link" href="#appetizers" >Appetizers</a></li>
                         <li><a id="dessert_link"  href="#desserts">Desserts</a></li>
                         <li><a id="drink_link"  href="#drinks">Drinks</a></li>
@@ -54,15 +52,15 @@
                     </ul>
 
                     <ul class="nav navbar-nav navbar-right">
-					
-						<!--Fan_start login/signup, profile and logout move to user login state only -->
-                        <!--
-						<div id="sign_in_stuff">
-                            <li><a id="profile_link" href="/public/profile.html"><span class="glyphicon glyphicon-log-in"></span> Profile</a></li>
-                            <li id="logout"><a href="/logout" class="reg"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
-                        </div>-->
-                        <li><a id="login" href="/signin" class="reg"><span class="glyphicon glyphicon-log-in"></span> Login | Signup</a></li>
-						<!--Fan_end login/signup -->
+                        
+                        <!-- If user has id, hide login | signup, else, show sign_in_stuff -->
+                        
+						<div id="sign_in_stuff" class="container-fluid">
+                            <li class="col-lg-6 col-md-6 col-sm-12 col-xs-12"><a id="profile_link" href="/public/profile.html">Profile</a></li>
+                            <li id="logout" class="col-lg-6 col-md-6 col-sm-12 col-xs-12"><a id="logout_link" href="/logout" class="reg">Logout</a></li>
+                        </div>
+                        
+                        <li><a id="login" href="/signin" class="reg">Login | Signup</a></li>
                     </ul>
                 </div>
             </div>
@@ -71,9 +69,6 @@
         <div id="appetizers" class="container-fluid">
             <div class="text-center">
                 <p><img id="appetizer_img" class = "menu_icon" src="/images/appetizer.png" /></p>
-                
-                
-                
             </div>
             
             <!-- 
