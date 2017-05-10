@@ -4,18 +4,19 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+	"test": "mocha"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Rc85/webapp.git"
+    "url": "git+https://github.com/ACIT2910-HOTH/hoth.git"
   },
-  "author": "",
+  "author": "Team-Hoth",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Rc85/webapp/issues"
+    "url": "https://github.com/ACIT2910-HOTH/hoth/issues"
   },
-  "homepage": "https://github.com/Rc85/webapp#readme",
+  "homepage": "https://github.com/ACIT2910-HOTH/hoth#readme",
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
@@ -25,5 +26,8 @@
     "socket.io": "^1.7.4",
     "webpack": "^2.5.1"
   },
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "mocha": "^3.3.0"
+  }
 }
