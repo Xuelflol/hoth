@@ -121,7 +121,7 @@ app.post("/user-cp", function(req, resp) {
                 var obj = {
                     status:"customer",
                     result:result.rows
-                }
+                };
 
                 resp.send(obj);
             });
