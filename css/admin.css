@@ -1,8 +1,7 @@
-body {
-    position: relative;
-    background-color: white;
-    margin: 0;
-    background: url(/images/Hoth_plains.jpg) no-repeat center top fixed; 
+body{
+	position:center;
+	margin:0;
+	background: url(../images/Hoth_plains.jpg) no-repeat center top fixed;
 	-webkit-background-size: cover;
 	-moz-background-size: cover;
 	-o-background-size: cover;
@@ -29,7 +28,6 @@ body {
 }
 
 .menu_icon {
-    
     height: 150px;
     width: 150px;
 }
@@ -44,10 +42,6 @@ body {
 
 .item_container:nth-child(3n+1) {
     clear:left;
-}
-
-#teamhoth_txt {
-    border-bottom-style: solid;
 }
 
 .btn-glyphicon {
@@ -79,5 +73,6 @@ body {
 }
 
 #admin-div{
+	margin-top:10vh;
 	height:auto;
 }
