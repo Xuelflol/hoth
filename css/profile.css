@@ -31,16 +31,14 @@ body {
     border: 1px solid black;
 }
 
-#history {
-    height: 65vh;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
 #profile_link {
     color: #333333;
 }
 
 #cEmail {
     padding-top: 100px;
+}
+
+#login {
+    display: none;
 }
