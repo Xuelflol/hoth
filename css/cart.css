@@ -41,6 +41,9 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    text-overflow: ellipse;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .price {
@@ -61,3 +64,11 @@
     background-color: black;
     border: 1px solid black;
 }
+
+@media (max-height: 550px) {
+    #cart {
+        position: absolute;
+        height: 500px;
+    }
+}
+
