@@ -1,4 +1,5 @@
 body{
+	position:center;
 	margin:0;
 	width:100vw;
 	background: url(../images/Hoth_plains.jpg) no-repeat center top fixed; 
@@ -36,5 +37,38 @@ body{
 }
 
 #admin-div{
+	margin-top:10vh;
 	height:auto;
+}
+
+#cart {
+    position: fixed;
+    background-color: rgba(150,150,150,0.5);
+    height: 88vh;
+    top: 60px;
+    width: 50vw;
+    z-index: 1;
+    right: 0;
+}
+
+#cart_link:hover {
+    background-color: #24292e;
+    color: white;
+}
+
+.cart_items {
+    height: 5%;
+    margin: 1vh;
+    background-color: grey;
+    padding: 0;
+}
+
+#holder {
+    height: 90%;
+    overflow-y: auto;
+}
+.menu_icon {
+    
+    height: 150px;
+    width: 150px;
 }
