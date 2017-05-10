@@ -52,6 +52,10 @@
     color: #fff !important;
 }
 
+.icon-bar {
+    background-color: white;
+}
+
 /*Fan - fix color scheme and behavior for nav bar*/
 #appetizer_link:hover, #dessert_link:hover, #drink_link:hover, #meal_link:hover, #about_link:hover, #login:hover, #logout_link:hover, #profile_link:hover {
     text-decoration: none;
