@@ -57,3 +57,17 @@ body {
 #teamhoth_txt {
     border-bottom-style: solid;
 }
+
+@media (max-width: 400px) {
+    .panel {
+        width: 150px;
+    }
+    
+    #about-right {
+        width: 200px;
+    }
+    
+    #about-left {
+        width: 200px;
+    }
+}
