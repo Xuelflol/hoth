@@ -18,61 +18,8 @@ body {
     top: 0;
 }
 
-#cart {
-    position: fixed;
-    background-color: rgba(150,150,150,0.5);
-    height: 88vh;
-    top: 60px;
-    z-index: 1;
-    right: 0;
-}
-
-#cart_link:hover {
-    background-color: #24292e;
-    color: white;
-}
-
-.cart_items {
-    height: 5%;
-    margin: 1vh;
-    background-color: grey;
-    padding: 0;
-}
-
-#holder {
-    height: 90%;
-    overflow-y: auto;
-}
-
-.remove {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.remove:hover {
-    color: white;
-}
-
-.item {
-    height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-.price {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
 #appetizers, #desserts, #drinks, #meals, #about {
     padding: 100px 25px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-}
-
-label {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
