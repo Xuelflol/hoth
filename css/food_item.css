@@ -50,6 +50,10 @@
     border: 1px solid #2257BF;
 }
 
+.item-control-input {
+    margin:5px;
+}
+
 .add {
     background-color: #333333;
     border: 1px solid #333333;

@@ -70,7 +70,6 @@ body {
 
 .item {
     height: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .price {
@@ -82,7 +81,6 @@ body {
 
 #appetizers, #desserts, #drinks, #meals, #about {
     padding: 100px 25px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 
 .imgs {
@@ -114,10 +112,6 @@ body {
 
 .item-container {
     float:left;
-}
-
-.item_container:nth-child(3n+1) {
-    clear:left;
 }
 /*Fan_start------------------------------------------------*/
 /*fix about us text border*/
