@@ -44,3 +44,7 @@ body {
 #cEmail {
     padding-top: 100px;
 }
+
+#login {
+    display: none;
+}
