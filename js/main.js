@@ -290,28 +290,56 @@ $(document).ready(function() {
         }
 
         submitCart.addEventListener("click", function() {
-           addToCart(item_name, item_code, price); 
+           addToCart(item_name, item_code, price, quantityInput.value); 
         });
     }
     
-    function addToCart(item_name, item_code, price) {
+    function addToCart(item_name, item_code, price, qty) {
         var container = document.createElement("div");
         container.className = "cart_items container-fluid";
+        container.id = "cart-item-" + item_code;
         var deleteButton = document.createElement("div");
-        deleteButton.className = "remove col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        deleteButton.className = "item-label col-lg-1 col-md-1 col-sm-2 col-xs-2";
         var deleteIcon = document.createElement("span");
         deleteIcon.className = "glyphicon glyphicon-remove";
         deleteButton.appendChild(deleteIcon);
         var itemName = document.createElement("div");
-        itemName.className = "item col-lg-10 col-md-10 col-sm-8 col-xs-8";
+        itemName.className = "item-label col-lg-9 col-md-9 col-sm-7 col-xs-7";
         itemName.innerHTML = item_name;
+        var qtyDiv = document.createElement("div");
+        qtyDiv.className = "item-label col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        qtyDiv.id = "cart-items-qty-" + item_code;
+        qtyDiv.innerHTML = qty;
         var priceDiv = document.createElement("div");
-        priceDiv.className = "price col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        priceDiv.className = "item-label col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        priceDiv.id = "cart-price-" + item_code;
         priceDiv.innerHTML = price;
+        var form = document.createElement("form");
+        form.id = "cart-form-" + item_code;
+        form.className = "item-control-form";
+        form.action = "javascript:console.log('updated');";
+        form.method = "post";
+        var cartQuantityInput = document.createElement("input");
+        cartQuantityInput.type = "number";
+        cartQuantityInput.min = "1";
+        cartQuantityInput.max = "5";
+        cartQuantityInput.name = "qty_input";
+        cartQuantityInput.id = "cart-qty-" + item_code;
+        cartQuantityInput.className = "item-control-input";
+        var updateCart = document.createElement("input");
+        updateCart.type = "submit";
+        updateCart.value = "Update";
+        updateCart.id = "cart-update-" + item_code;
+        updateCart.className = "item-control-input";
+        
+        form.appendChild(cartQuantityInput);
+        form.appendChild(updateCart);
         
         container.appendChild(deleteButton);
         container.appendChild(itemName);
+        container.appendChild(qtyDiv);
         container.appendChild(priceDiv);
+        container.appendChild(form);
         holderDiv.appendChild(container);
     }
     

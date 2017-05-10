@@ -23,12 +23,6 @@
     font-weight: bold;
 }
 
-.price {
-    font-size: 130%;
-    font-weight: bolder;
-    color: #111111;
-}
-
 #meals_div, #appetizers_div, #desserts_div, #drinks_div {
     display:none;
     width:100%;

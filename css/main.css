@@ -33,10 +33,9 @@ body {
 }
 
 .cart_items {
-    height: 5%;
     margin: 1vh;
-    background-color: grey;
-    padding: 0;
+    background-color: lightskyblue;
+    padding: 5px;
 }
 
 #holder {
@@ -44,26 +43,15 @@ body {
     overflow-y: auto;
 }
 
-.remove {
+.item-label {
     height: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
 }
 
 .remove:hover {
     color: white;
-}
-
-.item {
-    height: 100%;
-}
-
-.price {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 #appetizers, #desserts, #drinks, #meals, #about {
