@@ -1,3 +1,10 @@
+//travis ci test
+module.exports = {
+    add: function (a, b) {
+        return a + b;
+    }
+};
+
 // initializations
 const pg = require("pg");
 const express = require("express");
