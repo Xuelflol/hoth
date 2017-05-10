@@ -1,5 +1,5 @@
 var assert = require('assert');
-var calculator = require('../index');
+var calculator = require('../server');
 describe('calculator', function() {
     describe('add function', function() {
         it('adds numbers', function () {
