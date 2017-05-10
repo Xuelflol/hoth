@@ -10341,7 +10341,7 @@ return jQuery;
     var appetizersDiv = document.getElementById("appetizers_div");
     var dessertsDiv = document.getElementById("desserts_div");
     var drinksDiv = document.getElementById("drinks_div");
-    var items = document.getElementById("items");
+    var holderDiv = document.getElementById("holder");
     
     var app_digit = 0;
     var bev_digit = 0;
@@ -10524,57 +10524,129 @@ return jQuery;
         });
     } */
     
-    function populateMenu(divname, url) {
-        $.ajax({
-            url:url,
-            type:"post",
-            success:function(resp) {
-                for (var i = 0; i < resp.length; i++) {
-                    var container  = document.createElement("div");
-                    container.className = "col-sm-4 col-xs-12";
-                    var panel = document.createElement("div");
-                    panel.className = "panel panel-default text-center";
-                    var panelHeading = document.createElement("div");
-                    panelHeading.className = "panel-heading";
-                    panelHeading.innerHTML = "<h1>" + resp[i].item_name + "</h1>";
-                    var panelBody = document.createElement("div");
-                    panelBody.className = "panel-body";
-                    var newImg = document.createElement("img");
-                    newImg.src = "/images/" + resp[i].filename;
-                    newImg.className = "item_img";
-                    panelBody.appendChild(newImg);
-                    var panelFooter = document.createElement("div");
-                    panelFooter.className = "panel-footer";
-                    var h4 = document.createElement("h4");
-                    h4.innerHTML = resp[i].description;
-                    var h3 = document.createElement("h3");
-                    h3.innerHTML = resp[i].price;
-                    panelFooter.appendChild(h4);
-                    panelFooter.appendChild(h3);
-
-                    // input
-                    // add button
-
-                    panel.appendChild(panelHeading);
-                    panel.appendChild(panelBody);
-                    panel.appendChild(panelFooter)
-                    container.appendChild(panel);
-                    divname.appendChild(container);
-
-                    var clearDiv = document.createElement("div");
-                    if ((i + 1) % 3 == 0) {
-                        clearDiv.className = "clearfix";
-                        divname.appendChild(clearDiv);
-                    }
-                }
+    $.ajax({
+        url:"/meals",
+        type:"post",
+        success:function(resp) {
+            for (var i = 0; i < resp.length; i++) {
+                createItem(i, meals, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
             }
+        }
+    });
+    
+    $.ajax({
+        url:"/appetizers",
+        type:"post",
+        success:function(resp) {
+            for (var i = 0; i < resp.length; i++) {
+                createItem(i, appetizers, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
+            }
+        }
+    });
+    
+    $.ajax({
+        url:"/drinks",
+        type:"post",
+        success:function(resp) {
+            for (var i = 0; i < resp.length; i++) {
+                createItem(i, drinks, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
+            }
+        }
+    });
+    
+    $.ajax({
+        url:"/desserts",
+        type:"post",
+        success:function(resp) {
+            for (var i = 0; i < resp.length; i++) {
+                createItem(i, desserts, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
+            }
+        }
+    });
+    
+    function createItem(i, divname, item_name, item_code, price, filename, description) {
+        var container  = document.createElement("div");
+        container.className = "col-sm-4 col-xs-12";
+        var panel = document.createElement("div");
+        panel.className = "panel panel-default text-center";
+        var panelHeading = document.createElement("div");
+        panelHeading.className = "panel-heading";
+        panelHeading.innerHTML = "<h1>" + item_name + "</h1>";
+        var panelBody = document.createElement("div");
+        panelBody.className = "panel-body";
+        var newImg = document.createElement("img");
+        newImg.src = "/images/" + filename;
+        newImg.className = "item_img";
+        panelBody.appendChild(newImg);
+        var panelFooter = document.createElement("div");
+        panelFooter.className = "panel-footer";
+        var h4 = document.createElement("h4");
+        h4.innerHTML = description;
+        var h3 = document.createElement("h3");
+        h3.innerHTML = price;
+        panelFooter.appendChild(h4);
+        panelFooter.appendChild(h3);
+
+        var controlDiv = document.createElement("div");
+        var form = document.createElement("form");
+        form.id = "form-" + item_code;
+        form.className = "item-control-form";
+        form.action = "javascript:console.log('added');";
+        form.method = "post";
+        var quantityInput = document.createElement("input");
+        quantityInput.type = "number";
+        quantityInput.min = "1";
+        quantityInput.max = "5";
+        quantityInput.name = "qty_input";
+        quantityInput.id = "qty-" + item_code;
+        quantityInput.className = "item-control-input";
+        var submitCart = document.createElement("input");
+        submitCart.type = "submit";
+        submitCart.value = "Add to Cart";
+        submitCart.id = "add-" + item_code;
+        submitCart.className = "item-control-input";
+
+        form.appendChild(quantityInput);
+        form.appendChild(submitCart);
+        panelFooter.appendChild(form);
+
+        panel.appendChild(panelHeading);
+        panel.appendChild(panelBody);
+        panel.appendChild(panelFooter)
+        container.appendChild(panel);
+        divname.appendChild(container);
+
+        var clearDiv = document.createElement("div");
+        if ((i + 1) % 3 == 0) {
+            clearDiv.className = "clearfix";
+            divname.appendChild(clearDiv);
+        }
+
+        submitCart.addEventListener("click", function() {
+           addToCart(item_name, item_code, price); 
         });
     }
     
-    populateMenu(appetizers, "/appetizers");
-    populateMenu(meals, "/meals");
-    populateMenu(drinks, "/drinks");
-    populateMenu(desserts, "/desserts");
+    function addToCart(item_name, item_code, price) {
+        var container = document.createElement("div");
+        container.className = "cart_items container-fluid";
+        var deleteButton = document.createElement("div");
+        deleteButton.className = "remove col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        var deleteIcon = document.createElement("span");
+        deleteIcon.className = "glyphicon glyphicon-remove";
+        deleteButton.appendChild(deleteIcon);
+        var itemName = document.createElement("div");
+        itemName.className = "item col-lg-10 col-md-10 col-sm-8 col-xs-8";
+        itemName.innerHTML = item_name;
+        var priceDiv = document.createElement("div");
+        priceDiv.className = "price col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        priceDiv.innerHTML = price;
+        
+        container.appendChild(deleteButton);
+        container.appendChild(itemName);
+        container.appendChild(priceDiv);
+        holderDiv.appendChild(container);
+    }
     
     /*appetizers.addEventListener("click", function() {
         if (app_digit == 0) {
