@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "node node_modules/jshint/bin/jshint hello.js",
+    "test": "./node_modules/jshint/bin/jshint hello.js",
     "start": "node server.js"
   },
   "repository": {
