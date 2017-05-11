@@ -1,39 +1,203 @@
 body {
     margin: 0;
 	background-image: url(/images/Hoth_plains.jpg);
-    
 }
 
 #order-display{
 	background-color:rgba(240,240,250,0.6);
 	border: 2px solid #333333;
-	
+    overflow-y: auto;
 }
 
 #cart-total-div{
 	background-color:rgba(240,240,250,0.6);
 	border: 2px solid #333333;
-	
+    overflow-y: auto;
 }
 
 #order-cust-info{
 	background-color:rgba(240,240,250,0.6);
 	border: 2px solid #333333;
+    overflow: auto;
 }
 
 #order-submit-div{
-	background-color:rgba(240,240,250,0.6);
-	border: 2px solid #333333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #order-cancel-btn{
-	margin-top:2vh;
-	margin-left:2vw;
-	border-radius: 6vw;
+    border-radius: 6vw;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #order-submit-btn{
-	margin-top:2vh;
-	margin-left:4vw;
-	border-radius: 6vw;
+    border-radius: 6vw;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/*XS screen size*/
+@media (max-width: 767px) {
+    #order-display {
+        height: 100vh;
+    }
+    
+    #cart-total-div {
+        height: 80vh;
+    }
+    
+    #order-cust-info {
+        height: 20vh;
+    }
+    
+    #order-div {
+        height: 75%;
+    }
+    
+    #order-submit-div {
+        height: 15%;
+    }
+    
+    #order-cancel-btn{
+        margin-top: 20px;
+        width: 80px;
+    }
+
+    #order-submit-btn{
+        width: 80px;
+    }
+}
+
+
+/*SM screen size*/
+@media (min-width: 768px) and (max-width: 991px) {
+    #order-display {
+        height: 80vh;
+    }
+    
+    #cart-total-div {
+        height: 80vh;
+    }
+    
+    #order-cust-info {
+        height: 20vh;
+    }
+    
+    #order-div {
+        height: 75%;
+    }
+    
+    #order-submit-div {
+        height: 15%;
+    }
+    
+    #order-cancel-btn{
+        margin-top: 20px;
+        width: 80px;
+    }
+
+    #order-submit-btn{
+        width: 80px;
+    }
+}
+
+
+/*MD screen size*/
+@media (min-width: 992px) and (max-width: 1200px) {
+    #order-display {
+        height: 80vh;
+    }
+    
+    #cart-total-div {
+        height: 80vh;
+    }
+    
+    #order-cust-info {
+        height: 20vh;
+    }
+    
+    #order-div {
+        height: 75%;
+    }
+    
+    #order-submit-div {
+        height: 15%;
+    }
+    
+    #order-cancel-btn{
+        margin-top: 20px;
+        width: 80px;
+    }
+
+    #order-submit-btn{
+        width: 80px;
+    }
+}
+
+
+/*LG screen size*/
+@media (min-width: 1201px) {
+    #order-display {
+        height: 80vh;
+    }
+    
+    #cart-total-div {
+        height: 80vh;
+    }
+    
+    #order-cust-info {
+        height: 20vh;
+    }
+    
+    #order-div {
+        height: 75%;
+    }
+    
+    #order-submit-div {
+        height: 15%;
+    }
+    
+    #order-cancel-btn{
+        margin-top: 20px;
+        width: 80px;
+    }
+
+    #order-submit-btn{
+        width: 80px;
+    }
+}
+
+@media (max-height: 650px) {
+    #order-display {
+        height: 650px;
+    }
+    
+    #cart-total-div {
+        height: 650px;
+    }
+    
+    #order-cust-info {
+        height: 200px;
+    }
+    
+    #order-div {
+        height: 75%;
+    }
+    
+    #order-submit-div {
+        height: 15%;
+    }
+    
+    #order-cancel-btn{
+        margin-top: 20px;
+        width: 80px;
+    }
+
+    #order-submit-btn{
+        width: 80px;
+    }
 }

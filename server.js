@@ -22,7 +22,7 @@ var imgFolder = path.resolve(__dirname, "images");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:58nihcregor@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -164,7 +164,9 @@ app.get("/logout", function(req, resp) {
 app.get("/user_profile", function(req, resp) {
     if (req.session.auth == "C") {
         resp.sendFile(pF + "/profile.html");
-    } else {
+    } else if (req.session.auth == "A"){
+		resp.sendFile(pF + "/admin.html");
+	} else {
         resp.sendFile("/");
     }
 });
