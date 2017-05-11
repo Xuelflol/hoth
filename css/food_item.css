@@ -23,12 +23,6 @@
     font-weight: bold;
 }
 
-.price {
-    font-size: 130%;
-    font-weight: bolder;
-    color: #111111;
-}
-
 #meals_div, #appetizers_div, #desserts_div, #drinks_div {
     display:none;
     width:100%;
@@ -50,6 +44,10 @@
     border: 1px solid #2257BF;
 }
 
+.item-control-input {
+    margin:5px;
+}
+
 .add {
     background-color: #333333;
     border: 1px solid #333333;
@@ -60,4 +58,22 @@
 .add:hover {
     background-color: black;
     border: 1px solid black;
+}
+
+#warning {
+    border:1px solid black;
+    text-align:center;
+    padding:15px;
+    position:absolute;
+    background-color:rgb(0,200,255);
+    display:none;
+}
+
+#warning-container {
+    position:relative;
+    height:50px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events:none;
 }
