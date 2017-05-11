@@ -13,7 +13,6 @@
 }
 
 .cart_items {
-    height: 5%;
     margin: 1vh;
     background-color: grey;
     padding: 0;
@@ -29,6 +28,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    cursor:pointer;
 }
 
 .remove:hover {
@@ -46,7 +46,7 @@
     white-space: nowrap;
 }
 
-.price {
+.price, .cart-item-qty {
     height: 100%;
     display: flex;
     flex-direction: column;

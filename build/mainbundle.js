@@ -10342,6 +10342,11 @@ return jQuery;
     var dessertsDiv = document.getElementById("desserts_div");
     var drinksDiv = document.getElementById("drinks_div");
     var holderDiv = document.getElementById("holder");
+    var warningDiv = document.getElementById("warning");
+    
+    document.addEventListener("scroll", function() {
+        warningDiv.style.display = "none";
+    });
     
     var app_digit = 0;
     var bev_digit = 0;
@@ -10350,23 +10355,6 @@ return jQuery;
     
     var orders = {};
     var total_price = 0;
-    
-    /* function updateQuantity(item, qty, price) {
-        if (!(item in orders)) {
-            orders[item] = parseInt(qty);
-        } else if (item in orders) {
-            orders[item] = orders[item] + parseInt(qty);
-        }     
-        
-        var qtyupdate = document.getElementById("qcount_" + item);
-        
-        if (qtyupdate != null) {
-            qtyupdate.innerHTML = orders[item];
-        }
-        
-        total_price = total_price + qty * price;
-        console.log(total_price);
-    }*/
 
     $.ajax({
         url:"/meals",
@@ -10427,7 +10415,7 @@ return jQuery;
         var h4 = document.createElement("h4");
         h4.innerHTML = description;
         var h3 = document.createElement("h3");
-        h3.innerHTML = price;
+        h3.innerHTML = "$" + price;
         panelFooter.appendChild(h4);
         panelFooter.appendChild(h3);
 
@@ -10465,44 +10453,47 @@ return jQuery;
             clearDiv.className = "clearfix";
             divname.appendChild(clearDiv);
         }
-
-        var cartItem = document.getElementById("cart-item-" + item_code);
         
         submitCart.addEventListener("click", function(event) {
-            if(cartItem != undefined) {
+            var cartItem = document.getElementById("cart-item-" + item_code);
+            var itemQty = document.getElementById("qty-" + item_code);
+            
+            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 5) {
                 addToCart(item_name, item_code, price, quantityInput.value);
 
-                orders[item_code] = parseInt(quantityInput.value);
-            } else {
-                var warningDiv = document.createElement("div");
-                warningDiv.className = "warning";
-                warningDiv.innerHTML = "You already have this item in the cart";
-                warningDiv.top = event.clientY + "px";
-                warningDiv.left = event.clientX + "px";
+                orders[item_code] = parseInt(itemQty.value);
+                
+                total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
+            } else if (cartItem != null) {
+                warningDiv.style.display = "inline";
+                warningDiv.innerHTML = "You already have this item in the cart.";
+                warningDiv.style.top = event.pageY - 50 + "px";
+                warningDiv.style.left = event.pageX + "px";
             }
         });
     }
     
     function addToCart(item_name, item_code, price, qty) {
         var container = document.createElement("div");
-        container.className = "cart_items container-fluid";
+        container.className = "cart_items panel-default container-fluid";
         container.id = "cart-item-" + item_code;
         var deleteButton = document.createElement("div");
-        deleteButton.className = "item-label col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        deleteButton.className = "remove col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        deleteButton.id = "cart-delete-" + item_code;
         var deleteIcon = document.createElement("span");
         deleteIcon.className = "glyphicon glyphicon-remove";
         deleteButton.appendChild(deleteIcon);
         var itemName = document.createElement("div");
-        itemName.className = "item-label col-lg-9 col-md-9 col-sm-7 col-xs-7";
+        itemName.className = "item col-lg-8 col-md-8 col-sm-6 col-xs-6";
         itemName.innerHTML = item_name;
         var qtyDiv = document.createElement("div");
-        qtyDiv.className = "item-label col-lg-1 col-md-1 col-sm-2 col-xs-2";
+        qtyDiv.className = "cart-items-qty col-lg-2 col-md-2 col-sm-3 col-xs-3";
         qtyDiv.id = "cart-items-qty-" + item_code;
-        qtyDiv.innerHTML = qty;
+        qtyDiv.innerHTML = qty + " x ";
         var priceDiv = document.createElement("div");
         priceDiv.className = "item-label col-lg-1 col-md-1 col-sm-2 col-xs-2";
         priceDiv.id = "cart-price-" + item_code;
-        priceDiv.innerHTML = price;
+        priceDiv.innerHTML = "$" + price;
         var form = document.createElement("form");
         form.id = "cart-form-" + item_code;
         form.className = "item-control-form";
@@ -10530,6 +10521,26 @@ return jQuery;
         container.appendChild(priceDiv);
         container.appendChild(form);
         holderDiv.appendChild(container);
+        
+        var itemUpdate = document.getElementById("cart-update-" + item_code);
+        var deleteItem = document.getElementById("cart-delete-" + item_code);
+        var cartItem = document.getElementById("cart-item-" + item_code);
+        
+        itemUpdate.addEventListener("click", function() {
+            var itemQty = document.getElementById("cart-qty-" + item_code);
+            var itemPrice = document.getElementById("cart-price-" + item_code);
+            orders[item_code] = parseInt(itemQty.value);
+            
+            qtyDiv.innerHTML = itemQty.value + " x ";
+        });
+        
+        deleteItem.addEventListener("click", function() {
+            cartItem.parentNode.removeChild(cartItem);
+            
+            delete orders[item_code];
+            
+            console.log(orders);
+        });
     }
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
