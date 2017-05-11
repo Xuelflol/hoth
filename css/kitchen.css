@@ -67,14 +67,26 @@ body {
     }
 }
 
-@media (min-width: 992px) {
-    
+/*XS screen size*/
+@media (max-width: 600px) {
 }
 
-@media (max-height: 991px) {
-    
+
+/*XS screen size*/
+@media (min-width: 601px) and (max-width: 767px) {
 }
 
-@media (min-height: 992px) {
-    
+
+/*SM screen size*/
+@media (min-width: 768px) and (max-width: 991px) {
+}
+
+
+/*MD screen size*/
+@media (min-width: 992px) and (max-width: 1200px) {
+}
+
+
+/*LG screen size*/
+@media (min-width: 1201px) and (max-width: 1535px) {
 }
