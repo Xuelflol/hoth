@@ -10344,6 +10344,13 @@ return jQuery;
     var regPass = document.getElementById("rpassword");
     var regEmail = document.getElementById("remail");
     var regSubmit = document.getElementById("rsubmit");
+	var loginDiv = document.getElementById("login");
+	var logoutDiv = document.getElementById("logout");
+	var profileDiv = document.getElementById("profile_link");
+	
+	//initial
+	profileDiv.style.display = "none";
+	logoutDiv.style.display = "none";
     
     /*regSubmit.addEventListener("click", function() {
         $.ajax({
@@ -10378,11 +10385,15 @@ return jQuery;
     register.addEventListener("click", function() {
         regDiv.style.display = "inline";
         signInDiv.style.display = "none";
+		logoutDiv.style.display = "none";
+		profileDiv.style.display = "none";
     });
     
     signIn.addEventListener("click", function() {
         regDiv.style.display = "none";
         signInDiv.style.display = "inline";
+		logoutDiv.style.display = "none";
+		profileDiv.style.display = "none";
     });
     
     document.getElementById("back").addEventListener("click", function() {

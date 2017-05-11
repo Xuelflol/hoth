@@ -10524,6 +10524,78 @@ return jQuery;
         });
     } */
     
+// *************** Alex took out lines 195-263 ***************
+//    function populateMenu(divname, url) {
+//        $.ajax({
+//            url:url,
+//            type:"post",
+//            success:function(resp) {
+//                for (var i = 0; i < resp.length; i++) {
+//                    var container  = document.createElement("div");
+//                    container.className = "col-lg-2 col-md-4 col-sm-6 col-xs-12";
+//                    
+//                    var panel = document.createElement("div");
+//                    panel.className = "panel panel-default text-center";
+//                    
+//                    var panelHeading = document.createElement("div");
+//                    panelHeading.className = "panel-heading head";
+//                    panelHeading.innerHTML = "<h3>" + resp[i].item_name + "</h3>";
+//                    
+//                    var panelBody = document.createElement("div");
+//                    panelBody.className = "panel-body body";
+//                    
+//                    var imgHolder = document.createElement("div");
+//                    imgHolder.className = "menu_imgs";
+//                    
+//                    var newImg = document.createElement("img");
+//                    newImg.src = "/images/" + resp[i].filename;
+//                    newImg.className = "menu";
+//                    imgHolder.appendChild(newImg);
+//                    panelBody.appendChild(imgHolder);
+//                    
+//                    var panelFooter = document.createElement("div");
+//                    panelFooter.className = "panel-footer foot";
+//                    
+//                    var h4 = document.createElement("h4");
+//                    h4.innerHTML = resp[i].description;
+//                    
+//                    var h3 = document.createElement("h3");
+//                    h3.innerHTML = resp[i].price;
+//                    panelFooter.appendChild(h4);
+//                    panelFooter.appendChild(h3);
+//
+//                    var input = document.createElement("input");
+//                    input.type = "number";
+//                    input.className = "form-control";
+//                    
+//                    var button = document.createElement("button");
+//                    button.className = "btn btn-lg";
+//                    
+//                    panelFooter.appendChild(input);
+//                    panelFooter.appendChild(button);
+//
+//                    panel.appendChild(panelHeading);
+//                    panel.appendChild(panelBody);
+//                    panel.appendChild(panelFooter)
+//                    container.appendChild(panel);
+//                    divname.appendChild(container);
+//
+//                    var clearDiv = document.createElement("div");
+//                    if ((i + 1) % 3 == 0) {
+//                        clearDiv.className = "clearfix";
+//                        divname.appendChild(clearDiv);
+//                    }
+//                }
+//            }
+//        });
+//    }
+//    
+//    populateMenu(appetizers, "/appetizers");
+//    populateMenu(meals, "/meals");
+//    populateMenu(drinks, "/drinks");
+//    populateMenu(desserts, "/desserts");
+// *************** Alex took out lines 195-263 ***************
+
     $.ajax({
         url:"/meals",
         type:"post",
