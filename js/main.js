@@ -66,20 +66,30 @@ $(document).ready(function() {
     
     function createItem(i, divname, item_name, item_code, price, filename, description) {
         var container  = document.createElement("div");
-        container.className = "col-sm-4 col-xs-12";
+        container.className = "col-lg-2 col-md-4 col-sm-6 col-xs-12";
+        
         var panel = document.createElement("div");
         panel.className = "panel panel-default text-center";
+        
         var panelHeading = document.createElement("div");
-        panelHeading.className = "panel-heading";
+        panelHeading.className = "panel-heading head";
         panelHeading.innerHTML = "<h1>" + item_name + "</h1>";
+        
         var panelBody = document.createElement("div");
-        panelBody.className = "panel-body";
+        panelBody.className = "panel-body body";
+        
+        var imgDiv = document.createElement("div");
+        imgDiv.className = "menu-imgs";
+        
         var newImg = document.createElement("img");
         newImg.src = "/images/" + filename;
-        newImg.className = "item_img";
-        panelBody.appendChild(newImg);
+        newImg.className = "menu";
+        imgDiv.appendChild(newImg);
+        panelBody.appendChild(imgDiv);
+        
         var panelFooter = document.createElement("div");
-        panelFooter.className = "panel-footer";
+        panelFooter.className = "panel-footer foot";
+        
         var h4 = document.createElement("h4");
         h4.innerHTML = description;
         var h3 = document.createElement("h3");
@@ -99,12 +109,12 @@ $(document).ready(function() {
         quantityInput.max = "5";
         quantityInput.name = "qty_input";
         quantityInput.id = "qty-" + item_code;
-        quantityInput.className = "item-control-input";
+        quantityInput.className = "form-control";
         var submitCart = document.createElement("input");
         submitCart.type = "submit";
         submitCart.value = "Add to Cart";
         submitCart.id = "add-" + item_code;
-        submitCart.className = "item-control-input";
+        submitCart.className = "btn btn-lg";
 
         form.appendChild(quantityInput);
         form.appendChild(submitCart);
