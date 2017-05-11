@@ -73,10 +73,7 @@ $(document).ready(function() {
         var panelHeading = document.createElement("div");
         panelHeading.className = "panel-heading head";
         panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
-        
-        var panelBody = document.createElement("div");
-        panelBody.className = "panel-body body";
-        
+    
         var imgDiv = document.createElement("div");
         imgDiv.className = "menu-imgs";
         
@@ -127,10 +124,6 @@ $(document).ready(function() {
         divname.appendChild(container);
 
         var clearDiv = document.createElement("div");
-        if ((i + 1) % 3 == 0) {
-            clearDiv.className = "clearfix";
-            divname.appendChild(clearDiv);
-        }
         
         submitCart.addEventListener("click", function(event) {
             var cartItem = document.getElementById("cart-item-" + item_code);
