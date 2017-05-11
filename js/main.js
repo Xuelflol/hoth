@@ -66,20 +66,20 @@ $(document).ready(function() {
     
     function createItem(i, divname, item_name, item_code, price, filename, description) {
         var container  = document.createElement("div");
-        container.className = "col-sm-4 col-xs-12";
+        container.className = "col-lg-2 col-md-4 col-sm-6 col-xs-12";
         var panel = document.createElement("div");
         panel.className = "panel panel-default text-center";
         var panelHeading = document.createElement("div");
         panelHeading.className = "panel-heading";
-        panelHeading.innerHTML = "<h1>" + item_name + "</h1>";
+        panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
         var panelBody = document.createElement("div");
-        panelBody.className = "panel-body";
+        panelBody.className = "panel-body body";
         var newImg = document.createElement("img");
         newImg.src = "/images/" + filename;
         newImg.className = "item_img";
         panelBody.appendChild(newImg);
         var panelFooter = document.createElement("div");
-        panelFooter.className = "panel-footer";
+        panelFooter.className = "panel-footer foot";
         var h4 = document.createElement("h4");
         h4.innerHTML = description;
         var h3 = document.createElement("h3");
