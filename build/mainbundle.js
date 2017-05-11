@@ -10332,6 +10332,7 @@ return jQuery;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {    
+    // heroku deployment test
     var signInButton = document.getElementById("sign_in");
     var appetizers = document.getElementById("appetizers");
     var desserts = document.getElementById("desserts");
@@ -10398,20 +10399,27 @@ return jQuery;
     
     function createItem(i, divname, item_name, item_code, price, filename, description) {
         var container  = document.createElement("div");
-        container.className = "col-sm-4 col-xs-12";
+        container.className = "col-lg-2 col-md-4 col-sm-6 col-xs-12";
         var panel = document.createElement("div");
         panel.className = "panel panel-default text-center";
+        
         var panelHeading = document.createElement("div");
-        panelHeading.className = "panel-heading";
-        panelHeading.innerHTML = "<h1>" + item_name + "</h1>";
+        panelHeading.className = "panel-heading head";
+        panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
+    
+        var imgDiv = document.createElement("div");
+        imgDiv.className = "menu-imgs";
+        
         var panelBody = document.createElement("div");
-        panelBody.className = "panel-body";
+        panelBody.className = "panel-body body";
         var newImg = document.createElement("img");
         newImg.src = "/images/" + filename;
-        newImg.className = "item_img";
-        panelBody.appendChild(newImg);
+        newImg.className = "menu";
+        imgDiv.appendChild(newImg);
+        panelBody.appendChild(imgDiv);
+        
         var panelFooter = document.createElement("div");
-        panelFooter.className = "panel-footer";
+        panelFooter.className = "panel-footer foot";
         var h4 = document.createElement("h4");
         h4.innerHTML = description;
         var h3 = document.createElement("h3");
@@ -10431,12 +10439,12 @@ return jQuery;
         quantityInput.max = "5";
         quantityInput.name = "qty_input";
         quantityInput.id = "qty-" + item_code;
-        quantityInput.className = "item-control-input";
+        quantityInput.className = "form-control";
         var submitCart = document.createElement("input");
         submitCart.type = "submit";
         submitCart.value = "Add to Cart";
         submitCart.id = "add-" + item_code;
-        submitCart.className = "item-control-input";
+        submitCart.className = "btn btn-lg";
 
         form.appendChild(quantityInput);
         form.appendChild(submitCart);
@@ -10449,10 +10457,10 @@ return jQuery;
         divname.appendChild(container);
 
         var clearDiv = document.createElement("div");
-        if ((i + 1) % 3 == 0) {
-            clearDiv.className = "clearfix";
-            divname.appendChild(clearDiv);
-        }
+        //if ((i + 1) % 6 == 0) {
+        //    clearDiv.className = "clearfix";
+        //    divname.appendChild(clearDiv);
+        //}
         
         submitCart.addEventListener("click", function(event) {
             var cartItem = document.getElementById("cart-item-" + item_code);
