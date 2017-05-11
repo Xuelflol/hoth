@@ -1,4 +1,5 @@
 $(document).ready(function() {    
+    // heroku deployment test
     var signInButton = document.getElementById("sign_in");
     var appetizers = document.getElementById("appetizers");
     var desserts = document.getElementById("desserts");
