@@ -129,19 +129,6 @@ app.post("/user-cp", function(req, resp) {
     });
 });
 
-// functions
-
-function readDir(dirname, resp) {
-    fs.readdir(dirname, function(err, filenames) {        
-        if (err) {
-            console.log(err);
-        }
-
-        resp.send(filenames);
-    });
-}
-
-// redirects
 app.use("/scripts", express.static("build"));
 
 app.use("/images", express.static("images"));
