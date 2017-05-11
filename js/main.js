@@ -69,15 +69,25 @@ $(document).ready(function() {
         container.className = "col-lg-2 col-md-4 col-sm-6 col-xs-12";
         var panel = document.createElement("div");
         panel.className = "panel panel-default text-center";
+        
         var panelHeading = document.createElement("div");
-        panelHeading.className = "panel-heading";
+        panelHeading.className = "panel-heading head";
         panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
+        
+        var panelBody = document.createElement("div");
+        panelBody.className = "panel-body body";
+        
+        var imgDiv = document.createElement("div");
+        imgDiv.className = "menu-imgs";
+        
         var panelBody = document.createElement("div");
         panelBody.className = "panel-body body";
         var newImg = document.createElement("img");
         newImg.src = "/images/" + filename;
-        newImg.className = "item_img";
-        panelBody.appendChild(newImg);
+        newImg.className = "menu";
+        imgDiv.appendChild(newImg);
+        panelBody.appendChild(imgDiv);
+        
         var panelFooter = document.createElement("div");
         panelFooter.className = "panel-footer foot";
         var h4 = document.createElement("h4");
@@ -99,12 +109,12 @@ $(document).ready(function() {
         quantityInput.max = "5";
         quantityInput.name = "qty_input";
         quantityInput.id = "qty-" + item_code;
-        quantityInput.className = "item-control-input";
+        quantityInput.className = "form-control";
         var submitCart = document.createElement("input");
         submitCart.type = "submit";
         submitCart.value = "Add to Cart";
         submitCart.id = "add-" + item_code;
-        submitCart.className = "item-control-input";
+        submitCart.className = "btn btn-lg";
 
         form.appendChild(quantityInput);
         form.appendChild(submitCart);
