@@ -70,7 +70,7 @@ $(document).ready(function() {
         var panel = document.createElement("div");
         panel.className = "panel panel-default text-center";
         var panelHeading = document.createElement("div");
-        panelHeading.className = "panel-heading";
+        panelHeading.className = "panel-heading head";
         panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
         var panelBody = document.createElement("div");
         panelBody.className = "panel-body body";
