@@ -1,5 +1,4 @@
 /*jshint esversion: 6 */
-//TESTING
 
 module.exports = {
     add: function (a, b) {
