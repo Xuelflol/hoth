@@ -21,6 +21,8 @@
     "express": "^4.15.2",
     "express-session": "^1.15.2",
     "jquery": "^3.2.1",
+    "jshint": "^2.9.4",
+    "mocha": "^3.3.0",
     "pg": "^6.1.5",
     "socket.io": "^1.7.4",
     "webpac": "^1.0.1",
