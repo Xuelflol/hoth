@@ -9,7 +9,9 @@ var config = {
         "login":jsFolder + "/login.js",
         "main":jsFolder + "/main.js",
         "admin":jsFolder + "/admin.js",
-        "navbar":jsFolder + "/navbar.js"
+        "navbar":jsFolder + "/navbar.js",
+        "orders":jsFolder + "/orders.js",
+        "kitchen":jsFolder + "/kitchen.js"
     },
     output:{
         filename:"[name]bundle.js",

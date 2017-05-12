@@ -63,12 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10328,28 +10327,25 @@ return jQuery;
 
 
 /***/ }),
-
-/***/ 5:
+/* 1 */,
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {
-    $.ajax({
-        url:"/user-cp",
-        type:"post",
-        success:function(resp) {
-            console.log("a: " + resp);
-            var profileLink = document.getElementById("profile_link");
-            var logoutLink = document.getElementById("logout_link");
-
-            if (resp.status = "customer") {
-                profileLink.style.display = "inline";
-                logoutLink.style.display = "inline";
-            }
-        }
+    var ordersContainer = document.getElementById("orders");
+    var socket = io();
+    
+    socket.on("create message", function(order) {
+        var orderNum = document.createElement("div");
+        var orderList = document.createElement("div");
+        var orderTimeLeft = document.createElement("div");
+        
+        orderNum.innerHTML = "#1";
+        
+        console.log(Object.keys(order)[0], Object.values(order)[0]);
     });
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
-
-/******/ });
+/******/ ]);

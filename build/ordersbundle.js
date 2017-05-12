@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -10329,23 +10329,18 @@ return jQuery;
 
 /***/ }),
 
-/***/ 5:
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {
-    $.ajax({
-        url:"/user-cp",
-        type:"post",
-        success:function(resp) {
-            console.log("a: " + resp);
-            var profileLink = document.getElementById("profile_link");
-            var logoutLink = document.getElementById("logout_link");
+    var submitButton = document.getElementById("order-submit-btn");
+    var socket = io();
+    var orders = {"han_burger": 3, "lightsabre_fries": 4};
 
-            if (resp.status = "customer") {
-                profileLink.style.display = "inline";
-                logoutLink.style.display = "inline";
-            }
-        }
+    submitButton.addEventListener("click", function() {
+        socket.emit("send message", orders);
+        
+        console.log("orders submitted");
     });
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
