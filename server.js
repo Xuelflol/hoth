@@ -128,6 +128,28 @@ app.post("/user-cp", function(req, resp) {
     });
 });
 
+app.post("/changeEmail", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_users SET email = $1 WHERE user_id = $2", [req.body.email, req.session.loginid], function(err, result) {
+            done();
+            
+            console.log(req.session.loginid);
+            
+            resp.redirect(pF + "/profile.html");
+        });
+    });
+});
+
+app.post("/changePassword", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_users SET password = $1 WHERE user_id = $2", [req.body.password, req.session.loginid], function(err, result) {
+            done();
+            
+            resp.redirect(pF + "/profile.html");
+        });
+    });
+});
+
 app.use("/scripts", express.static("build"));
 
 app.use("/images", express.static("images"));
@@ -137,7 +159,6 @@ app.use("/css", express.static("css"));
 app.use("/public", express.static("public"));
 
 app.get("/", function(req, resp) {
-    
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");
     } else if (req.session.auth == "E") {

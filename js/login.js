@@ -63,8 +63,4 @@ $(document).ready(function() {
 		logoutDiv.style.display = "none";
 		profileDiv.style.display = "none";
     });
-    
-    document.getElementById("back").addEventListener("click", function() {
-        location.href = "/";
-    });
 });
