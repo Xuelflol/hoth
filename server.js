@@ -128,6 +128,28 @@ app.post("/user-cp", function(req, resp) {
     });
 });
 
+app.post("/changeEmail", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_users SET email = $1 WHERE user_id = $2", [req.body.email, req.session.loginid], function(err, result) {
+            done();
+            
+            resp.send("Email has been changed");
+            resp.end();
+        });
+    });
+});
+
+app.post("/changePassword", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_users SET password = $1 WHERE user_id = $2", [req.body.password, req.session.loginid], function(err, result) {
+            done();
+            
+            resp.send("Password has been changed");
+            resp.end();
+        });
+    });
+});
+
 app.use("/scripts", express.static("build"));
 
 app.use("/images", express.static("images"));
@@ -137,11 +159,18 @@ app.use("/css", express.static("css"));
 app.use("/public", express.static("public"));
 
 app.get("/", function(req, resp) {
-    
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");
     } else if (req.session.auth == "E") {
         resp.sendFile(pF + "/kitchen.html");
+    } else {
+        resp.sendFile(pF + "/main.html");
+    }
+});
+
+app.get("/profile", function(req, resp) {
+    if(req.session.auth == "C") {
+        resp.sendFile(pF + "/profile.html");
     } else {
         resp.sendFile(pF + "/main.html");
     }
@@ -168,6 +197,29 @@ app.get("/user_profile", function(req, resp) {
 	} else {
         resp.sendFile("/");
     }
+});
+
+app.get("/checkout", function(req, resp) {
+    resp.sendFile(pF + "/orders.html");
+});
+
+//socket
+io.on("connection", function(socket) {
+    //socket.on("join room", function(room) {
+    //    socket.room = room;
+    //    socket.join = socket.room;
+    //    
+    //    console.log(socket.room);
+    //});
+    
+    socket.join("connected");
+    
+    console.log("you are in room connected");
+    
+    socket.on("send message", function(orders) {
+        console.log("order submitted")
+        io.to("connected").emit("create message", orders);
+    });
 });
 
 // server

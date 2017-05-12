@@ -7,7 +7,11 @@ var jsFolder = path.resolve(__dirname, "js");
 var config = {
     entry:{
         "login":jsFolder + "/login.js",
-        "main":jsFolder + "/main.js"
+        "main":jsFolder + "/main.js",
+        "admin":jsFolder + "/admin.js",
+        "navbar":jsFolder + "/navbar.js",
+        "orders":jsFolder + "/orders.js",
+        "kitchen":jsFolder + "/kitchen.js"
     },
     output:{
         filename:"[name]bundle.js",
