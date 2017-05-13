@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>Kitchen</title>
         
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -19,17 +19,8 @@
         <div id="container">
             <label>Orders</label>
             
-            <div class="item container-fluid">
-                <div class="id col-lg-1 col-md-1 col-sm-1 col-xs-2">#1</div>
-                
-                <div class="order col-lg-10 col-md-10 col-sm-9 col-xs-8">
-                    <div class="order_item">contentas df fsdaf sadf safsdafa sadf sd sdf sdaf</div>
-                    <div class="order_item">contenasdft asdfasfas asd fsaf saf asdfsa fasd fsd sa</div>
-                    <div class="order_item">asdfasdfsadf asdfasdfsa asdf as asfasfsafdsa sadf</div>
-                    <div class="order_item">ajdfklasjflkas afkajf; alkjflasdjl</div>
-                </div>
-                
-                <div class="time col-lg-1 col-md-1 col-sm-2 col-xs-2">50s</div>
+            <div id="orders" class="item container-fluid">
+
             </div>
             
         </div>
@@ -41,5 +32,8 @@
         <div id="order_num">
             <label>Orders: 100</label>
         </div>
+        
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/scripts/kitchenbundle.js"></script>
     </body>
 </html>

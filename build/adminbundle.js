@@ -10332,6 +10332,7 @@ return jQuery;
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){
 	var addbut = document.getElementById("addbut");
+<<<<<<< HEAD
 	var itemName = document.getElementById("item-name");
 	var itemCat = document.getElementById("item-cat");
 	var itemDesc = document.getElementById("item-desc");
@@ -10408,6 +10409,15 @@ return jQuery;
 	
 
 	
+=======
+	
+	
+	addbut.addEventListener("click",function(){
+		
+		
+	});
+	
+>>>>>>> e52a50a9948df0dc0738fcd7315f4b5db44890a7
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
