@@ -129,6 +129,19 @@ app.post("/user-cp", function(req, resp) {
     });
 });
 
+app.post("/adminItems", function(req,resp){
+	console.log(req.body);
+	if(req.body.type == "create"){
+		resp.send({
+			status:"success",
+			name: req.body.name,
+			img:req.body.img,
+			desc:req.body.desc,
+			price:req.body.price		
+		});
+	}
+});
+
 app.use("/scripts", express.static("build"));
 
 app.use("/images", express.static("images"));

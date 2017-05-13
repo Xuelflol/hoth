@@ -38,15 +38,48 @@ body {
     margin-left: auto;
     margin-right: auto;
 }
+ul{
+	list-style-type:none;
+	margin: 0; 
+	padding: 0;
+}
+
+li{
+	margin-left:1vw; 
+	padding: 0;
+	
+}
+
+hr.style2 {
+	border-top: 4px double #8c8b8b;
+}
+
+#cancel-but{
+	font-size:2em;
+	margin-left:1vw;
+	margin-top:4vh;
+	height:7vh;
+	width:40%;
+}
+
+#checkout-but{
+	font-size:2em;
+	margin-left:1vw;
+	margin-top:4vh;
+	height:7vh;
+	width:50%;
+	
+}
 
 
 /*XS screen size*/
 @media (max-width: 767px) {
     #order-display {
-        height: 100vh;
+        height: 80vh;
     }
     
     #cart-total-div {
+		font-size:0.8em;
         height: 80vh;
     }
     
@@ -70,6 +103,10 @@ body {
     #order-submit-btn{
         width: 80px;
     }
+	
+	h3{
+	font-size:1em;
+	}
 }
 
 
@@ -103,6 +140,9 @@ body {
     #order-submit-btn{
         width: 80px;
     }
+	h3{
+	font-size:1em;
+	}
 }
 
 
@@ -142,7 +182,7 @@ body {
 /*LG screen size*/
 @media (min-width: 1201px) {
     #order-display {
-        height: 80vh;
+        height: 100vh;
     }
     
     #cart-total-div {
