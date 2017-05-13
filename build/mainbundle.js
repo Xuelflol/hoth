@@ -10580,7 +10580,7 @@ return jQuery;
                 orders:orders
             },
             success:function(resp){
-                location.href = "/orders";
+                location.href = "/checkout";
         }
         })
     })

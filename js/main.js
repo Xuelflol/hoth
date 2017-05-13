@@ -245,7 +245,7 @@ $(document).ready(function() {
                 orders:orders
             },
             success:function(resp){
-                location.href = "/orders";
+                location.href = "/checkout";
         }
         })
     })

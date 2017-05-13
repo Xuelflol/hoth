@@ -62,6 +62,7 @@ app.post("/login", function(req, resp) {
                 req.session.loginid = result.rows[0].user_id;
                 req.session.pass = result.rows[0].password;
                 req.session.auth = result.rows[0].auth_level;
+                req.session.fname = result.rows[0].first_name;
                 
                 resp.redirect("/");
             } else {
@@ -179,7 +180,9 @@ app.post("/get/orders",function(req,resp){
     resp.send({
         status:"success",
         orders:orders,
-        username: req.session.username
+        username: req.session.username,
+        fname:req.session.fname,
+        email:req.session.email
     })
 }); 
 
@@ -321,6 +324,7 @@ app.get("/user_profile", function(req, resp) {
 app.get("/checkout", function(req, resp) {
     resp.sendFile(pF + "/orders.html");
 });
+
 
 //socket
 io.on("connection", function(socket) {
