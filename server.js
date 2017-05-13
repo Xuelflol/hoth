@@ -142,6 +142,7 @@ app.post("/adminItems", function(req,resp){
 	}
 });
 
+
 app.post("/changeEmail", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_users SET email = $1 WHERE user_id = $2", [req.body.email, req.session.loginid], function(err, result) {
