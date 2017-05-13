@@ -21,7 +21,7 @@ var imgFolder = path.resolve(__dirname, "images");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:58nihcregor@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -126,6 +126,19 @@ app.post("/user-cp", function(req, resp) {
             });
         } 
     });
+});
+
+app.post("/adminItems", function(req,resp){
+	console.log(req.body);
+	if(req.body.type == "create"){
+		resp.send({
+			status:"success",
+			name: req.body.name,
+			img:req.body.img,
+			desc:req.body.desc,
+			price:req.body.price		
+		});
+	}
 });
 
 app.post("/changeEmail", function(req, resp) {
@@ -262,6 +275,9 @@ app.use("/css", express.static("css"));
 app.use("/public", express.static("public"));
 
 app.get("/", function(req, resp) {
+    if(req.session.username == undefined){
+        req.ression.username = 'guest'
+    }
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");
     } else if (req.session.auth == "E") {
@@ -305,10 +321,6 @@ app.get("/user_profile", function(req, resp) {
 app.get("/checkout", function(req, resp) {
     resp.sendFile(pF + "/orders.html");
 });
-
-app.get("/orders",function(req,resp){
-    resp.sendFile(pF + "/orders.html")
-})
 
 //socket
 io.on("connection", function(socket) {

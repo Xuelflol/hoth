@@ -12,6 +12,7 @@ var config = {
         "navbar":jsFolder + "/navbar.js",
         "orders":jsFolder + "/orders.js",
         "kitchen":jsFolder + "/kitchen.js"
+
     },
     output:{
         filename:"[name]bundle.js",
