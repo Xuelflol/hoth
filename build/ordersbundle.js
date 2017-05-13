@@ -63,11 +63,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10327,15 +10328,16 @@ return jQuery;
 
 
 /***/ }),
-/* 1 */,
-/* 2 */,
-/* 3 */
+
+/***/ 6:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){    
     var orderDispaly = document.getElementById("order-div");
     var submitButton = document.getElementById("order-submit-btn"),
         cancelButton = document.getElementById("order-cancel-btn");
+    
+    var socket = io();
     
     
     var orders = {};
@@ -10349,17 +10351,10 @@ return jQuery;
         url:"/get/orders",
         type:"post",
         success:function(resp){
-            console.log(resp)
             orders = resp.orders[0];
             getOrderItems(orders)
-            console.log(itemName)
-            console.log(itemQuantity)
-            console.log(itemPrice)
             
-            console.log(itemName[0])
-             console.log(itemQuantity[0])
             for(var i=0; i<itemQuantity.length;i++){
-                console.log(i)
                 var itemTotalPrice = itemPrice[i] * itemQuantity[i];
 
                 var newD = document.createElement('div');
@@ -10423,12 +10418,16 @@ return jQuery;
                                 id:orderId
                             },
                             success:function(resp){
-                                alert("order created")
+                               
                             }
                         })
                     }
                 }
             })
+        
+        socket.emit("send message", orders);
+        
+        console.log("orders submitted");
         
         
         
@@ -10438,9 +10437,9 @@ return jQuery;
         location.href = "/"
     })
     
- 
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
-/******/ ]);
+
+/******/ });

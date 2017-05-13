@@ -3,6 +3,8 @@ $(document).ready(function(){
     var submitButton = document.getElementById("order-submit-btn"),
         cancelButton = document.getElementById("order-cancel-btn");
     
+    var socket = io();
+    
     
     var orders = {};
     var itemName = [];
@@ -15,17 +17,10 @@ $(document).ready(function(){
         url:"/get/orders",
         type:"post",
         success:function(resp){
-            console.log(resp)
             orders = resp.orders[0];
             getOrderItems(orders)
-            console.log(itemName)
-            console.log(itemQuantity)
-            console.log(itemPrice)
             
-            console.log(itemName[0])
-             console.log(itemQuantity[0])
             for(var i=0; i<itemQuantity.length;i++){
-                console.log(i)
                 var itemTotalPrice = itemPrice[i] * itemQuantity[i];
 
                 var newD = document.createElement('div');
@@ -96,6 +91,10 @@ $(document).ready(function(){
                 }
             })
         
+        socket.emit("send message", orders);
+        
+        console.log("orders submitted");
+        
         
         
     })
@@ -104,5 +103,4 @@ $(document).ready(function(){
         location.href = "/"
     })
     
- 
 });

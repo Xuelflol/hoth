@@ -8,7 +8,10 @@ var config = {
     entry:{
         "login":jsFolder + "/login.js",
         "main":jsFolder + "/main.js",
-        "orders":jsFolder+"/orders.js"
+        "admin":jsFolder + "/admin.js",
+        "navbar":jsFolder + "/navbar.js",
+        "orders":jsFolder + "/orders.js",
+        "kitchen":jsFolder + "/kitchen.js"
     },
     output:{
         filename:"[name]bundle.js",

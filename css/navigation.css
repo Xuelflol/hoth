@@ -56,8 +56,12 @@
     background-color: white;
 }
 
+#profile_link, #logout_link {
+    display:none;
+}
+
 /*Fan - fix color scheme and behavior for nav bar*/
-#appetizer_link:hover, #dessert_link:hover, #drink_link:hover, #meal_link:hover, #about_link:hover, #login:hover, #logout_link:hover, #profile_link:hover {
+#appetizer_link:hover, #dessert_link:hover, #drink_link:hover, #meal_link:hover, #about_link:hover, #login:hover, #logout_link:hover, #profile_link:hover, #logout:hover {
     text-decoration: none;
     background-color: #24292e;
     color: #fff;
