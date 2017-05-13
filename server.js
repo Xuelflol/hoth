@@ -276,7 +276,7 @@ app.use("/public", express.static("public"));
 
 app.get("/", function(req, resp) {
     if(req.session.username == undefined){
-        req.ression.username = 'guest'
+        req.session.username = 'guest'
     }
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");
