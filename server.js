@@ -128,7 +128,6 @@ app.post("/user-cp", function(req, resp) {
     });
 });
 
-<<<<<<< HEAD
 app.post("/adminItems", function(req,resp){
 	console.log(req.body);
 	if(req.body.type == "create"){
@@ -140,7 +139,7 @@ app.post("/adminItems", function(req,resp){
 			price:req.body.price		
 		});
 	}
-=======
+
 app.post("/changeEmail", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_users SET email = $1 WHERE user_id = $2", [req.body.email, req.session.loginid], function(err, result) {
@@ -161,7 +160,6 @@ app.post("/changePassword", function(req, resp) {
             resp.end();
         });
     });
->>>>>>> e52a50a9948df0dc0738fcd7315f4b5db44890a7
 });
 
 app.use("/scripts", express.static("build"));
