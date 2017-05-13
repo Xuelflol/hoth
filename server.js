@@ -21,7 +21,7 @@ var imgFolder = path.resolve(__dirname, "images");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:58nihcregor@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -139,6 +139,7 @@ app.post("/adminItems", function(req,resp){
 			price:req.body.price		
 		});
 	}
+});
 
 app.post("/changeEmail", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {

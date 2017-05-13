@@ -63,11 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-<<<<<<< HEAD
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
-=======
 /******/ 	return __webpack_require__(__webpack_require__.s = 4);
->>>>>>> e52a50a9948df0dc0738fcd7315f4b5db44890a7
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10333,12 +10329,8 @@ return jQuery;
 /***/ }),
 /* 1 */,
 /* 2 */,
-<<<<<<< HEAD
-/* 3 */
-=======
 /* 3 */,
 /* 4 */
->>>>>>> e52a50a9948df0dc0738fcd7315f4b5db44890a7
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {    
@@ -10416,14 +10408,7 @@ return jQuery;
         var panelHeading = document.createElement("div");
         panelHeading.className = "panel-heading head";
         panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
-<<<<<<< HEAD
-        
-        var panelBody = document.createElement("div");
-        panelBody.className = "panel-body body";
-        
-=======
     
->>>>>>> e52a50a9948df0dc0738fcd7315f4b5db44890a7
         var imgDiv = document.createElement("div");
         imgDiv.className = "menu-imgs";
         
