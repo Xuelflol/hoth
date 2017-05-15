@@ -246,9 +246,9 @@ $(document).ready(function() {
             },
             success:function(resp){
                 location.href = "/checkout";
-        }
-        })
-    })
+            }
+        });
+    });
     
     
 

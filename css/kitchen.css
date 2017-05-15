@@ -7,7 +7,6 @@ body {
 }
 
 .item {
-    height: 7vh;
     background-color: aqua;
     margin-top: 0.5vh;
 }

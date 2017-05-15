@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -10329,126 +10329,33 @@ return jQuery;
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){    
-    var orderDispaly = document.getElementById("order-div");
-    var submitButton = document.getElementById("checkout-but"),
-        cancelButton = document.getElementById("cancel-but"),
-        fname = document.getElementById("f-name"),
-        userName = document.getElementById("u-name"),
-        email = document.getElementById("e-mail"),
-        foodTotal = document.getElementById("fb-total"),
-        taxCost = document.getElementById("taxes"),
-        orderTotal = document.getElementById("order-total")  
+/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {
+    var orderNum = document.getElementById("order_num");
+    var orderList = document.getElementById("order_list");
     
-    var orders = {};
-    var itemName = [];
-    var itemPrice = [];
-    var itemQuantity = [];
-    var totalPrice = 0;
-    var tax;
-      
+    var socket = io();
     
     $.ajax({
-        url:"/get/orders",
+        url:"/submit/order",
         type:"post",
-        success:function(resp){
-            console.log(resp)
-            orders = resp.orders[0];
-            getOrderItems(orders);
+        success:function(resp) {
+            console.log(resp);
             
-            for(var i=0; i<itemQuantity.length;i++){
-                var itemTotalPrice = itemPrice[i] * itemQuantity[i];
-
-                var newD = document.createElement('div');
-                newD.innerHTML = itemName[i]+" X "+ itemQuantity[i]+ " $"+itemTotalPrice;
-                orderDispaly.appendChild(newD);
-                totalPrice = totalPrice + itemTotalPrice;
-                
+            orderNum.innerHTML = resp[0].order_id;
+            
+            for (var i = 0; i < resp.length; i++) {
+                var ndiv = document.createElement("div");
+                ndiv.innerHTML = resp[i].item_name + " x " + resp[i].quantity;
+                orderList.appendChild(ndiv);
             }
-            tax = totalPrice * 0.1;
-            console.log(tax)
-            fname.innerHTML = fname.innerHTML + ' ' + resp.fname;
-            userName.innerHTML = userName.innerHTML + ' ' + resp.username;
-            email.innerHTML = email.innerHTML + ' '+ resp.email;
-            foodTotal.innerHTML = foodTotal.innerHTML + ' ' + totalPrice;
-            taxCost.innerHTML = taxCost.innerHTML + ' ' + tax;
-            orderTotal.innerHTML = orderTotal.innerHTML + ' ' + (tax + totalPrice);
-            console.log(tax+totalPrice)
-
             
-            
-            
-            
-            
-            
-            
+            socket.emit("send message", resp);
         }
-    });
-    
-   
-    function getOrderItems(orders){
-        Object.keys(orders).forEach(function(key){
-                var orderItem = key;
-                var quantity = parseInt(orders[key]);
-                
-                itemQuantity.push(quantity)
-                
-                $.ajax({
-                    url:"/get/price",
-                    type:"post",
-                    data: {
-                        item:orderItem
-                    },
-                    success:function(resp){
-                        itemName.push(resp.name)
-                        itemPrice.push(parseFloat(resp.price))
-                
-                    },
-                    async:false
-                });
-            
-            });
-    };
-    
-    submitButton.addEventListener("click",function(){
-        
-        $.ajax({
-                url:"/save/order",
-                type:"post",
-                data:{
-                    totalPirce:totalPrice
-                    },
-                success:function(resp){
-                    console.log(resp)
-                    var orderId = resp.id;
-                    for(var i=0; i<itemName.length;i++){
-                        $.ajax({
-                            url:"/order/detailes",
-                            type:"post",
-                            data:{
-                                name:itemName[i],
-                                quantity:itemQuantity[i],
-                                id:orderId
-                            },
-                            success:function(res){
-                                if (res.status == "success") {
-                                    location.href = "/order/submitted/" + orderId;
-                                }
-                            }
-                        });
-                    }
-                }
-            })
     })
-    
-    cancelButton.addEventListener("click",function(){
-        location.href = "/"
-    })
-    
-});
+})
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
