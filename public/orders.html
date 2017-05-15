@@ -9,18 +9,19 @@
 		<link rel="stylesheet" href="/css/footer.css"/>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-		 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     </head>
     <body>
 		<div class="container-fluid">
             <div class="row">
                 <div id=order-display class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
 					<div id="order-display-title">
-					<h2>Order Details</h2>
+					<h3>Order Details</h3>
 					</div>
                     <div id="order-div">
 						
@@ -28,21 +29,21 @@
                         below is an example.-->                  
                         <!--<h4>2 Cheese Pizza $10.50</h4>-->
                     </div>
-					<div>
-					<p id="fb-total" >Food & Drink Total:</p>
+					<div id="fb-total">
+					<p>Food & Drink Total:</p>
 						
 					</div>
-					<div>
-					<p id="taxes">Taxes:</p>
+					<div id="taxes">
+					<p>Taxes:</p>
 					</div>
-					<div>
-					<p id="order-total">Order Total:</p>
+					<div id="order-total">
+					<p>Order Total:</p>
 					</div>
                 </div>
 
                 <div id=cart-total-div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 				<div id="review-title">
-					<h2>Review Order Settings</h2>
+					<h3>Review Order Settings</h3>
 				</div>
 				<ul id="cart-body">
 					<li id="user-loc">
@@ -105,7 +106,7 @@
                 </div>
 				<div id="order-cust-info" class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
 					<button type="button" id="cancel-but" class="btn btn-danger">Cancel</button>
-					<button type="button" id="checkout-but" class="btn btn-success" data-toggle="modal" data-target="#checkModal">Checkout</button>
+					<button type="button" id="checkout-but" class="btn btn-success" data-toggle="modal" data-target="#checkModal">Place Order</button>
 					 <div class="modal fade" id="checkModal" role="dialog">
     <div class="modal-dialog">
     
