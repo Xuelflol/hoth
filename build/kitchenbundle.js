@@ -10335,28 +10335,30 @@ return jQuery;
     var ordersContainer = document.getElementById("container");
     var socket = io();
     var kitchenItem = 0;
+    var orderIds = [];
+    var status = false;
     
-    $.ajax({
+    /*$.ajax({
         url:"/start-kitchen",
         type:"post",
         success:function(resp) {
-            while (kitchenItem < 6) {
+            if (kitchenItem == 0) {
                 var order = document.createElement("div");
                 var orderNum = document.createElement("div");
                 var orderList = document.createElement("div");
                 var orderTimeLeft = document.createElement("div");
 
-                order.id = "order-" + obj[0].order_id;
+                order.id = "order-" + resp[0].order_id;
                 order.className = "item container-fluid";
 
-                orderNum.innerHTML = obj[0].order_id;
+                orderNum.innerHTML = resp[0].order_id;
 
                 var timeLeft = 0;
 
-                for (var i = 0; i < obj.length; i++) {
+                for (var i = 0; i < resp.length; i++) {
                     var orderListDiv = document.createElement("div");
-                    orderListDiv.innerHTML = obj[i].item_name + "x " + obj[i].quantity;
-                    timeLeft += obj[i].time_left;
+                    orderListDiv.innerHTML = resp[i].item_name + "x " + resp[i].quantity;
+                    timeLeft += resp[i].time_left;
                     orderList.appendChild(orderListDiv);
                 }
                 
@@ -10371,20 +10373,19 @@ return jQuery;
             
             kitchenItem++;
         }
-    })
+    });*/
     
     socket.on("create message", function(obj) {
         var order = document.createElement("div");
         var orderNum = document.createElement("div");
         var orderList = document.createElement("div");
         var orderTimeLeft = document.createElement("div");
+        var timeLeft = 0;
         
         order.id = "order-" + obj[0].order_id;
         order.className = "item container-fluid";
         
         orderNum.innerHTML = obj[0].order_id;
-        
-        var timeLeft = 0;
         
         for (var i = 0; i < obj.length; i++) {
             var orderListDiv = document.createElement("div");
@@ -10394,7 +10395,7 @@ return jQuery;
         }
         
         orderTimeLeft.innerHTML = timeLeft;
-        orderTimeLeft.id = "order-timer-" + obj[0].order_id;
+        orderTimeLeft.id = "timer-order-" + obj[0].order_id;
         
         order.appendChild(orderNum);
         order.appendChild(orderList);
@@ -10403,50 +10404,72 @@ return jQuery;
         ordersContainer.appendChild(order);
             
         console.log(obj);
+        orderIds.push({
+            id: obj[0].order_id,
+            time: timeLeft
+        });
         
         kitchenItem++;
         console.log(kitchenItem);
-
-        var ndiv = document.getElementById("order-" + obj[0].order_id);
-        var tdiv = document.getElementById("order-timer-" + obj[0].order_id);
-            
-        if (ordersContainer.children[1] == ndiv) {
-            var countdownTimer = setInterval(countdown, 1000);
-        } else {
-            console.log("false");
-            
-            orderTimeLeft.innerHTML = "Pending...";
-        }
         
-        var recheck = setTimeout(checkDiv(obj[0].order_id, timeLeft), timeLeft * 1000)
+        check();
         
-        function countdown() {
-            timeLeft--;
-
-            tdiv.innerHTML = timeLeft;
-            console.log(timeLeft);
-            console.log(recheck);
-
-            if (timeLeft == 0) {
-                clearInterval(countdownTimer);
-
-                ndiv.parentNode.removeChild(ndiv);
-                
-                kitchenItem--;
-            }
-        }
+        console.log(orderIds);
+        
     });
     
-    function checkDiv(orderid, time) {
-        var ndiv = document.getElementById("order-" + obj[0].order_id);
-        var tdiv = document.getElementById("order-timer-" + obj[0].order_id);
+    function startCountdown() {
+        var ndiv = document.getElementById(ordersContainer.children[1].id);
+        var tdiv = document.getElementById("timer-" + ordersContainer.children[1].id);
+        var duration = parseInt(tdiv.innerHTML);
+
+        var cd = setInterval(countdown, 1000);
+        
+        function countdown() {
+            duration--;
+
+            tdiv.innerHTML = duration;
+
+            if (duration == 0) {
+                clearInterval(cd);
+
+                ndiv.parentNode.removeChild(ndiv);
+
+                kitchenItem--;
+                orderIds.shift();
+                status = false;
+                
+                var testing = ordersContainer.children[1].id;
+                console.log(testing);
+                
+                if (kitchenItem > 0) {
+                    check();
+                }
+            }
+        }
+    }
+    
+    function check() {
+        var ndiv = document.getElementById(ordersContainer.children[1].id);
+        
+        if (ordersContainer.children[1] == ndiv && status == false) {
+            startCountdown();
+            status = true;
+        } else {
+            return false;
+        }
+    }
+    
+    /*function checkDiv(orderid, time) {
+        var ndiv = document.getElementById("order-" + orderIds[0]);
+        var tdiv = document.getElementById("order-timer-" + orderIds[0]);
 
         if (ordersContainer.children[1] == ndiv) {
             tdiv.innerHTML = time;
             
-            var countdownTimer = setInterval(countdown, 1000);
+            var countdownTimer = setInterval(function() {countdown(time, tdiv, ndiv, countdownTimer);}, 1000);
         }
-    }
+    }*/
     
     function deleteItem() {
         ndiv.parentNode.removeChild("order-" + orderid)
