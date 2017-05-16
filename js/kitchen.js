@@ -1,5 +1,6 @@
 $(document).ready(function() {
     var ordersContainer = document.getElementById("container");
+    var logout = document.getElementById("logout");
     var socket = io();
     var kitchenItem = 0;
     var status = false;
@@ -111,6 +112,10 @@ $(document).ready(function() {
             return false;
         }
     }
+    
+    logout.addEventListener("click", function() {
+        location.href = "/logout";
+    });
     
     /*function checkDiv(orderid, time) {
         var ndiv = document.getElementById("order-" + orderIds[0]);

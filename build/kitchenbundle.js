@@ -10333,9 +10333,9 @@ return jQuery;
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {
     var ordersContainer = document.getElementById("container");
+    var logout = document.getElementById("logout");
     var socket = io();
     var kitchenItem = 0;
-    var orderIds = [];
     var status = false;
     
     /*$.ajax({
@@ -10402,20 +10402,10 @@ return jQuery;
         order.appendChild(orderTimeLeft);
         
         ordersContainer.appendChild(order);
-            
-        console.log(obj);
-        orderIds.push({
-            id: obj[0].order_id,
-            time: timeLeft
-        });
         
         kitchenItem++;
-        console.log(kitchenItem);
         
         check();
-        
-        console.log(orderIds);
-        
     });
     
     function startCountdown() {
@@ -10436,11 +10426,7 @@ return jQuery;
                 ndiv.parentNode.removeChild(ndiv);
 
                 kitchenItem--;
-                orderIds.shift();
                 status = false;
-                
-                var testing = ordersContainer.children[1].id;
-                console.log(testing);
                 
                 if (kitchenItem > 0) {
                     check();
@@ -10460,6 +10446,10 @@ return jQuery;
         }
     }
     
+    logout.addEventListener("click", function() {
+        location.href = "/logout";
+    });
+    
     /*function checkDiv(orderid, time) {
         var ndiv = document.getElementById("order-" + orderIds[0]);
         var tdiv = document.getElementById("order-timer-" + orderIds[0]);
@@ -10471,9 +10461,9 @@ return jQuery;
         }
     }*/
     
-    function deleteItem() {
-        ndiv.parentNode.removeChild("order-" + orderid)
-    }
+    /*function deleteItem() {
+        ndiv.parentNode.removeChild("order-" + orderid);
+    }*/
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
