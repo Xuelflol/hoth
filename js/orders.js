@@ -7,11 +7,7 @@ $(document).ready(function(){
         email = document.getElementById("e-mail"),
         foodTotal = document.getElementById("fb-total"),
         taxCost = document.getElementById("taxes"),
-        orderTotal = document.getElementById("order-total")
-        
-    
-    var socket = io();
-    
+        orderTotal = document.getElementById("order-total")  
     
     var orders = {};
     var itemName = [];
@@ -97,20 +93,15 @@ $(document).ready(function(){
                                 quantity:itemQuantity[i],
                                 id:orderId
                             },
-                            success:function(resp){
-                               
+                            success:function(res){
+                                if (res.status == "success") {
+                                    location.href = "/order/submitted/" + orderId;
+                                }
                             }
-                        })
+                        });
                     }
                 }
             })
-        
-        socket.emit("send message", orders);
-        
-        console.log("orders submitted");
-        
-        
-        
     })
     
     cancelButton.addEventListener("click",function(){
