@@ -25,7 +25,6 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 var dbURL = process.env.DATABASE_URL || "postgres://postgres:(password)@localhost:5432/kitchen";
 
-
 app.use(bodyParser.urlencoded({
     extended:true
 }));
@@ -238,29 +237,53 @@ app.post("/save/order",function(req,resp){
 
 app.post("/order/detailes",function(req,resp){
     console.log(req.body)
-        pg.connect(dbURL,function(err,client,done){
+    pg.connect(dbURL,function(err,client,done){
         if(err){
             console.log(err);
             resp.send({
                 status:"fail"
             });
         }
+
         client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id) VALUES ($1,$2,$3)",[req.body.name,req.body.quantity,req.body.id],function(err,result){
             done();
-            
+
             if(err){
                 console.log(err);
-                resp.sent({
+                resp.send({
                     status:"fail"
                 });
             }
+
             resp.send({
                 status:"success"
             });
+
         });
     });
     
 });
+
+app.post("/submit/order", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("SELECT * FROM hoth_order_details WHERE order_id = $1", [req.session.orderid], function(err, result) {
+            done();
+            
+            resp.send(result.rows);
+        });
+    });
+});
+
+app.post("/start-kitchen", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("SELECT * FROM hoth_order_details WHERE status = 'P'", function(err, result) {
+            done();
+            
+            resp.send(result.rows);
+        });
+    });
+});
+
 
 // -----------------------Order page end ------------------//
 // -----------------------Admin operation---------------//
@@ -402,9 +425,11 @@ app.get("/checkout", function(req, resp) {
     resp.sendFile(pF + "/orders.html");
 });
 
-app.get("/backdoor",function(req,resp){
-    resp.sendFile(pF+"/admin.html")
-})
+app.get("/order/submitted/:orderid", function(req, resp) {
+    req.session.orderid = req.params.orderid;
+    
+    resp.sendFile(pF + "/submitted.html");
+});
 
 
 //socket
