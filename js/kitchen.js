@@ -5,42 +5,51 @@ $(document).ready(function() {
     var kitchenItem = 0;
     var status = false;
     
-    /*$.ajax({
+    $.ajax({
         url:"/start-kitchen",
         type:"post",
         success:function(resp) {
+            console.log(resp);
+            
             if (kitchenItem == 0) {
-                var order = document.createElement("div");
-                var orderNum = document.createElement("div");
-                var orderList = document.createElement("div");
-                var orderTimeLeft = document.createElement("div");
+                for (key in resp) {
+                    var order = document.createElement("div");
+                    var orderNum = document.createElement("div");
+                    var orderList = document.createElement("div");
+                    var orderTimeLeft = document.createElement("div");
 
-                order.id = "order-" + resp[0].order_id;
-                order.className = "item container-fluid";
+                    order.id = "order-" + resp[key].order_id;
+                    order.className = "item container-fluid";
 
-                orderNum.innerHTML = resp[0].order_id;
+                    orderNum.innerHTML = resp[key].order_id;
 
-                var timeLeft = 0;
+                    var timeLeft = 0;
 
-                for (var i = 0; i < resp.length; i++) {
-                    var orderListDiv = document.createElement("div");
-                    orderListDiv.innerHTML = resp[i].item_name + "x " + resp[i].quantity;
-                    timeLeft += resp[i].time_left;
-                    orderList.appendChild(orderListDiv);
+                    //for (var i = 0; i < resp[key].item_name.length; i++) {
+                    for (items in resp[key].items) {
+                        var orderListDiv = document.createElement("div");
+                        orderListDiv.innerHTML = items + "x " + resp[key].items[items];
+                        timeLeft = resp[key].time_left;
+                        orderList.appendChild(orderListDiv);
+                    }
+
+                    orderTimeLeft.innerHTML = timeLeft;
+                    orderTimeLeft.id = "timer-order-" + resp[key].order_id;
+
+                    order.appendChild(orderNum);
+                    order.appendChild(orderList);
+                    order.appendChild(orderTimeLeft);
+
+                    ordersContainer.appendChild(order);
+                    
+                    kitchenItem++;
+                    console.log(kitchenItem);
                 }
-                
-                orderTimeLeft.innerHTML = timeLeft;
-
-                order.appendChild(orderNum);
-                order.appendChild(orderList);
-                order.appendChild(orderTimeLeft);
-
-                ordersContainer.appendChild(order);
             }
             
-            kitchenItem++;
+            check();
         }
-    });*/
+    });
     
     socket.on("create message", function(obj) {
         var order = document.createElement("div");
@@ -71,6 +80,7 @@ $(document).ready(function() {
         ordersContainer.appendChild(order);
         
         kitchenItem++;
+        console.log(kitchenItem);
         
         check();
     });
@@ -78,7 +88,10 @@ $(document).ready(function() {
     function startCountdown() {
         var ndiv = document.getElementById(ordersContainer.children[1].id);
         var tdiv = document.getElementById("timer-" + ordersContainer.children[1].id);
+        var orderid = ordersContainer.children[1].id;
         var duration = parseInt(tdiv.innerHTML);
+        
+        console.log(orderid);
 
         var cd = setInterval(countdown, 1000);
         
@@ -91,8 +104,24 @@ $(document).ready(function() {
                 clearInterval(cd);
 
                 ndiv.parentNode.removeChild(ndiv);
+                var orderDigit = splitString(orderid);
+                console.log(orderDigit);
+                
+                $.ajax({
+                    url:"/order/complete",
+                    type:"post",
+                    data: {
+                        orderid: orderDigit
+                    },
+                    success:function(resp) {
+                        var orderStatus = document.getElementById("order-status");
+                        
+                        orderStatus.innerHTML = "Order #" + resp.orderid + " is complete.";
+                    }
+                });
 
                 kitchenItem--;
+                console.log(kitchenItem);
                 status = false;
                 
                 if (kitchenItem > 0) {
@@ -111,6 +140,13 @@ $(document).ready(function() {
         } else {
             return false;
         }
+    }
+    
+    function splitString(string) {
+        var stringArray = string.split("-");
+        var sliceArray = stringArray.slice(-1)
+        
+        return sliceArray[0];
     }
     
     logout.addEventListener("click", function() {

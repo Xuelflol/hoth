@@ -23,7 +23,7 @@ var imgFolder = path.resolve(__dirname, "images");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:(password)@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -279,11 +279,53 @@ app.post("/start-kitchen", function(req, resp) {
         client.query("SELECT * FROM hoth_order_details WHERE status = 'P'", function(err, result) {
             done();
             
-            resp.send(result.rows);
+            var index = 0;
+            var lastItem = 0;
+            var obj = {};
+            
+            while (index < result.rows.length) {
+                if (result.rows[index].order_id != lastItem) {
+                    lastItem = result.rows[index].order_id;
+                    
+                    obj[lastItem] = {
+                        order_id: result.rows[index].order_id,
+                        items: {},
+                        time_left: result.rows[index].time_left
+                    };
+                    
+                    obj[lastItem].items[result.rows[index].item_name] = result.rows[index].quantity;
+                    
+                    index++;
+                } else {
+                    obj[lastItem].items[result.rows[index].item_name] = result.rows[index].quantity;
+                    obj[lastItem].time_left += result.rows[index].time_left;
+                    index++
+                }
+            }
+            
+            resp.send(obj);
+            console.log(obj);
         });
     });
 });
 
+app.post("/order/complete", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_order_details SET status = 'F' WHERE order_id = $1", [req.body.order_id], function() {
+            done();
+        });
+        
+        client.query("UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING order_id", [req.body.orderid], function(err, result) {
+            done();
+            
+            var obj = {
+                orderid: result.rows[0].order_id
+            };
+            
+            resp.send(obj);
+        });
+    });
+});
 
 // -----------------------Order page end ------------------//
 // -----------------------Admin operation---------------//
