@@ -10349,7 +10349,6 @@ return jQuery;
     var itemQuantity = [];
     var totalPrice = 0;
     var tax;
-      
     
     $.ajax({
         url:"/get/orders",
@@ -10378,12 +10377,6 @@ return jQuery;
             orderTotal.innerHTML = orderTotal.innerHTML + ' ' + (tax + totalPrice);
             console.log(tax+totalPrice)
 
-            
-            
-            
-            
-            
-            
             
         }
     });

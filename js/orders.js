@@ -15,7 +15,7 @@ $(document).ready(function(){
     var itemQuantity = [];
     var totalPrice = 0;
     var tax;
-      
+
     
     $.ajax({
         url:"/get/orders",
@@ -44,12 +44,6 @@ $(document).ready(function(){
             orderTotal.innerHTML = orderTotal.innerHTML + ' ' + (tax + totalPrice);
             console.log(tax+totalPrice)
 
-            
-            
-            
-            
-            
-            
             
         }
     });
