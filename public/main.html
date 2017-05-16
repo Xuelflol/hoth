@@ -18,6 +18,14 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         
+        <script src="/scripts/mainbundle.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript">
+           $(document).ready(function(){
+               $('#foot').load('/public/footer.html');
+           });
+        </script>
+        
     </head>
   
     <body data-spy="scroll" data-target=".navbar" data-offset="50">
@@ -262,14 +270,6 @@
         <div id="warning">
             <div id="warning-container">                
             </div>
-        </div>
-        
-        <script src="/scripts/mainbundle.js"></script>
-        <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
-        <script type="text/javascript">
-           $(document).ready(function(){
-               $('#foot').load('/public/footer.html');
-           });
-        </script>   
+        </div>   
     </body>
 </html>
