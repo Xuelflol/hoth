@@ -274,6 +274,7 @@ app.post("/submit/order", function(req, resp) {
     });
 });
 
+//kitchen
 app.post("/start-kitchen", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_order_details WHERE status = 'P'", function(err, result) {
