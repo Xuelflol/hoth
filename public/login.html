@@ -27,14 +27,15 @@
             
             <form class="form" id="signform"action="/login" method="post">
 			<h2>Login</h2>
+				<div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input type="email" placeholder="EMAIL" name="email" class="form-control inputs" pattern="^[a-zA-Z0-9\._\-]{1,50}@[a-zA-Z0-9_\-]{1,50}(.[a-zA-Z0-9_\-])?.(ca|com|org|net|info|us|cn|co.uk|se)$" title="Must be in the form of starwars@starwars.com" required="required">
+                </div>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                     <input type="password" placeholder="PASSWORD" name="password" class="form-control inputs" pattern="^[^ \s]{4,15}$" title="Must be 4-15 characters. Whitespace is not allowed." required="required">
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                    <input type="email" placeholder="EMAIL" name="email" class="form-control inputs" pattern="^[a-zA-Z0-9\._\-]{1,50}@[a-zA-Z0-9_\-]{1,50}(.[a-zA-Z0-9_\-])?.(ca|com|org|net|info|us|cn|co.uk|se)$" title="Must be in the form of starwars@starwars.com" required="required">
-                </div>
+                
                 <input id="subs" type="submit" value="SIGN IN"  class="buttons btn">
             </form>
 
@@ -44,22 +45,11 @@
         <div id="register">
             <form class="form form-group" action="/register" method="post">
 				<h2>Register</h2>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                    <input type="password" placeholder="PASSWORD" name="password" pattern="[^ \s]{4,15}" class="form-control inputs" title="Must be 4-15 characters. Whitespace is not allowed." required="require">
-                </div>
-                
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-                    <input type="email" placeholder="EMAIL" name="email" class="form-control inputs" pattern="^[a-zA-Z0-9\._\-]{1,50}@[a-zA-Z0-9_\-]{1,50}(.[a-zA-Z0-9_\-])?.(ca|com|org|net|info|us|cn|co.uk|se)$" title="Must be in the form of example@example.com" min="6" required="require">
-                </div>
-                
-                <div class="input-group">
+				 <div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                     <input type="text" placeholder="USERNAME" pattern="[a-zA-Z0-9\-_]{4,20}" name="uname" class="form-control inputs" title="Must be 4-20 alpha-numerics. Hyphen and underscore are allowed." required="require">
                 </div>
-                
-                <div class="input-group">
+				<div class="input-group">
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                     <input type="text" placeholder="FIRST NAME" name="fname" class="form-control inputs" pattern="^[a-zA-Z]{1,15}$" title="Must be 1-15 alpha-numerics." required="require">
                 </div>
@@ -68,7 +58,14 @@
                     <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                     <input type="text" placeholder="LAST NAME" name="lname" class="form-control inputs" pattern="^[a-zA-Z]{1,15}$" title="Must be 1-15 alpha-numerics." required="require">
                 </div>
-                
+				<div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                    <input type="email" placeholder="EMAIL" name="email" class="form-control inputs" pattern="^[a-zA-Z0-9\._\-]{1,50}@[a-zA-Z0-9_\-]{1,50}(.[a-zA-Z0-9_\-])?.(ca|com|org|net|info|us|cn|co.uk|se)$" title="Must be in the form of example@example.com" min="6" required="require">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                    <input type="password" placeholder="PASSWORD" name="password" pattern="[^ \s]{4,15}" class="form-control inputs" title="Must be 4-15 characters. Whitespace is not allowed." required="require">
+                </div>
                 <input type="submit" value="SUBMIT"  class="buttons btn" required="require">
             </form>
 

@@ -10353,6 +10353,7 @@ return jQuery;
 	//initial
 	profileDiv.style.display = "none";
 	logoutDiv.style.display = "none";
+	loginDiv.style.display = "none";
     
     /*regSubmit.addEventListener("click", function() {
         $.ajax({
@@ -10389,6 +10390,7 @@ return jQuery;
         signInDiv.style.display = "none";
 		logoutDiv.style.display = "none";
 		profileDiv.style.display = "none";
+		loginDiv.style.display = "none";
     });
     
     signIn.addEventListener("click", function() {
@@ -10396,6 +10398,7 @@ return jQuery;
         signInDiv.style.display = "inline";
 		logoutDiv.style.display = "none";
 		profileDiv.style.display = "none";
+		loginDiv.style.display = "none";
     });
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))

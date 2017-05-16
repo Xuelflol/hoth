@@ -9,13 +9,12 @@
 		<link rel="stylesheet" href="/css/footer.css"/>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         
-        <script src="/socket.io/socket.io.js"></script>
         <script src="/scripts/ordersbundle.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
         <script type="text/javascript">
@@ -24,7 +23,7 @@
             });
             
             var cancelBut = document.getElementById("cancel-but");
-
+		
             $(document).ready(function(){
                 cancelBut.addEventListener("click", function(){
                 location.href = "/";
@@ -35,34 +34,38 @@
 
     </head>
     <body>
-		<div class="container-fluid">
+        <div class="container-fluid">
             <div class="row">
                 <div id=order-display class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-					<div id="order-display-title">
-					<h3>Order Details</h3>
-					</div>
-                    <div id="order-div">
-						
-                        <!--Populate using Javascript by creating a new div for each item added to the cart
-                        below is an example.-->                  
-                        <!--<h4>2 Cheese Pizza $10.50</h4>-->
+                    <div id="order-display-title">
+                        <h3>Order Details</h3>
                     </div>
-					<div id="fb-total">
-					<p>Food & Drink Total:</p>
-						
-					</div>
-					<div id="taxes">
-					<p>Taxes:</p>
-					</div>
-					<div id="order-total">
-					<p>Order Total:</p>
-					</div>
+                    
+                    <div id="order-div">
+
+                    <!--Populate using Javascript by creating a new div for each item added to the cart
+                    below is an example.-->                  
+                    <!--<h4>2 Cheese Pizza $10.50</h4>-->
+                    </div>
+                    
+                    <div id="fb-total">
+                        <p>Food & Drink Total:</p>
+                    </div>
+                    
+                    <div id="taxes">
+                        <p>Taxes:</p>
+                    </div>
+                    
+                    <div id="order-total">
+                        <p>Order Total:</p>
+                    </div>
                 </div>
 
                 <div id=cart-total-div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <div id="review-title">
                         <h3>Review Order Settings</h3>
                     </div>
+                    
                     <ul id="cart-body">
                         <li id="user-loc">
                             <h3>Location:</h3>
@@ -77,13 +80,13 @@
                             <ul>
                                 <li>
                                     <label>
-                                        <input type="radio" name="eat-in" id="eat-in" value="Eat-In">Eat In
+                                        <input type="radio" name="service-op" id="eat-in" value="Eat-In">Eat In
                                     </label>
                                 </li>
                                 
                                 <li>
                                     <label>
-                                        <input type="radio" name="to-go" id="to-go" value="To-Go">To Go
+                                        <input type="radio" name="service-op" id="to-go" value="To-Go">To Go
                                     </label>
                                 </li>
                             </ul>
@@ -93,29 +96,33 @@
                         
                         <li>
                             <h3>Payment Type:</h3>
+                            
                             <ul>
                                 <li>
                                     <label>
-                                        <input type="radio" name="im-credit" id="im-credit" value="im-credit">Imperial Credit Coin
+                                        <input type="radio" name="payment" id="im-credit" value="im-credit">Imperial Credit Coin
                                     </label>
                                 </li>
                                 
                                 <li>
                                     <label>
-                                        <input type="radio" name="gcs" id="gcs" value="gcs">Galactic Credit Chips
+                                        <input type="radio" name="payment" id="gcs" value="gcs">Galactic Credit Chips
                                     </label>
                                 </li>
                                 
                                 <li>
                                     <label>
-                                        <input type="radio" name="wupi" id="wupi" value="wupi">Wupiupi Coin
+                                        <input type="radio" name="payment" id="wupi" value="wupi">Wupiupi Coin
                                     </label>
                                 </li>
                             </ul>
                         </li>
+                        
                         <hr class="style2">	
+                    
                         <li>
                             <h3>Customer Info</h3>
+                            
                             <ul>
                                 <li>
                                     <label id="f-name">First Name:</label>
@@ -133,12 +140,12 @@
                     </ul>
                 </div>
                 
-				<div id="order-cust-info" class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-					<button type="button" id="cancel-but" class="btn btn-danger">Cancel</button>
-					<button type="button" id="checkout-but" class="btn btn-success" data-toggle="modal" data-target="#checkModal">Place Order</button>
+                <div id="order-cust-info" class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
+                    <button type="button" id="cancel-but" class="btn btn-danger">Cancel</button>
+                    <button type="button" id="checkout-but" class="btn btn-success" data-toggle="modal" data-target="#checkModal">Place Order</button>
+                    
                     <div class="modal fade" id="checkModal" role="dialog">
                         <div class="modal-dialog">
-
                             <!-- Modal content-->
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -155,13 +162,12 @@
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
-                
             </div>           
-		</div>
-		<div id="foot"></div>
+        </div>
+        
+        <div id="foot"></div>
     </body>
 </html>

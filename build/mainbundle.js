@@ -10581,9 +10581,9 @@ return jQuery;
             },
             success:function(resp){
                 location.href = "/checkout";
-        }
-        })
-    })
+            }
+        });
+    });
     
     
 

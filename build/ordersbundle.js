@@ -10341,11 +10341,7 @@ return jQuery;
         email = document.getElementById("e-mail"),
         foodTotal = document.getElementById("fb-total"),
         taxCost = document.getElementById("taxes"),
-        orderTotal = document.getElementById("order-total")
-        
-    
-    var socket = io();
-    
+        orderTotal = document.getElementById("order-total")  
     
     var orders = {};
     var itemName = [];
@@ -10353,8 +10349,6 @@ return jQuery;
     var itemQuantity = [];
     var totalPrice = 0;
     var tax;
-     
-      
     
     $.ajax({
         url:"/get/orders",
@@ -10383,12 +10377,6 @@ return jQuery;
             orderTotal.innerHTML = orderTotal.innerHTML + ' ' + (tax + totalPrice);
             console.log(tax+totalPrice)
 
-            
-            
-            
-            
-            
-            
             
         }
     });
@@ -10438,20 +10426,15 @@ return jQuery;
                                 quantity:itemQuantity[i],
                                 id:orderId
                             },
-                            success:function(resp){
-                               
+                            success:function(res){
+                                if (res.status == "success") {
+                                    location.href = "/order/submitted/" + orderId;
+                                }
                             }
-                        })
+                        });
                     }
                 }
             })
-        
-        socket.emit("send message", orders);
-        
-        console.log("orders submitted");
-        
-        
-        
     })
     
     cancelButton.addEventListener("click",function(){
