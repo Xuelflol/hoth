@@ -25,6 +25,11 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
 
+var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
+var nameRegex = /^[a-zA-Z]{1,15}$/;
+var emailRegex = /^[a-zA-Z0-9\._\-]{1,50}@[a-zA-Z0-9_\-]{1,50}(.[a-zA-Z0-9_\-])?.(ca|com|org|net|info|us|cn|co.uk|se)$/;
+var passwordRegex = /^[^ \s]{4,15}$/;
+
 app.use(bodyParser.urlencoded({
     extended:true
 }));
@@ -39,41 +44,48 @@ app.use(session({
 
 // ajax response
 app.post("/register", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
-        client.query("INSERT INTO hoth_users (first_name, last_name, password, email, username) VALUES ($1, $2, $3, $4, $5)", [req.body.fname, req.body.lname, req.body.password, req.body.email, req.body.uname], function(err, result) {
-            done();
-            
-            if (err) {
-                console.log(err);
-            }
-            
-            resp.redirect("/created");
+    if (nameRegex.test(req.body.fname) && nameRegex.test(req.body.lname) && passwordRegex.test(req.body.password) && emailRegex.test(req.body.email) && usernameRegex.test(req.body.uname)) {
+        pg.connect(dbURL, function(err, client, done) {
+            client.query("INSERT INTO hoth_users (first_name, last_name, password, email, username) VALUES ($1, $2, $3, $4, $5)", [req.body.fname, req.body.lname, req.body.password, req.body.email, req.body.uname], function(err, result) {
+                done();
+
+                if (err) {
+                    console.log(err);
+                }
+
+                resp.redirect("/created");
+            });
         });
-    });
+    } else {
+        resp.send("Wrong Format");
+    }
 });
 
 app.post("/login", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
-        client.query("SELECT * FROM hoth_users WHERE email = $1 AND password = $2", [req.body.email, req.body.password], function(err, result) {
-            done();
-            if (err) {
-                console.log(err);
-            }
-            
-            if (result.rows.length > 0) {
-                req.session.username = result.rows[0].username;
-                req.session.email = result.rows[0].email;
-                req.session.loginid = result.rows[0].user_id;
-                req.session.pass = result.rows[0].password;
-                req.session.auth = result.rows[0].auth_level;
-                req.session.fname = result.rows[0].first_name;
-                
-                resp.redirect("/");
-            } else {
-                resp.send("Wrong login information");
-            }
+    if (emailRegex.test(req.body.email) && passwordRegex.test(req.body.password)) {
+        pg.connect(dbURL, function(err, client, done) {
+            client.query("SELECT * FROM hoth_users WHERE email = $1 AND password = $2", [req.body.email, req.body.password], function(err, result) {
+                done();
+                if (err) {
+                    console.log(err);
+                }
+
+                if (result.rows.length > 0) {
+                    req.session.username = result.rows[0].username;
+                    req.session.email = result.rows[0].email;
+                    req.session.loginid = result.rows[0].user_id;
+                    req.session.auth = result.rows[0].auth_level;
+                    req.session.fname = result.rows[0].first_name;
+
+                    resp.redirect("/");
+                } else {
+                    resp.send("Wrong login information");
+                }
+            });
         });
-    });
+    } else {
+        resp.send("Wrong format");
+    }
 });
 
 app.post("/appetizers", function(req, resp) {
@@ -311,13 +323,17 @@ app.post("/start-kitchen", function(req, resp) {
 
 app.post("/order/complete", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
-        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING *) UPDATE hoth_order_details SET status = 'F' WHERE order_id in (SELECT order_id FROM twotables)", [req.body.orderid], function(err, result) {
+        client.query("UPDATE hoth_order_details SET status = 'F' WHERE order_id = $1", [req.body.order_id], function() {
             done();
-
+        });
+        
+        client.query("UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING order_id", [req.body.orderid], function(err, result) {
+            done();
+            
             var obj = {
-                orderid: req.body.orderid
+                orderid: result.rows[0].order_id
             };
-
+            
             resp.send(obj);
         });
     });
@@ -481,10 +497,7 @@ io.on("connection", function(socket) {
     
     socket.join("connected");
     
-    console.log("you are in room connected");
-    
     socket.on("send message", function(orders) {
-        console.log("order submitted")
         io.to("connected").emit("create message", orders);
     });
 });
