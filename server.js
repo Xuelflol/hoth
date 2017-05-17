@@ -286,6 +286,7 @@ app.post("/submit/order", function(req, resp) {
     });
 });
 
+//kitchen
 app.post("/start-kitchen", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_order_details WHERE status = 'P'", function(err, result) {
@@ -323,17 +324,13 @@ app.post("/start-kitchen", function(req, resp) {
 
 app.post("/order/complete", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
-        client.query("UPDATE hoth_order_details SET status = 'F' WHERE order_id = $1", [req.body.order_id], function() {
+        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING *) UPDATE hoth_order_details SET status = 'F' WHERE order_id in (SELECT order_id FROM twotables)", [req.body.orderid], function(err, result) {
             done();
-        });
-        
-        client.query("UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING order_id", [req.body.orderid], function(err, result) {
-            done();
-            
+
             var obj = {
-                orderid: result.rows[0].order_id
+                orderid: req.body.orderid
             };
-            
+
             resp.send(obj);
         });
     });
