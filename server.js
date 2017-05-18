@@ -23,7 +23,7 @@ var imgFolder = path.resolve(__dirname, "images");
 
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:020298asm@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
 
 app.use(bodyParser.urlencoded({
     extended:true
