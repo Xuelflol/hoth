@@ -103,7 +103,7 @@ $(document).ready(function(){
         
         var updataPrice = document.createElement("input");
         updataPrice.type = "submit";
-        updataPrice.value = "Updata Price";
+        updataPrice.value = "Update Price";
         updataPrice.id = "upDate-" + item_code;
         updataPrice.className = "btn btn-lg";
 
@@ -243,8 +243,7 @@ $(document).ready(function(){
 				    if(resp.status == "success"){
                         createItem(i, targetDiv, resp.name, resp.item_code, resp.price, resp.filename, resp.desc);
                         imgSubmitCheck = 0;
-					
-					
+
 				}
 			}
 		});	

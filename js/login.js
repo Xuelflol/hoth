@@ -19,6 +19,7 @@ $(document).ready(function() {
 	//initial
 	profileDiv.style.display = "none";
 	logoutDiv.style.display = "none";
+	loginDiv.style.display = "none";
     
     /*regSubmit.addEventListener("click", function() {
         $.ajax({
@@ -55,6 +56,7 @@ $(document).ready(function() {
         signInDiv.style.display = "none";
 		logoutDiv.style.display = "none";
 		profileDiv.style.display = "none";
+		loginDiv.style.display = "none";
     });
     
     signIn.addEventListener("click", function() {
@@ -62,5 +64,6 @@ $(document).ready(function() {
         signInDiv.style.display = "inline";
 		logoutDiv.style.display = "none";
 		profileDiv.style.display = "none";
+		loginDiv.style.display = "none";
     });
 });
