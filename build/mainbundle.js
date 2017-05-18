@@ -10465,7 +10465,7 @@ return jQuery;
             var cartItem = document.getElementById("cart-item-" + item_code);
             var itemQty = document.getElementById("qty-" + item_code);
             
-            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 5) {
+            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6) {
                 addToCart(item_name, item_code, price, quantityInput.value);
 
                 orders[item_code] = parseInt(itemQty.value);
