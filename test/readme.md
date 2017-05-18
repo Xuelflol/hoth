@@ -29,7 +29,7 @@ For support, please contact email <fan.cbest@gmail.com>. Or comment on our githu
 
 1. Clone to local repo
 
-> Get Hoth:
+    > Get Hoth:
 
     ```bash
     git clone https://github.com/ACIT2910-HOTH/hoth.git
