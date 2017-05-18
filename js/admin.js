@@ -90,6 +90,7 @@ $(document).ready(function(){
         var priceIn = document.createElement("input");
         priceIn.type = 'number';
         priceIn.min = '0';
+        priceIn.max = '100';
         priceIn.value = price;
         priceIn.id = "priceIn-" + item_code;
         panelFooter.appendChild(h4);
