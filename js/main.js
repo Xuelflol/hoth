@@ -17,6 +17,10 @@ $(document).ready(function() {
         warningDiv.style.display = "none";
     });
     
+    $(document).ready(function(){
+        $('#foot').load('/public/footer.html');
+    });
+    
     var app_digit = 0;
     var bev_digit = 0;
     var meals_digit = 0;
