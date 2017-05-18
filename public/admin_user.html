@@ -25,18 +25,51 @@
         
     </head>
     
-    <body   >
+    <body>
         <div id="nav"></div>
         
+        <div id = "menu">
+            <p id = 'shop_status'> Shop is:</p>
+            <div>
+            <label class="switch">
+            <input id = 'in1' type="checkbox" >
+            <div class="slider"></div>
+            </label>
+            </div>
+            <button id = "show_coustomer_accounts" class="button">Show coustomer accounts</button>
+            <button id = "show_employee_accounts" class="button">Show employee accounts</button>
+            <button id = "show_admin_accounts" class="button">Show admin accounts</button>
+        </div>
+        
         <div id = "container">
-            <h3 id="shop_status_open">Current shop status:<span style = "font-size: 2vw;font-weight:700; color:red;"> OPEN</span> </h3>
-            <h3 id="shop_status_close">Current shop status: <span style = "font-size: 2vw;font-weight:700; color:red;"> CLOSE</span></h3>
-            <button id = "open_shop">Open shop</button>
-            <button id = "close_shop">Close shop</button>
-            <br><br>
-            <button id = "show_coustomer_accounts">Show coustomer accounts</button>
-            <button id = "show_employee_accounts">Show employee accounts</button>
-            <button id = "show_admin_accounts">Show admin accounts</button>
+            <table class = "table">
+                <tr style="padding-left:10px">
+                <th >User name</th>   
+                <th>Email ............</th>
+                <th>First name</th>
+                <th>Last name</th>
+                <th>Auth_level</th>
+                <th></th>
+                </tr>
+                <tr>
+                <td>Eray</td>   
+                <td>edwardguo12@gmail.com </td>
+                <td>edwardcwe2a</td>
+                <td>csqwdasdq</td>
+                <td><select> 
+                    <option value = "C">Customer</option>
+                    <option value = "E">Cheif</option>
+                    <option value = "A">Admin</option>
+                    
+                    </select></td>
+                <td><button>Update</button></td>
+
+                </tr>
+            
+            
+            </table>
+            
+                    
         </div>
     </body>
 </html>
