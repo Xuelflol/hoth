@@ -10332,7 +10332,7 @@ return jQuery;
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {
-    var ordersContainer = document.getElementById("container");
+/*    var ordersContainer = document.getElementById("container");
     var logout = document.getElementById("logout");
     var socket = io();
     var kitchenItem = 0;
@@ -10484,7 +10484,7 @@ return jQuery;
     
     logout.addEventListener("click", function() {
         location.href = "/logout";
-    });
+    });*/
     
     /*function checkDiv(orderid, time) {
         var ndiv = document.getElementById("order-" + orderIds[0]);
@@ -10500,6 +10500,19 @@ return jQuery;
     /*function deleteItem() {
         ndiv.parentNode.removeChild("order-" + orderid);
     }*/
+
+    var orderNum = 0;
+    var socket = io();
+
+    if (orderNum == 0) {
+        $.ajax({
+            url:"/start-kitchen",
+            type:"post",
+            success:function(resp) {
+                console.log(resp);
+            }
+        })
+    }
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 

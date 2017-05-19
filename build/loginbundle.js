@@ -10351,9 +10351,9 @@ return jQuery;
 	var profileDiv = document.getElementById("profile_link");
 	
 	//initial
-	profileDiv.style.display = "none";
+	/*profileDiv.style.display = "none";
 	logoutDiv.style.display = "none";
-	loginDiv.style.display = "none";
+	loginDiv.style.display = "none";*/
     
     /*regSubmit.addEventListener("click", function() {
         $.ajax({

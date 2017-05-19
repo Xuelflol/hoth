@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha test/functional/pagetest.js",
     "start": "node server.js"
   },
   "repository": {
