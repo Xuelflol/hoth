@@ -428,6 +428,7 @@ app.get("/", function(req, resp) {
     }
 });
 
+
 app.get("/profile", function(req, resp) {
     if(req.session.auth == "C") {
         resp.sendFile(pF + "/profile.html");
@@ -447,6 +448,10 @@ app.get("/signin", function(req, resp) {
 app.get("/logout", function(req, resp) {
     req.session.destroy();
     resp.redirect("/");
+});
+
+app.get("/adminuser", function(req, resp) {
+    resp.sendFile(pF + "/admin_user.html");
 });
 
 
