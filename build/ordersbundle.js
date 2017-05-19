@@ -10339,9 +10339,13 @@ return jQuery;
         fname = document.getElementById("f-name"),
         userName = document.getElementById("u-name"),
         email = document.getElementById("e-mail"),
-        foodTotal = document.getElementById("fb-total"),
-        taxCost = document.getElementById("taxes"),
-        orderTotal = document.getElementById("order-total")  
+        foodTotal = document.getElementById("fb-t"),
+        taxCost = document.getElementById("fb-ta"),
+        orderTotal = document.getElementById("fb-ot") 
+	var im_credit = document.getElementById("im-credit");
+	var	gcs = document.getElementById("gcs");
+	var	wupi = document.getElementById("wupi");
+	var table = document.getElementById("table");
     
     var orders = {};
     var itemName = [];
@@ -10349,8 +10353,24 @@ return jQuery;
     var itemQuantity = [];
     var totalPrice = 0;
     var tax;
+	
+	//to round to 2 dec places
+	function round2Fixed(value) {
+  		value = +value;
+		
+  	if (isNaN(value))
+    	return NaN;
 
-    
+  	// Shift
+  	value = value.toString().split('e');
+  	value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + 2) : 2)));
+
+  	// Shift back
+  	value = value.toString().split('e');
+	return (+(value[0] + 'e' + (value[1] ? (+value[1] - 2) : -2))).toFixed(2);
+	}
+	
+
     $.ajax({
         url:"/get/orders",
         type:"post",
@@ -10362,9 +10382,15 @@ return jQuery;
             for(var i=0; i<itemQuantity.length;i++){
                 var itemTotalPrice = itemPrice[i] * itemQuantity[i];
 
-                var newD = document.createElement('div');
-                newD.innerHTML = itemName[i]+" X "+ itemQuantity[i]+ " $"+itemTotalPrice;
-                orderDispaly.appendChild(newD);
+				var row = table.insertRow();
+				var cel0 = row.insertCell(0);
+				var cel1 = row.insertCell(1);
+				var cel2 = row.insertCell(2);
+				cel0.innerHTML = itemName[i];
+				cel1.innerHTML = itemQuantity[i];
+				cel2.innerHTML = " $" + round2Fixed(itemTotalPrice);
+				
+                table.appendChild(row);
                 totalPrice = totalPrice + itemTotalPrice;
                 
             }
@@ -10373,12 +10399,10 @@ return jQuery;
             fname.innerHTML = fname.innerHTML + ' ' + resp.fname;
             userName.innerHTML = userName.innerHTML + ' ' + resp.username;
             email.innerHTML = email.innerHTML + ' '+ resp.email;
-            foodTotal.innerHTML = foodTotal.innerHTML + ' ' + totalPrice;
-            taxCost.innerHTML = taxCost.innerHTML + ' ' + tax;
-            orderTotal.innerHTML = orderTotal.innerHTML + ' ' + (tax + totalPrice);
+            foodTotal.innerHTML = foodTotal.innerHTML + " " + round2Fixed(totalPrice);
+            taxCost.innerHTML = taxCost.innerHTML + " " + round2Fixed(tax);
+            orderTotal.innerHTML = orderTotal.innerHTML + " " + round2Fixed(tax + totalPrice);
             console.log(tax+totalPrice)
-
-            
         }
     });
     
