@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/ACIT2910-HOTH/hoth#readme",
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "express": "^4.15.2",
-    "express-session": "^1.15.2",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "express-session": "^1.15.3",
     "formidable": "^1.1.1",
     "jquery": "^3.2.1",
     "jshint": "^2.9.4",
