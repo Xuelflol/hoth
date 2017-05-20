@@ -23,7 +23,7 @@ body {
 }
 
 #item_up {
-    
+
 }
 
 #logout {
@@ -53,10 +53,34 @@ h3 {
     margin: 10px auto;
 }
 
+.pos {
+    position:relative;
+}
+
+.hot-plate-timer {
+    position:absolute;
+    right:10px;
+    top:5px;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.hot-plate-qty {
+    position:absolute;
+    left:10px;
+    top:5px;
+    font-size:22px;
+    font-weight:bold;
+}
+
 #progress {
     margin: 50px auto;
     width: 80vw;
     background-color: rgba(150,150,150,0.6);
+}
+
+#controller {
+
 }
 
 #controller_2 {
@@ -66,11 +90,28 @@ h3 {
 #timeout {
     background-color: darkgrey;
     color: black;
-    width: 80%;
+    width: 0%;
+}
+
+#progress {
+    position:relative;
+}
+
+#percentage {
+    position:absolute;
+    left:50%;
 }
 
 #button {
     margin: 50px auto;
+}
+
+#item-list {
+    transform: scale(1.5);
+}
+
+#item-list option {
+    font-size: 16px;
 }
 
 @media (max-width: 991px) {

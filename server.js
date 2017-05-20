@@ -318,7 +318,6 @@ app.post("/start-kitchen", function(req, resp) {
             }
             
             resp.send(obj);
-            console.log(obj);
         });
     });
 });
@@ -382,6 +381,44 @@ app.post("/adminItems", function(req,resp){
         });
     });
 });
+
+app.post("/get/items", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("SELECT * FROM hoth_items", function(err, result) {
+            done();
+            resp.send({result: result.rows});
+        });
+    });
+});
+
+app.post("/prepare/item", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("INSERT INTO hoth_prepared (item_name, quantity, item_code) VALUES ($1, $2, $3) RETURNING *", [req.body.item, req.body.quantity, req.body.item_id], function(err, result) {
+            done();
+            
+            resp.send({
+                item_id: result.rows[0].prep_id,
+                item: result.rows[0].item_name,
+                quantity: result.rows[0].quantity,
+                item_code: result.rows[0].item_code
+            });
+        });
+    });
+});
+
+app.post("/discard/item", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_prepared SET discarded = 'Y' WHERE prep_id = $1", [req.body.item], function(err, result) {
+            done();
+
+            if (err) {
+                console.log(err);
+            }
+
+            resp.send("success");
+        })
+    })
+})
 
 var imageName;
 app.post("/filename",function(req,resp){
