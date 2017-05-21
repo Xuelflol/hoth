@@ -178,7 +178,6 @@ app.post("/orders",function(req,resp){
         orders.pop();
     }
     orders.push(req.body.orders)
-    console.log(orders)
     resp.send({status:"success"})
     
 });
@@ -194,7 +193,6 @@ app.post("/get/orders",function(req,resp){
 }); 
 
 app.post("/get/price",function(req,resp){
-    console.log(req.body);
     pg.connect(dbURL,function(err,client,done){
         if(err){
             console.log(err);
@@ -221,7 +219,6 @@ app.post("/get/price",function(req,resp){
          });
 
 app.post("/save/order",function(req,resp){
-    console.log(req.body)
     pg.connect(dbURL,function(err,client,done){
         if(err){
             console.log(err);
@@ -249,7 +246,6 @@ app.post("/save/order",function(req,resp){
 });
 
 app.post("/order/detailes",function(req,resp){
-    console.log(req.body)
     pg.connect(dbURL,function(err,client,done){
         if(err){
             console.log(err);
@@ -279,10 +275,23 @@ app.post("/order/detailes",function(req,resp){
 
 app.post("/submit/order", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
-        client.query("SELECT * FROM hoth_order_details WHERE order_id = $1", [req.session.orderid], function(err, result) {
+        client.query("SELECT * FROM hoth_order_details INNER JOIN hoth_items ON hoth_order_details.item_name = hoth_items.item_name WHERE hoth_order_details.order_id = $1", [req.session.orderid], function(err, result) {
             done();
-            
-            resp.send(result.rows);
+
+            var obj = {}
+
+            obj["0"] = {
+                order_id: result.rows[0].orderid,
+                items: {},
+                item_code: {}
+            }
+
+            for (var i = 0; i < result.rows.length; i++) {
+                obj["0"].items[result.rows[i].item_name] = result.rows[i].quantity;
+                obj["0"].item_code[result.rows[i].item_name] = result.rows[i].item_code;
+            }
+
+            resp.send(obj);
         });
     });
 });
@@ -290,7 +299,7 @@ app.post("/submit/order", function(req, resp) {
 //kitchen
 app.post("/start-kitchen", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
-        client.query("SELECT * FROM hoth_order_details WHERE status = 'P'", function(err, result) {
+        client.query("SELECT hoth_order_details.*, hoth_items.item_code FROM hoth_order_details INNER JOIN hoth_items ON hoth_order_details.item_name = hoth_items.item_name WHERE hoth_order_details.status = 'P' ORDER BY hoth_order_details.order_id", function(err, result) {
             done();
             
             var index = 0;
@@ -304,15 +313,16 @@ app.post("/start-kitchen", function(req, resp) {
                     obj[lastItem] = {
                         order_id: result.rows[index].order_id,
                         items: {},
-                        time_left: result.rows[index].time_left
+                        item_code: {},
                     };
                     
                     obj[lastItem].items[result.rows[index].item_name] = result.rows[index].quantity;
+                    obj[lastItem].item_code[result.rows[index].item_name] = result.rows[index].item_code;
                     
                     index++;
                 } else {
                     obj[lastItem].items[result.rows[index].item_name] = result.rows[index].quantity;
-                    obj[lastItem].time_left += result.rows[index].time_left;
+                    obj[lastItem].item_code[result.rows[index].item_name] = result.rows[index].item_code;
                     index++
                 }
             }
@@ -345,7 +355,7 @@ app.post("/change/price",function(req,resp){
         }
         client.query("UPDATE hoth_items SET price = $1 WHERE item_code = $2",[req.body.price,req.body.item],function(err,result){
             done();
-            console.log(result)
+
             if(err){
                 console.log(err);
             }else {
@@ -357,14 +367,12 @@ app.post("/change/price",function(req,resp){
 });
 
 app.post("/adminItems", function(req,resp){
-	console.log(req.body);
     pg.connect(dbURL,function(err,client,done){
         if(err){
             console.log(err)
         }
         client.query("INSERT INTO hoth_items (item_code,category,description,item_name,filename,price) VALUES($1,$2,$3,$4,$5,$6)",[req.body.itemCode,req.body.category,req.body.desc,req.body.name,req.body.fileName,req.body.price],function(err,result){
             done();
-            console.log(result)
             if(err){
                 console.log(err);
             }else {
@@ -395,9 +403,9 @@ app.post("/prepare/item", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         client.query("INSERT INTO hoth_prepared (item_name, quantity, item_code) VALUES ($1, $2, $3) RETURNING *", [req.body.item, req.body.quantity, req.body.item_id], function(err, result) {
             done();
-            
+    
             resp.send({
-                item_id: result.rows[0].prep_id,
+                prep_id: result.rows[0].prep_id,
                 item: result.rows[0].item_name,
                 quantity: result.rows[0].quantity,
                 item_code: result.rows[0].item_code
@@ -416,9 +424,75 @@ app.post("/discard/item", function(req, resp) {
             }
 
             resp.send("success");
-        })
-    })
-})
+        });
+    });
+});
+
+app.post("/bag/item", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("SELECT * FROM hoth_prepared WHERE item_name = $1 AND discarded = 'N' AND quantity >= $2", [req.body.item, req.body.quantity], function(err, result) {
+            done();
+
+            if (result.rows.length > 0) {
+                client.query("WITH cte AS (SELECT prep_id FROM hoth_prepared WHERE quantity >= $1 AND item_name = $2 ORDER BY prep_id LIMIT 1) UPDATE hoth_prepared s SET quantity = quantity - $1 FROM cte WHERE s.prep_id = cte.prep_id RETURNING cte.prep_id, s.item_code, s.quantity", [req.body.quantity, req.body.item], function(err, result) {
+                    done();
+
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    var obj = {
+                        status: "success",
+                        prep_id: result.rows[0].prep_id,
+                        item_code: result.rows[0].item_code,
+                        quantity: result.rows[0].quantity
+                    }
+
+                    resp.send(obj);
+                }); 
+            } else {
+                resp.send({
+                    status: "fail"
+                });
+            }
+        });
+    });
+});
+
+app.post("/item/complete", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_order_details SET status = 'F' WHERE item_name = $1 and order_id = $2", [req.body.item, req.body.orderid], function(err, result) {
+            done();
+
+            client.query("SELECT * FROM hoth_order_details WHERE order_id = $1 AND status = 'P'", [req.body.orderid], function(err, result) {
+                done();
+
+                if (result.rows.length == 0) {
+                    resp.send({
+                        status: "success",
+                        orderid: req.body.orderid
+                    });
+                } else {
+                    resp.send({
+                        status: "fail"
+                    });
+                }
+            });
+        });
+    });
+});
+
+app.post("/complete/order", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING order_id", [req.body.orderid], function(err, result) {
+            done();
+
+            resp.send({
+                orderid: result.rows[0].order_id
+            });
+        });
+    });
+});
 
 var imageName;
 app.post("/filename",function(req,resp){
@@ -426,8 +500,6 @@ app.post("/filename",function(req,resp){
 })
 
 app.post('/upload', function(req, resp){
-    
-    console.log(imageName)
   var form = new formidable.IncomingForm();
  
   form.multiples = true;
@@ -478,7 +550,6 @@ app.get("/", function(req, resp) {
     }
 });
 
-
 app.get("/profile", function(req, resp) {
     if(req.session.auth == "C") {
         resp.sendFile(pF + "/profile.html");
@@ -498,10 +569,6 @@ app.get("/signin", function(req, resp) {
 app.get("/logout", function(req, resp) {
     req.session.destroy();
     resp.redirect("/");
-});
-
-app.get("/adminuser", function(req, resp) {
-    resp.sendFile(pF + "/admin_user.html");
 });
 
 
@@ -527,17 +594,11 @@ app.get("/order/submitted/:orderid", function(req, resp) {
 
 
 //socket
-io.on("connection", function(socket) {
-    //socket.on("join room", function(room) {
-    //    socket.room = room;
-    //    socket.join = socket.room;
-    //    
-    //    console.log(socket.room);
-    //});
-    
+io.on("connection", function(socket) {    
     socket.join("connected");
     
     socket.on("send message", function(orders) {
+        console.log(orders);
         io.to("connected").emit("create message", orders);
     });
 });

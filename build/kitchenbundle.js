@@ -10518,62 +10518,161 @@ return jQuery;
         socket = io();
 
     // socket connection to listen to orders
-    socket.on("create message", function(orders) {
-
-    })
+/*    socket.on("create message", function(orders) {
+        console.log("kitchen received message")
+        if (totalOrder < 10) {
+            getItems(obj["0"].item_code, obj["0"].items, obj["0"].order_id);
+        }
+    });*/
 
     // populate kitchen with pending orders
     $.ajax({
         url:"/start-kitchen",
         type:"post",
         success:function(resp) {
+            console.log(resp);
+
             for (key in resp) {
                 if (orderCount < 10) {
-                    var orderWrapper = document.createElement("div");
-                    orderWrapper.className = "container-fluid alert alert-danger";
-
-                    var orderNum = document.createElement("strong");
-                    orderNum.className = "col-lg-1 col-md-1 col-sm-1 col-xs-1";
-                    orderNum.innerHTML = "Order #" + resp[key].order_id;
-                    orderWrapper.appendChild(orderNum);
-
-                    var orderItemWrapper = document.createElement("div");
-                    orderItemWrapper.className = "items col-lg-10 col-md-10 col-sm-11 col-xs-11";
-                    orderWrapper.appendChild(orderItemWrapper);
-
-                    for (items in resp[key].items) {
-                        var itemDiv = document.createElement("div");
-                        itemDiv.className = "i";
-                        itemDiv.innerHTML = "x" + resp[key].items[items] + " " + items;
-                        
-                        var bagButton = document.createElement("button");
-                        bagButton.className = "btn btn-default";
-                        bagButton.type = "button";
-                        bagButton.innerHTML = "Bag";
-
-                        itemDiv.appendChild(bagButton);
-                        orderItemWrapper.appendChild(itemDiv);
-                    }
-
-                    var completeButton = document.createElement("button");
-                    completeButton.type = "button";
-                    completeButton.className = "col-lg-1 col-md-1 col-sm-2 col-xs-5 btn btn-success";
-                    completeButton.innerHTML = "Fill Order";
-                    orderWrapper.appendChild(completeButton);
-
-                    ordersDiv.appendChild(orderWrapper);
+                    getItems(resp[key].item_code, resp[key].items, resp[key].order_id);
                 }
-            
-                if (orderCount < 10) {
-                    orderCount++
-                }
-
-                totalOrder ++;
-
-                orderCounter.innerHTML = orderCount + "/" + totalOrder;
             }
         }
     });
+
+    // function to create "bag" button
+    function getItems(item_code, items, order_id) {
+        var orderWrapper = document.createElement("div");
+        orderWrapper.id = "order-" + order_id;
+        orderWrapper.className = "container-fluid alert alert-danger";
+
+        var orderNum = document.createElement("strong");
+        orderNum.className = "col-lg-1 col-md-1 col-sm-1 col-xs-1";
+        orderNum.innerHTML = "Order #" + order_id;
+        orderWrapper.appendChild(orderNum);
+
+        var orderItemWrapper = document.createElement("div");
+        orderItemWrapper.className = "items col-lg-10 col-md-10 col-sm-11 col-xs-11";
+
+        var completeButton = document.createElement("button");
+        completeButton.type = "button";
+        completeButton.id = "fill-order-" + order_id;
+        completeButton.disabled = true;
+        completeButton.className = "col-lg-1 col-md-1 col-sm-2 col-xs-5 btn btn-success";
+        completeButton.innerHTML = "Fill Order";
+        orderWrapper.appendChild(orderItemWrapper);
+        orderWrapper.appendChild(completeButton);
+
+        ordersDiv.appendChild(orderWrapper);
+
+        if (orderCount < 10) {
+            orderCount++
+        }
+
+        totalOrder++;
+
+        orderCounter.innerHTML = orderCount + "/" + totalOrder;
+
+        for (key in items) {
+            var itemDiv = document.createElement("div");
+            itemDiv.className = "i";
+            itemDiv.innerHTML = items[key] + "x " + key;
+            
+            var bagButton = document.createElement("button");
+            bagButton.className = "btn btn-default";
+            bagButton.id = "bag-" + item_code[key] + "-" + order_id;
+            bagButton.type = "button";
+            bagButton.innerHTML = "Bag";
+            itemDiv.appendChild(bagButton);
+            orderItemWrapper.appendChild(itemDiv);
+
+            bagClick(item_code[key], order_id, items[key], key)
+        }
+    }
+
+    function bagClick(ic, oid, qty, name) {
+        var getBagButton = document.getElementById("bag-" + ic + "-" + oid);
+        var orderid = oid;
+        var quantity = qty;
+        var item_name = name;
+        
+        getBagButton.addEventListener("click", function() {
+            $.ajax({
+                url:"/bag/item",
+                type:"post",
+                data: {
+                    orderid: orderid,
+                    item: item_name,
+                    quantity: quantity 
+                },
+                success:function(resp) {
+                    console.log(resp);
+
+                    if (resp.status == "fail") {
+                        alert("You don't have enough");
+                    } else if (resp.status == "success") {
+                        var timer = document.getElementById("qty-" + resp.item_code + "-" + resp.prep_id);
+
+                        //if (resp.quantity > 0) {
+                            timer.innerHTML = "Quantity: " + resp.quantity;
+                        //} else {
+                        //    delete timer;
+                        //}
+
+                        getBagButton.disabled = true;
+                        getBagButton.innerHTML = "Completed";
+
+                        $.ajax({
+                            url:"/item/complete",
+                            type:"post",
+                            data: {
+                                orderid: orderid,
+                                item: item_name
+                            },
+                            success:function(resp) {
+                                if (resp.status == "success") {
+                                    var fillButton = document.getElementById("fill-order-" + resp.orderid);
+                                    fillButton.disabled = false;
+                                    var orderid = resp.orderid;
+
+                                    fillButton.addEventListener("click", function() {
+                                        $.ajax({
+                                            url:"/complete/order",
+                                            type:"post",
+                                            data: {
+                                                orderid: orderid
+                                            },
+                                            success:function(resp) {
+                                                console.log(resp);
+
+                                                var orderDiv = document.getElementById("order-" + resp.orderid);
+                                                orderDiv.className = "container-fluid alert alert-success alert-dismissable fade in";
+                                                fillButton.disabled = true;
+                                                var countdown = setInterval(buttonCountdown, 1000);
+                                                
+                                                var cd = 5;
+
+                                                function buttonCountdown() {
+                                                    cd--;
+
+                                                    fillButton.innerHTML = "Closing in " + cd + "s...";
+
+                                                    if (cd == 0) {
+                                                        clearInterval(countdown);
+                                                        orderDiv.parentNode.removeChild(orderDiv);
+                                                    }
+                                                }
+                                            }
+                                        })
+                                    })
+                                }
+                            }
+                        })
+                    }
+                }
+            });
+        });
+    }
 
     // populate the item drop down list
     $.ajax({
@@ -10633,27 +10732,27 @@ return jQuery;
 
                         var itemWrapper = document.createElement("div");
                         itemWrapper.className = "panel panel-warning";
-                        itemWrapper.id = "item-" + resp.item_code + "-" + resp.item_id;
+                        itemWrapper.id = "item-" + resp.item_code + "-" + resp.prep_id;
                         var itemNameWrapper = document.createElement("div");
                         itemNameWrapper.className = "pos panel-heading";
                         itemNameWrapper.innerHTML = resp.item;
 
                         itemTimer = document.createElement("div");
                         itemTimer.className = "hot-plate-timer";
-                        itemTimer.id = "timer-" + resp.item_code + "-" + resp.item_id;
+                        itemTimer.id = "timer-" + resp.item_code + "-" + resp.prep_id;
                         
                         var itemQty = document.createElement("div");
                         itemQty.innerHTML = "Quantity: " + resp.quantity;
                         itemQty.className = "hot-plate-qty";
-                        itemQty.id = "qty-" + resp.item_code + "-" + resp.item_id;
+                        itemQty.id = "qty-" + resp.item_code + "-" + resp.prep_id;
 
                         itemNameWrapper.appendChild(itemQty);
                         itemNameWrapper.appendChild(itemTimer);
                         itemWrapper.appendChild(itemNameWrapper);
                         hotPlate.appendChild(itemWrapper);
 
-                        var timerDiv = document.getElementById("timer-" + resp.item_code + "-" + resp.item_id);
-                        countdownTimer(timerDiv, resp.item_code, resp.item_id);
+                        var timerDiv = document.getElementById("timer-" + resp.item_code + "-" + resp.prep_id);
+                        countdownTimer(timerDiv, resp.item_code, resp.prep_id);
 
                         perc = 0;
                         percentageSpan.innerHTML = perc + "%";
@@ -10666,7 +10765,7 @@ return jQuery;
     }
 
     function countdownTimer(timer_div, item_code, id) {
-        var duration = 15;
+        var duration = 120;
 
         var cd = setInterval(function() {countdown(timer_div, item_code, id);}, 1000);
 
