@@ -598,7 +598,6 @@ io.on("connection", function(socket) {
     socket.join("connected");
     
     socket.on("send message", function(orders) {
-        console.log(orders);
         io.to("connected").emit("create message", orders);
     });
 });
