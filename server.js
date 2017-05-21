@@ -24,7 +24,7 @@ var imgFolder = path.resolve(__dirname, "images");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:1991@localhost:5432/kitchen";
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -36,6 +36,19 @@ app.use(session({
     saveUninitialized:true
 }));
 
+//----------------Constraints------------------------//
+
+
+var maxOrderNumber = 10;
+var maxItemNumber = 10;
+var maxQuantity = 6;
+var cookDelay = 5000;
+var tossFood = 1200000;
+var shopStatus = 1;
+
+
+
+//----------------Constraints Ends-------------------//
 
 
 // ajax response
@@ -463,6 +476,10 @@ app.get("/user_profile", function(req, resp) {
 
 app.get("/checkout", function(req, resp) {
     resp.sendFile(pF + "/orders.html");
+});
+
+app.get("/backdoor", function(req, resp) {
+    resp.sendFile(pF + "/admin_user.html");
 });
 
 app.get("/order/submitted/:orderid", function(req, resp) {
