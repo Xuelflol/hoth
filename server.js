@@ -281,7 +281,7 @@ app.post("/submit/order", function(req, resp) {
             var obj = {}
 
             obj["0"] = {
-                order_id: result.rows[0].orderid,
+                order_id: result.rows[0].order_id,
                 items: {},
                 item_code: {}
             }

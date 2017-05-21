@@ -13,13 +13,23 @@ body {
 
 .holder, .holder_2 {
     background-color: rgba(50,50,50,0.8);
-    width: 95vw;
     margin: 0 auto;
     border: 2px solid black;
 }
 
 .holder_2 {
     margin: 50px auto;
+    position:relative;
+    width:95vw;
+}
+
+.fill-button {
+    width: 100%;
+    height:100%;
+}
+
+#logout_form {
+    
 }
 
 #item_up {
@@ -28,6 +38,9 @@ body {
 
 #logout {
     margin-bottom: 20px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
 }
 
 h3 {

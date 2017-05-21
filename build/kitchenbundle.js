@@ -10502,7 +10502,6 @@ return jQuery;
     }*/
 
     var ordersDiv = document.getElementById("orders"),
-        orderCounter = document.getElementById("order-counter"),
         itemList = document.getElementById("item-list"),
         makeOne = document.getElementById("make1"),
         makeTwo = document.getElementById("make2"),
@@ -10518,12 +10517,15 @@ return jQuery;
         socket = io();
 
     // socket connection to listen to orders
-/*    socket.on("create message", function(orders) {
-        console.log("kitchen received message")
+    socket.on("create message", function(orders) {
+        console.log(orders)
         if (totalOrder < 10) {
-            getItems(obj["0"].item_code, obj["0"].items, obj["0"].order_id);
+            getItems(orders["0"].item_code, orders["0"].items, orders["0"].order_id);
         }
-    });*/
+
+        console.log(orderCount);
+        console.log(totalOrder);
+    });
 
     // populate kitchen with pending orders
     $.ajax({
@@ -10537,6 +10539,9 @@ return jQuery;
                     getItems(resp[key].item_code, resp[key].items, resp[key].order_id);
                 }
             }
+
+            console.log(orderCount);
+            console.log(totalOrder);
         }
     });
 
@@ -10552,13 +10557,13 @@ return jQuery;
         orderWrapper.appendChild(orderNum);
 
         var orderItemWrapper = document.createElement("div");
-        orderItemWrapper.className = "items col-lg-10 col-md-10 col-sm-11 col-xs-11";
+        orderItemWrapper.className = "items col-lg-8 col-md-8 col-sm-9 col-xs-9";
 
         var completeButton = document.createElement("button");
         completeButton.type = "button";
         completeButton.id = "fill-order-" + order_id;
         completeButton.disabled = true;
-        completeButton.className = "col-lg-1 col-md-1 col-sm-2 col-xs-5 btn btn-success";
+        completeButton.className = "col-lg-3 col-md-3 col-sm-2 col-xs-2 btn btn-success";
         completeButton.innerHTML = "Fill Order";
         orderWrapper.appendChild(orderItemWrapper);
         orderWrapper.appendChild(completeButton);
@@ -10570,8 +10575,6 @@ return jQuery;
         }
 
         totalOrder++;
-
-        orderCounter.innerHTML = orderCount + "/" + totalOrder;
 
         for (key in items) {
             var itemDiv = document.createElement("div");
@@ -10611,13 +10614,14 @@ return jQuery;
                     if (resp.status == "fail") {
                         alert("You don't have enough");
                     } else if (resp.status == "success") {
-                        var timer = document.getElementById("qty-" + resp.item_code + "-" + resp.prep_id);
+                        var qtyDiv = document.getElementById("qty-" + resp.item_code + "-" + resp.prep_id);
+                        var itemDiv = document.getElementById("item-" + resp.item_code + "-" + resp.prep_id);
 
-                        //if (resp.quantity > 0) {
-                            timer.innerHTML = "Quantity: " + resp.quantity;
-                        //} else {
-                        //    delete timer;
-                        //}
+                        if (resp.quantity > 0) {
+                            qtyDiv.innerHTML = "Quantity: " + resp.quantity;
+                        } else {
+                            itemDiv.parentNode.removeChild(itemDiv);
+                        }
 
                         getBagButton.disabled = true;
                         getBagButton.innerHTML = "Completed";
@@ -10655,7 +10659,7 @@ return jQuery;
                                                 function buttonCountdown() {
                                                     cd--;
 
-                                                    fillButton.innerHTML = "Closing in " + cd + "s...";
+                                                    fillButton.innerHTML = cd + "s...";
 
                                                     if (cd == 0) {
                                                         clearInterval(countdown);

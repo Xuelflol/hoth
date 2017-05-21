@@ -21,37 +21,11 @@
     </head>
     
     <body>
-        <form method="get" action="/logout">
-            <button class="btn btn-primary" type="submit" id="logout">LOGOUT</button>
-        </form>
-        
-        <div class="holder">
-            <h3>Orders <span id="order-counter"></span></h3>
-            
-            <div id="orders">
-            <!--Order item that has been finished
-                <div class="container-fluid alert alert-success alert-dismissable fade in">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Order #1</strong>
-                    <div class="items col-lg-10 col-md-10 col-sm-10 col-xs-10">
-                        <div class="i">x2 Burger</div>
-                        <div class="i">x3 Fries</div>
-                    </div>
-                </div>-->
-                
-                <!--Order item that has not been finished
-                <div class="container-fluid alert alert-danger">
-                    <strong class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Order #2</strong>
-                    <div class="items col-lg-10 col-md-10 col-sm-11 col-xs-11">
-                        <div class="i">x2 Burger <button class="btn btn-default" type="button">Bag</button></div>
-                        <div class="i">x2 Fries <button class="btn btn-default" type="button">Bag</button></div>
-                    </div>
-                    <button type="button" class="col-lg-1 col-md-1 col-sm-2 col-xs-5 btn btn-success">Fill Order</button>
-                </div>-->
-            </div>
-        </div>
-        
         <div class="holder_2">
+            <form id="logout_form" method="get" action="/logout">
+                <button class="btn btn-primary" type="submit" id="logout">LOGOUT</button>
+            </form>
+
             <div id="controller">
                 <!--Once a food item is clicked on, change the item_to_make innerHTML to the name of the food item-->
                 <div id="item_up">
@@ -79,25 +53,55 @@
             </div>
         </div>
         
-        <div class="holder">
-            <h3>Hot Plate</h3>
-            
-            <div id="hot_plate">
-                <!--<div class="panel panel-warning">
-                    <div class="pos panel-heading">
-                        5 X-Wings
+        <div class="container-fluid">
+            <div class="holder col-lg-6">
+                <h3>Orders</h3>
+                
+                <div id="orders">
+                <!--Order item that has been finished
+                    <div class="container-fluid alert alert-success alert-dismissable fade in">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Order #1</strong>
+                        <div class="items col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                            <div class="i">x2 Burger</div>
+                            <div class="i">x3 Fries</div>
+                        </div>
+                    </div>-->
+                    
+                    <!--Order item that has not been finished
+                    <div class="container-fluid alert alert-danger">
+                        <strong class="col-lg-1 col-md-1 col-sm-1 col-xs-1">Order #2</strong>
+                        <div class="items col-lg-10 col-md-10 col-sm-11 col-xs-11">
+                            <div class="i">x2 Burger <button class="btn btn-default" type="button">Bag</button></div>
+                            <div class="i">x2 Fries <button class="btn btn-default" type="button">Bag</button></div>
+                        </div>
+                        <button type="button" class="col-lg-1 col-md-1 col-sm-2 col-xs-5 btn btn-success">Fill Order</button>
+                    </div>-->
+                </div>
+            </div>
 
-                        <div class="hot-plate-timer">
-                            
+            <div class="col-lg-1">
+            </div>
+
+            <div class="holder col-lg-5">
+                <h3>Hot Plate</h3>
+                
+                <div id="hot_plate">
+                    <!--<div class="panel panel-warning">
+                        <div class="pos panel-heading">
+                            5 X-Wings
+
+                            <div class="hot-plate-timer">
+                                
+                            </div>
                         </div>
                     </div>
+                    
+                    <div class="panel panel-warning">
+                        <div class="panel-heading">5 X-Wings</div>
+                    </div>-->
                 </div>
-                
-                <div class="panel panel-warning">
-                    <div class="panel-heading">5 X-Wings</div>
-                </div>-->
             </div>
-        </div>
-        
+        </div>        
     </body>
 </html>
