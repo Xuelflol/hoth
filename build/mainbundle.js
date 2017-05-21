@@ -10439,7 +10439,7 @@ return jQuery;
         var quantityInput = document.createElement("input");
         quantityInput.type = "number";
         quantityInput.min = "1";
-        quantityInput.max = "5";
+        quantityInput.max = "6";
         quantityInput.name = "qty_input";
         quantityInput.id = "qty-" + item_code;
         quantityInput.className = "form-control";
@@ -10465,7 +10465,7 @@ return jQuery;
             var cartItem = document.getElementById("cart-item-" + item_code);
             var itemQty = document.getElementById("qty-" + item_code);
             
-            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 5) {
+            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6) {
                 addToCart(item_name, item_code, price, quantityInput.value);
 
                 orders[item_code] = parseInt(itemQty.value);
@@ -10475,6 +10475,11 @@ return jQuery;
             } else if (cartItem != null) {
                 warningDiv.style.display = "inline";
                 warningDiv.innerHTML = "You already have this item in the cart.";
+                warningDiv.style.top = event.pageY - 50 + "px";
+                warningDiv.style.left = event.pageX + "px";
+            } else if (quantityInput.value > 6) {
+                warningDiv.style.display = "inline";
+                warningDiv.innerHTML = "You're ordering too much, we don't want your money!";
                 warningDiv.style.top = event.pageY - 50 + "px";
                 warningDiv.style.left = event.pageX + "px";
             }
@@ -10537,21 +10542,24 @@ return jQuery;
         itemUpdate.addEventListener("click", function() {
             var itemQty = document.getElementById("cart-qty-" + item_code);
             var itemPrice = document.getElementById("cart-price-" + item_code);
-            orders[item_code] = parseInt(itemQty.value);
             
-            qtyDiv.innerHTML = itemQty.value + " x ";
-            console.log(orders);
+            if(itemQty.value > 0 && itemQty.value <= 6) {
+                orders[item_code] = parseInt(itemQty.value);
+
+                qtyDiv.innerHTML = itemQty.value + " x ";
+            } else if (itemQty.value > 6) {
+                warningDiv.style.display = "inline";
+                warningDiv.innerHTML = "You're ordering too much, we don't want your money!";
+                warningDiv.style.top = event.pageY - 50 + "px";
+                warningDiv.style.left = event.pageX + "px";
+            }
         });
         
         deleteItem.addEventListener("click", function() {
             cartItem.parentNode.removeChild(cartItem);
             
             delete orders[item_code];
-            
-            console.log(orders);
         });
-        
-        console.log(orders);
     }
     
 

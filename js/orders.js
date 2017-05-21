@@ -58,7 +58,6 @@ $(document).ready(function(){
 				
                 table.appendChild(row);
                 totalPrice = totalPrice + itemTotalPrice;
-                
             }
             tax = totalPrice * 0.1;
             console.log(tax)
@@ -75,61 +74,59 @@ $(document).ready(function(){
    
     function getOrderItems(orders){
         Object.keys(orders).forEach(function(key){
-                var orderItem = key;
-                var quantity = parseInt(orders[key]);
-                
-                itemQuantity.push(quantity)
-                
-                $.ajax({
-                    url:"/get/price",
-                    type:"post",
-                    data: {
-                        item:orderItem
-                    },
-                    success:function(resp){
-                        itemName.push(resp.name)
-                        itemPrice.push(parseFloat(resp.price))
-                
-                    },
-                    async:false
-                });
-            
+            var orderItem = key;
+            var quantity = parseInt(orders[key]);
+
+            itemQuantity.push(quantity)
+
+            $.ajax({
+                url:"/get/price",
+                type:"post",
+                data: {
+                    item:orderItem
+                },
+                success:function(resp){
+                    itemName.push(resp.name);
+                    itemPrice.push(parseFloat(resp.price));
+                },
+                async:false
             });
+        });
     };
     
     submitButton.addEventListener("click",function(){
         
         $.ajax({
-                url:"/save/order",
-                type:"post",
-                data:{
-                    totalPirce:totalPrice
-                    },
-                success:function(resp){
-                    console.log(resp)
-                    var orderId = resp.id;
-                    for(var i=0; i<itemName.length;i++){
-                        $.ajax({
-                            url:"/order/detailes",
-                            type:"post",
-                            data:{
-                                name:itemName[i],
-                                quantity:itemQuantity[i],
-                                id:orderId
-                            },
-                            success:function(res){
-                                if (res.status == "success") {
-                                    location.href = "/order/submitted/" + orderId;
-                                }
+            url:"/save/order",
+            type:"post",
+            data:{
+                totalPirce:totalPrice
+            },
+            success:function(resp){
+                console.log(resp)
+                var orderId = resp.id;
+                
+                for(var i=0; i<itemName.length;i++){
+                    $.ajax({
+                        url:"/order/detailes",
+                        type:"post",
+                        data:{
+                            name:itemName[i],
+                            quantity:itemQuantity[i],
+                            id:orderId
+                        },
+                        success:function(res){
+                            if (res.status == "success") {
+                                location.href = "/order/submitted/" + orderId;
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            })
-    })
+            }
+        });
+    });
     
     cancelButton.addEventListener("click",function(){
         location.href = "/"
-    })
-    
+    });
 });
