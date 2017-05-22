@@ -9,7 +9,7 @@ $(document).ready(function() {
         type:"post",
         success:function(resp) {
             
-            orderNum.innerHTML = resp.order_id;
+            orderNum.innerHTML = resp["0"].order_id;
             
             for (key in resp) {
                 for (items in resp[key].items) {

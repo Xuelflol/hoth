@@ -22,33 +22,70 @@
         <link rel="stylesheet" href="/css/navigation.css"/>
         <link rel="icon" type="image/png" href="/images/Rebel-50.png"/>
         
+        <script src="/scripts/admin_userbundle.js"></script>
     </head>
     
     <body>
         <div id="nav"></div>
         
         <div id = "menu">
-            <p id = 'shop_status'> Shop is:</p>
+            <p id = 'shop_status'> Open/Close Shop:</p>
             <div>
             <label class="switch">
             <input id = 'switch' type="checkbox" >
             <div class="slider"></div>
             </label>
             </div>
+          
             <button id = "show_customer_accounts" class="button">Show customer accounts</button>
             <button id = "show_employee_accounts" class="button">Show employee accounts</button>
             <button id = "show_admin_accounts" class="button">Show admin accounts</button>
             <button id = "show_summary" class="button">Summary</button>
-            <button id = "show_discard_food" class="button">Discard food</button>
+            <button id = "show_discard_food" class="button">Generate Discard Report</button>
+            <button id="gen_order_report" class="button">Generate Order Report</button>
+            <button id="gen_item_report" class="button">Generate Item Report</button>
             
         </div>
         
         <div id = "container">
             <table id ="table" class = "table">
-                
             </table>
             
-                    
+            <div id="order-report-div">
+                <h3>Orders Report</h3>
+
+                <div class="report-wrapper">
+                    <div class="report-data">
+                        <h4>Order Id</h4>
+                    </div>
+
+                    <div class="report-data">
+                        <h4>Total Price</h4>
+                    </div>
+
+                    <div class="report-data">
+                        <h4>Customer</h4>
+                    </div>
+                </div>
+            </div>   
+
+            <div id="item-report-div">
+                <h3>Item Report</h3>
+
+                <div class="report-wrapper">
+                    <div class="report-data">
+                        <h4>Item Name</h4>
+                    </div>
+
+                    <div class="report-data">
+                        <h4>Total Price</h4>
+                    </div>
+
+                    <div class="report-data">
+                        <h4>Quantity</h4>
+                    </div>
+                </div>
+            </div> 
         </div>
         
     </body>

@@ -10444,7 +10444,7 @@ return jQuery;
             url:"/save/order",
             type:"post",
             data:{
-                totalPirce:totalPrice
+                totalPrice:totalPrice + tax
             },
             success:function(resp){
                 var orderId = resp.id;
@@ -10456,7 +10456,8 @@ return jQuery;
                         data:{
                             name:itemName[i],
                             quantity:itemQuantity[i],
-                            id:orderId
+                            id:orderId,
+                            price:itemPrice[i]
                         },
                         success:function(res){
                             if (res.status == "success") {

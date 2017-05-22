@@ -4,7 +4,31 @@
     
 }
 
+#user-table th, #user-table tr td {
+  border: 1px solid black;
+}
 
+#user-table tr:nth-child(1n+1) {
+  background-color:lightgray;
+}
+
+#user-table tr:nth-child(2n+1) {
+  background-color:lightblue;
+}
+
+#order-report-div {
+  display:none;
+}
+
+#item-report-div {
+  display:none;
+}
+
+.report-data {
+  display:inline-block;
+  width:32%;
+  text-align:left;
+}
 
 .button{
     font-size: 1vw;

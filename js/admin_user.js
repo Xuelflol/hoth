@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function() {
     var shopDisStatus = document.getElementById("shop_status");
     var shopSwitch = document.getElementById("switch");
     var showCustomer = document.getElementById("show_customer_accounts");
@@ -6,12 +6,92 @@ $(document).ready(function(){
     var showAdmin = document.getElementById("show_admin_accounts");
     var summary = document.getElementById("show_summary");
     var discardFood = document.getElementById("show_discard_food");
-    
-    
     var displayDiv = document.getElementById("container");
-   
-    
-    
+    var orderReportDiv = document.getElementById("order-report-div");
+    var itemReportDiv = document.getElementById("item-report-div");
+    var accountTable = document.getElementById("table");
+    var allAccountButton = document.getElementById("show_all_accounts"),
+        generateOrder = document.getElementById("gen_order_report"),
+        generateItem = document.getElementById("gen_item_report");
+
+    $.ajax({
+        url:"/report",
+        type:"post",
+        data: {
+            type: "order"
+        },
+        success:function(resp) {
+            for (key in resp.result) {
+                var reportWrapper = document.createElement("div");
+                reportWrapper.className = "report-wrapper";
+
+                var orderIdDiv = document.createElement("div");
+                orderIdDiv.className = "report-data";
+                var totalPriceDiv = document.createElement("div");
+                totalPriceDiv.className = "report-data";
+                var customerDiv = document.createElement("div");
+                customerDiv.className = "report-data";
+
+                orderIdDiv.innerHTML = resp.result[key].order_id;
+                totalPriceDiv.innerHTML = "$" + resp.result[key].total_price;
+                customerDiv.innerHTML = resp.result[key].customer;
+
+                reportWrapper.appendChild(orderIdDiv);
+                reportWrapper.appendChild(totalPriceDiv);
+                reportWrapper.appendChild(customerDiv);
+                orderReportDiv.appendChild(reportWrapper);
+            }
+
+            var sumWrapper = document.createElement("div");
+            sumWrapper.className = "report-wrapper";
+            sumWrapper.innerHTML = "<h4>Total: $" + resp.result["0"].sum + "</h4>";
+            orderReportDiv.appendChild(sumWrapper);
+        }
+    });
+
+    $.ajax({
+        url:"/report",
+        type:"post",
+        data: {
+            type: "item"
+        },
+        success:function(resp) {
+            console.log(resp);
+
+            for (var i = 0; i < resp.length; i++) {
+                var reportWrapper = document.createElement("div");
+                reportWrapper.className = "report-wrapper";
+
+                var itemNameDiv = document.createElement("div");
+                itemNameDiv.className = "report-data";
+                var totalPriceDiv = document.createElement("div");
+                totalPriceDiv.className = "report-data";
+                var quantityDiv = document.createElement("div");
+                quantityDiv.className = "report-data";
+
+                itemNameDiv.innerHTML = resp[i].item_name;
+                totalPriceDiv.innerHTML = "$" + resp[i].price;
+                quantityDiv.innerHTML = resp[i].quantity;
+
+                reportWrapper.appendChild(itemNameDiv);
+                reportWrapper.appendChild(totalPriceDiv);
+                reportWrapper.appendChild(quantityDiv);
+                itemReportDiv.appendChild(reportWrapper);
+            }
+        }
+    });
+
+    generateOrder.addEventListener("click", function() {
+        orderReportDiv.style.display = "inline";
+        itemReportDiv.style.display = "none";
+        accountTable.style.display = "none";
+    });
+
+    generateItem.addEventListener("click", function() {
+        orderReportDiv.style.display = "none";
+        itemReportDiv.style.display = "inline";
+        accountTable.style.display = "none";
+    });
     
     $.ajax({
         url:"/get/shopstatus",
@@ -61,6 +141,10 @@ $(document).ready(function(){
     });
     
     showChef.addEventListener("click",function(){
+        orderReportDiv.style.display = "none";
+        itemReportDiv.style.display = "none;
+        accountTable.style.display = "inline";
+      
         $.ajax({
             url:"/get/accounts",
             type:"post",
@@ -84,6 +168,10 @@ $(document).ready(function(){
     });
     
     showAdmin.addEventListener("click",function(){
+        orderReportDiv.style.display = "none";
+        itemReportDiv.style.display = "none;
+        accountTable.style.display = "inline";
+      
         $.ajax({
             url:"/get/accounts",
             type:"post",
@@ -107,6 +195,10 @@ $(document).ready(function(){
     });
     
     showCustomer.addEventListener("click",function(){
+        orderReportDiv.style.display = "none";
+        itemReportDiv.style.display = "none;
+        accountTable.style.display = "inline";
+      
         $.ajax({
             url:"/get/accounts",
             type:"post",
@@ -320,13 +412,5 @@ $(document).ready(function(){
        
         
     }
-				
-				
-	
-				
-	
-    
-    
-    
-    
+
 });

@@ -276,7 +276,7 @@ app.post("/order/detailes",function(req,resp){
             });
         }
 
-        client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id) VALUES ($1,$2,$3)",[req.body.name,req.body.quantity,req.body.id],function(err,result){
+        client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id, price) VALUES ($1,$2,$3, $4)",[req.body.name,req.body.quantity,req.body.id,req.body.price],function(err,result){
             done();
 
             if(err){
@@ -634,12 +634,53 @@ app.post("/complete/order", function(req, resp) {
 });
 
 
+app.post("/report", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        if (req.body.type == "order") {
+            client.query("WITH cte AS (SELECT SUM(total_price) FROM hoth_orders) SELECT * FROM hoth_orders CROSS JOIN cte", function(err, result) {
+                done();
 
+                resp.send({
+                    result: result.rows
+                });
+            });
+        } else if (req.body.type == "item") {
+            client.query("SELECT item_name, sum(quantity) AS quantity, sum(price) AS price FROM (SELECT * FROM hoth_order_details) AS s GROUP BY item_name", function(err, result) {
+                done();
 
+                resp.send(result.rows);
+            }) ;
+        }
+    });
+});
 
+var imageName;
+app.post("/filename",function(req,resp){
+    imageName = req.body.fileName
+})
 
+app.post('/upload', function(req, resp){
+  var form = new formidable.IncomingForm();
+ 
+  form.multiples = true;
 
+  form.uploadDir = path.join(__dirname, '/images');
 
+  form.on('file', function(field, file) {
+    fs.rename(file.path, path.join(form.uploadDir, imageName));
+  });
+
+  form.on('error', function(err) {
+    console.log('An error has occured: \n' + err);
+  });
+
+  form.on('end', function() {
+    resp.end('success');
+  });
+
+  form.parse(req);
+
+});
 
 app.use("/scripts", express.static("build"));
 
@@ -731,7 +772,6 @@ app.get("/adminuser",function(req,resp){
 app.get("/getId", function(req, resp) {
     resp.send(req.session.orderid);
 });
-
 
 //socket
 io.on("connection", function(socket) {    
