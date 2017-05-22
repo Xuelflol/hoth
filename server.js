@@ -665,6 +665,18 @@ app.get("/", function(req, resp) {
     }
 });
 
+app.get("/submit/getOrdersNums", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("SELECT * FROM hoth_orders", function(err, result) {
+            done();
+
+            resp.send({
+                orders: result.rows
+            });
+        });
+    });
+});
+
 app.get("/profile", function(req, resp) {
     if(req.session.auth == "C") {
         resp.sendFile(pF + "/profile.html");
@@ -714,7 +726,11 @@ app.get("/adminuser",function(req,resp){
     } else{
         resp.sendFile("/");
     }
-})
+});
+
+app.get("/getId", function(req, resp) {
+    resp.send(req.session.orderid);
+});
 
 
 //socket

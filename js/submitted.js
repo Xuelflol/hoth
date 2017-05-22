@@ -29,10 +29,19 @@ $(document).ready(function() {
         }
     });
     
+    socket.on("order up", function(id) {
+        for (var i = 0; i < id.length; i++) {
+            if (id[i] == getId()) {
+                alert("Your order is ready");
+            }
+        }
+    });
+    
+    socket.on("new order", createCurrentOrders(document.getElementById("current_orders"), order_num));
     
 //    This function is for getting the current orders
     $.ajax({
-        url: "/getOrdersNums",
+        url: "/submit/getOrdersNums",
         type: "get",
         success: function(resp) {
             getCurrentOrders(document.getElementById("current_orders"), resp);
@@ -51,9 +60,23 @@ $(document).ready(function() {
         for (var i = 0; i < arr.length; i++) {
             var ndiv = document.createElement("div");
             ndiv.className = "num";
-            ndiv.innerHTML = "Order #"+message;
+            ndiv.innerHTML = "Order #"+arr.orders[i].id;
 
             div.appendChild(ndiv);
         }
+    }
+        
+    function getId() {
+        var id = 0;
+        
+        $.ajax({
+            url: "/getId",
+            type: "get",
+            success: function(gottenId) {
+                id = gottenId;
+            }
+        });
+        
+        return id;
     }
 });

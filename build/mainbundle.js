@@ -10352,6 +10352,10 @@ return jQuery;
         warningDiv.style.display = "none";
     });
     
+    $(document).ready(function(){
+       $('#foot').load('/public/footer.html');
+   });
+    
     var app_digit = 0;
     var bev_digit = 0;
     var meals_digit = 0;
@@ -10483,7 +10487,6 @@ return jQuery;
                 addToCart(item_name, item_code, price, quantityInput.value);
 
                 orders[item_code] = parseInt(itemQty.value);
-                console.log(orders);
                 
                 total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
             } else if (cartItem != null) {
@@ -10581,7 +10584,6 @@ return jQuery;
         url:"/user-cp",
         type:"post",
         success:function(resp) {
-            console.log("a: " + resp);
             var profileLink = document.getElementById("profile_link");
             var logoutLink = document.getElementById("logout_link");
             var login = document.getElementById("login");
@@ -10610,9 +10612,6 @@ return jQuery;
             }
         });
     });
-    
-    
-
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
