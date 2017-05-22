@@ -24,7 +24,7 @@ var imgFolder = path.resolve(__dirname, "images");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
@@ -269,7 +269,7 @@ app.post("/order/detailes",function(req,resp){
             });
         }
 
-        client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id, price) VALUES ($1,$2,$3, $4)",[req.body.name,req.body.quantity,req.body.id,req.body.price],function(err,result){
+        client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id, price) VALUES ($1,$2,$3, $4)",[req.body.name,req.body.quantity,req.body.id,req.body.quantity*req.body.price],function(err,result){
             done();
 
             if(err){
@@ -418,12 +418,66 @@ app.post("/get/items", function(req, resp) {
     });
 });
 
+app.post("/delete/item",function(req,resp){
+	pg.connect(dbURL, function(err, client, done) {
+        client.query("DELETE FROM hoth_items WHERE item_code = $1",[req.body.item], function(err, result) {
+            done();
+            resp.send("success");
+        });
+    });
+})
+
+var imageName;
+app.post("/filename",function(req,resp){
+    imageName = req.body.fileName
+})
+
+app.post('/upload', function(req, resp){
+  var form = new formidable.IncomingForm();
+ 
+  form.multiples = true;
+
+  form.uploadDir = path.join(__dirname, '/images');
+
+  form.on('file', function(field, file) {
+    fs.rename(file.path, path.join(form.uploadDir, imageName));
+  });
+
+  form.on('error', function(err) {
+    console.log('An error has occured: \n' + err);
+  });
+
+  form.on('end', function() {
+    resp.end('success');
+  });
+
+  form.parse(req);
+
+});
+
 app.post('/get/shopstatus',function(req,resp){
     resp.send({shopStatus:shopStatus});
 });
 
 app.post("/open/close",function(req,resp){
     shopStatus = req.body.shopStatus;
+	if(req.body.shopStatus == 0){
+		pg.connect(dbURL,function(err,client,done){
+			client.query("UPDATE hoth_order_details SET status = 'C' WHERE status  ='P'"),function(err,result){
+				if(err){
+					console.log(err)
+				}
+			}
+			client.query("UPDATE hoth_orders SET STATUS = 'C' WHERE STATUS = 'P';"),function(err,result){
+				done();
+				if(err){
+					console.log(err)
+				} else {
+					resp.send("success")
+				}
+			}
+		})
+	}
     resp.send({status:"success"})
     
 });

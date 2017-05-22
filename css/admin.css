@@ -85,6 +85,18 @@ body{
     max-width: 3vw;
 }
 
+.deleteDiv{
+	width: 1px;
+	padding: 0;
+	color: red;
+	position: relative;
+	top:0%;
+	right: -92%;
+}
+.deleteDiv:hover{
+	cursor: pointer;
+}
+
 
 /* message div */
 #price-updated{
