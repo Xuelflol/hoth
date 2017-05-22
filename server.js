@@ -24,7 +24,7 @@ var imgFolder = path.resolve(__dirname, "images");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:1991@localhost:5432/kitchen";
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
@@ -145,22 +145,12 @@ app.post("/meals", function(req, resp) {
 app.post("/user-cp", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         if (req.session.auth == "C") {
-            client.query("SELECT * FROM hoth_users WHERE auth_level = 'C'", function(err, result) {
-                done();
-
-                var obj = {
-                    status:"customer",
-                    result:result.rows
-                };
-
-                resp.send(obj);
-            });
-        } 
+           resp.send("customer");
+        } else if (req.session.auth == "E" || req.session.auth == "A") {
+            resp.send("ea");
+        }
     });
 });
-
-
-
 
 app.post("/changeEmail", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
@@ -230,11 +220,14 @@ app.post("/get/price",function(req,resp){
                     status:"faile",
                 });
             }
-            resp.send({
-                status:"success",
-                price:result.rows[0].price,
-                name:result.rows[0].item_name
-            });
+
+            if (result != undefined && result.rows.length > 0) {
+                resp.send({
+                    status:"success",
+                    price:result.rows[0].price,
+                    name:result.rows[0].item_name
+                });
+            }
         });
     });
          });
@@ -248,7 +241,7 @@ app.post("/save/order",function(req,resp){
                 status:"fail",
                 message:"database connection err"});
         }
-        client.query("INSERT INTO hoth_orders (customer,total_price) VALUES ($1,$2) RETURNING order_id",[req.session.username,req.body.totalPirce],function(err,result){
+        client.query("INSERT INTO hoth_orders (customer,total_price) VALUES ($1,$2) RETURNING order_id",[req.session.username,req.body.totalPrice],function(err,result){
             done();
             if(err){
                 console.log(err);
@@ -276,7 +269,7 @@ app.post("/order/detailes",function(req,resp){
             });
         }
 
-        client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id) VALUES ($1,$2,$3)",[req.body.name,req.body.quantity,req.body.id],function(err,result){
+        client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id, price) VALUES ($1,$2,$3, $4)",[req.body.name,req.body.quantity,req.body.id,req.body.quantity*req.body.price],function(err,result){
             done();
 
             if(err){
@@ -302,18 +295,20 @@ app.post("/submit/order", function(req, resp) {
 
             var obj = {}
 
-            obj["0"] = {
-                order_id: result.rows[0].order_id,
-                items: {},
-                item_code: {}
-            }
+            if (result != undefined && result.rows.length > 0) {
+                obj["0"] = {
+                    order_id: result.rows[0].order_id,
+                    items: {},
+                    item_code: {}
+                }
 
-            for (var i = 0; i < result.rows.length; i++) {
-                obj["0"].items[result.rows[i].item_name] = result.rows[i].quantity;
-                obj["0"].item_code[result.rows[i].item_name] = result.rows[i].item_code;
-            }
+                for (var i = 0; i < result.rows.length; i++) {
+                    obj["0"].items[result.rows[i].item_name] = result.rows[i].quantity;
+                    obj["0"].item_code[result.rows[i].item_name] = result.rows[i].item_code;
+                }
 
-            resp.send(obj);
+                resp.send(obj);
+            }
         });
     });
 });
@@ -328,28 +323,30 @@ app.post("/start-kitchen", function(req, resp) {
             var lastItem = 0;
             var obj = {};
             
-            while (index < result.rows.length) {
-                if (result.rows[index].order_id != lastItem) {
-                    lastItem = result.rows[index].order_id;
-                    
-                    obj[lastItem] = {
-                        order_id: result.rows[index].order_id,
-                        items: {},
-                        item_code: {},
-                    };
-                    
-                    obj[lastItem].items[result.rows[index].item_name] = result.rows[index].quantity;
-                    obj[lastItem].item_code[result.rows[index].item_name] = result.rows[index].item_code;
-                    
-                    index++;
-                } else {
-                    obj[lastItem].items[result.rows[index].item_name] = result.rows[index].quantity;
-                    obj[lastItem].item_code[result.rows[index].item_name] = result.rows[index].item_code;
-                    index++
+            if (result != undefined && result.rows.length > 0) {
+                while (index < result.rows.length) {
+                    if (result.rows[index].order_id != lastItem) {
+                        lastItem = result.rows[index].order_id;
+                        
+                        obj[lastItem] = {
+                            order_id: result.rows[index].order_id,
+                            items: {},
+                            item_code: {},
+                        };
+                        
+                        obj[lastItem].items[result.rows[index].item_name] = result.rows[index].quantity;
+                        obj[lastItem].item_code[result.rows[index].item_name] = result.rows[index].item_code;
+                        
+                        index++;
+                    } else {
+                        obj[lastItem].items[result.rows[index].item_name] = result.rows[index].quantity;
+                        obj[lastItem].item_code[result.rows[index].item_name] = result.rows[index].item_code;
+                        index++
+                    }
                 }
-            }
             
-            resp.send(obj);
+                resp.send(obj);
+            }
         });
     });
 });
@@ -414,7 +411,7 @@ app.post("/adminItems", function(req,resp){
 
 app.post("/get/items", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
-        client.query("SELECT * FROM hoth_items", function(err, result) {
+        client.query("SELECT * FROM hoth_items ORDER BY item_name", function(err, result) {
             done();
             resp.send({result: result.rows});
         });
@@ -466,6 +463,11 @@ app.post("/open/close",function(req,resp){
     shopStatus = req.body.shopStatus;
 	if(req.body.shopStatus == 0){
 		pg.connect(dbURL,function(err,client,done){
+			client.query("UPDATE hoth_order_details SET status = 'C' WHERE status  ='P'"),function(err,result){
+				if(err){
+					console.log(err)
+				}
+			}
 			client.query("UPDATE hoth_orders SET STATUS = 'C' WHERE STATUS = 'P';"),function(err,result){
 				done();
 				if(err){
@@ -486,7 +488,7 @@ app.post("/get/accounts",function(req,resp){
             done();
             if(err){
                 console.log(err)
-            } else {
+            } else if (result != undefined && result.rows.length > 0) {
                 resp.send(result.rows)
             }
         })
@@ -508,7 +510,7 @@ app.post("/auth",function(req,resp){
     
 });
 
-app.post("/order/summary",function(req,resp){
+/*app.post("/order/summary",function(req,resp){
     var totalOrderNum;
     var totalIncome;
    
@@ -554,7 +556,7 @@ app.post("/discard",function(req,resp){
         })
     })
 	
-})
+}) */
 
 //------------------------Admin operation end-----------//
 
@@ -655,12 +657,73 @@ app.post("/complete/order", function(req, resp) {
 });
 
 
+app.post("/report", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        if (req.body.type == "order") {
+            client.query("WITH cte AS (SELECT SUM(total_price) FROM hoth_orders) SELECT * FROM hoth_orders s CROSS JOIN cte WHERE s.status = 'F'", function(err, result) {
+                done();
 
+                if (result != undefined && result.rows.length > 0) {
+                    resp.send({
+                        result: result.rows
+                    });
+                }
+            });
+        } else if (req.body.type == "item") {
+            client.query("SELECT item_name, sum(quantity) AS quantity, sum(price) AS price FROM (SELECT * FROM hoth_order_details) AS s WHERE s.status = 'F' GROUP BY item_name", function(err, result) {
+                done();
 
+                if (result != undefined && result.rows.length > 0) {
+                    resp.send(result.rows);
+                }
+            }) ;
+        } else if (req.body.type == "discarded") {
+            client.query("SELECT p.item_name, p.quantity, i.price FROM hoth_prepared p LEFT JOIN hoth_items i ON p.item_name = i.item_name WHERE discarded = 'Y' AND quantity > 0", function(err, result) {
+                done();
 
+                if (result != undefined && result.rows.length > 0) {
+                    resp.send(result.rows);
+                }
+            });
+        }
+    });
+});
 
+app.post("/discard/all", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("UPDATE hoth_prepared SET discarded = 'Y'", function(err, result) {
+            done();
+        });
+    });
+});
 
+var imageName;
+app.post("/filename",function(req,resp){
+    imageName = req.body.fileName
+})
 
+app.post('/upload', function(req, resp){
+  var form = new formidable.IncomingForm();
+ 
+  form.multiples = true;
+
+  form.uploadDir = path.join(__dirname, '/images');
+
+  form.on('file', function(field, file) {
+    fs.rename(file.path, path.join(form.uploadDir, imageName));
+  });
+
+  form.on('error', function(err) {
+    console.log('An error has occured: \n' + err);
+  });
+
+  form.on('end', function() {
+    resp.end('success');
+  });
+
+  form.parse(req);
+
+});
 
 app.use("/scripts", express.static("build"));
 
@@ -677,6 +740,7 @@ app.get("/", function(req, resp) {
     if(req.session.username == undefined){
         req.session.username = 'guest'
     }
+
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");
     } else if (req.session.auth == "E") {
@@ -684,6 +748,18 @@ app.get("/", function(req, resp) {
     } else {
         resp.sendFile(pF + "/main.html");
     }
+});
+
+app.get("/submit/getOrdersNums", function(req, resp) {
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("SELECT * FROM hoth_orders WHERE status = 'P'", function(err, result) {
+            done();
+
+            resp.send({
+                orders: result.rows
+            });
+        });
+    });
 });
 
 app.get("/profile", function(req, resp) {
@@ -706,7 +782,6 @@ app.get("/logout", function(req, resp) {
     req.session.destroy();
     resp.redirect("/");
 });
-
 
 app.get("/user_profile", function(req, resp) {
     if (req.session.auth == "C") {
@@ -731,19 +806,33 @@ app.get("/order/submitted/:orderid", function(req, resp) {
 
 app.get("/adminuser",function(req,resp){
     if(req.session.auth == "A"){
-        resp.sendFile(pF+"/admin_user.html");
+        resp.sendFile(pF + "/admin_user.html");
     } else{
-        resp.sendFile("/");
+        resp.sendFile(pF + "/main.html");
     }
-})
+});
 
+app.get("/getId", function(req, resp) {
+    resp.send(req.session.orderid);
+});
 
 //socket
+var orderRecords = [];
+var checkRecords = false;
+
 io.on("connection", function(socket) {    
     socket.join("connected");
     
     socket.on("send message", function(orders) {
         io.to("connected").emit("create message", orders);
+    });
+
+    socket.on("send order", function(id) {
+        io.to("connected").emit("create order", id);
+    });
+
+    socket.on("send confirmation", function(orderid) {
+        io.to("connected").emit("confirmation received", orderid);
     });
 });
 
