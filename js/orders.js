@@ -19,6 +19,7 @@ $(document).ready(function(){
     var itemQuantity = [];
     var totalPrice = 0;
     var tax;
+    var socket = io();
     
     $(document).ready(function(){
        $('#foot').load('/public/footer.html');
@@ -78,7 +79,8 @@ $(document).ready(function(){
             foodTotal.innerHTML = foodTotal.innerHTML + " " + round2Fixed(totalPrice);
             taxCost.innerHTML = taxCost.innerHTML + " " + round2Fixed(tax);
             orderTotal.innerHTML = orderTotal.innerHTML + " " + round2Fixed(tax + totalPrice);
-        }
+        },
+        async: false
     });
     
    
@@ -114,6 +116,8 @@ $(document).ready(function(){
             },
             success:function(resp){
                 var orderId = resp.id;
+
+                socket.emit("send order", orderId);
                 
                 for(var i=0; i<itemName.length;i++){
                     $.ajax({
@@ -132,7 +136,8 @@ $(document).ready(function(){
                         }
                     });
                 }
-            }
+            },
+        async: false
         });
     });
     

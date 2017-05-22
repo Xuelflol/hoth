@@ -4,23 +4,23 @@
     
 }
 
-#user-table th, #user-table tr td {
+#table {
+  width:95%;
+}
+
+#table th, #table tr td {
   border: 1px solid black;
 }
 
-#user-table tr:nth-child(1n+1) {
+#table tr:nth-child(1n+1) {
   background-color:lightgray;
 }
 
-#user-table tr:nth-child(2n+1) {
+#table tr:nth-child(2n+1) {
   background-color:lightblue;
 }
 
-#order-report-div {
-  display:none;
-}
-
-#item-report-div {
+#order-report-div, #item-report-div, #discarded-report-div {
   display:none;
 }
 
