@@ -15,6 +15,7 @@
                 $("#nav").replaceWith(data);
             });
         </script>
+        <script src="/scripts/admin_userbundle.js"></script>
         
         <link rel="stylesheet" href="/css/admin_user.css"/>
         <link rel="stylesheet" href="/css/scrollbar.css"/>
@@ -31,103 +32,23 @@
             <p id = 'shop_status'> Open/Close Shop:</p>
             <div>
             <label class="switch">
-            <input id = 'in1' type="checkbox" >
+            <input id = 'switch' type="checkbox" >
             <div class="slider"></div>
             </label>
             </div>
-            <button id="show_all_accounts" class="button">Show All Accounts
-            <button id = "show_customer_accounts" class="button">Show Customer Accounts</button>
-            <button id = "show_employee_accounts" class="button">Show Employee Accounts</button>
-            <button id = "show_admin_accounts" class="button">Show Admin Account</button>
+          
+            <button id = "show_customer_accounts" class="button">Show customer accounts</button>
+            <button id = "show_employee_accounts" class="button">Show employee accounts</button>
+            <button id = "show_admin_accounts" class="button">Show admin accounts</button>
+            <button id = "show_summary" class="button">Summary</button>
+            <button id = "show_discard_food" class="button">Generate Discard Report</button>
             <button id="gen_order_report" class="button">Generate Order Report</button>
             <button id="gen_item_report" class="button">Generate Item Report</button>
+            
         </div>
         
         <div id = "container">
-            <table id="user-table" class = "table">
-                <tr style="padding-left:10px">
-                <th >User name</th>   
-                <th>Email ............</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Auth_level</th>
-                <th></th>
-                </tr>
-
-                <tr>
-                    <td>Eray</td>   
-                    <td>edwardguo12@gmail.com </td>
-                    <td>edwardcwe2a</td>
-                    <td>csqwdasdq</td>
-                    <td><select> 
-                        <option value = "C">Customer</option>
-                        <option value = "E">Cheif</option>
-                        <option value = "A">Admin</option>
-                        
-                        </select></td>
-                    <td><button>Update</button></td>
-
-                </tr>
-            
-                <tr>
-                    <td>Eray</td>   
-                    <td>edwardguo12@gmail.com </td>
-                    <td>edwardcwe2a</td>
-                    <td>csqwdasdq</td>
-                    <td><select> 
-                        <option value = "C">Customer</option>
-                        <option value = "E">Cheif</option>
-                        <option value = "A">Admin</option>
-                        
-                        </select></td>
-                    <td><button>Update</button></td>
-
-                </tr>
-
-                <tr>
-                    <td>Eray</td>   
-                    <td>edwardguo12@gmail.com </td>
-                    <td>edwardcwe2a</td>
-                    <td>csqwdasdq</td>
-                    <td><select> 
-                        <option value = "C">Customer</option>
-                        <option value = "E">Cheif</option>
-                        <option value = "A">Admin</option>
-                        
-                        </select></td>
-                    <td><button>Update</button></td>
-
-                </tr>
-
-                <tr>
-                    <td>Eray</td>   
-                    <td>edwardguo12@gmail.com </td>
-                    <td>edwardcwe2a</td>
-                    <td>csqwdasdq</td>
-                    <td><select> 
-                        <option value = "C">Customer</option>
-                        <option value = "E">Cheif</option>
-                        <option value = "A">Admin</option>
-                        
-                        </select></td>
-                    <td><button>Update</button></td>
-
-                </tr>
-
-                <tr>
-                    <td>Eray</td>   
-                    <td>edwardguo12@gmail.com </td>
-                    <td>edwardcwe2a</td>
-                    <td>csqwdasdq</td>
-                    <td><select> 
-                        <option value = "C">Customer</option>
-                        <option value = "E">Cheif</option>
-                        <option value = "A">Admin</option>
-                        
-                        </select></td>
-                    <td><button>Update</button></td>
-
-                </tr>
+            <table id ="table" class = "table">
             </table>
             
             <div id="order-report-div">
@@ -166,5 +87,6 @@
                 </div>
             </div> 
         </div>
+        
     </body>
 </html>
