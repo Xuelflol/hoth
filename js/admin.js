@@ -65,12 +65,17 @@ $(document).ready(function(){
     function createItem(i, divname, item_name, item_code, price, filename, description) {
         var container  = document.createElement("div");
         container.className = "col-lg-2 col-md-4 col-sm-6 col-xs-12";
+		container.id = "container-"+item_code;
         var panel = document.createElement("div");
         panel.className = "panel panel-default text-center";
         
         var panelHeading = document.createElement("div");
         panelHeading.className = "panel-heading head";
         panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
+		var deleteDiv = document.createElement("div");
+		deleteDiv.className = "deleteDiv"
+		deleteDiv.innerHTML = "X"
+		panel.appendChild(deleteDiv);
     
         var imgDiv = document.createElement("div");
         imgDiv.className = "menu-imgs";
@@ -93,8 +98,14 @@ $(document).ready(function(){
         priceIn.max = '100';
         priceIn.value = price;
         priceIn.id = "priceIn-" + item_code;
+		
+		
+
+		
+		
         panelFooter.appendChild(h4);
         panelFooter.appendChild(priceIn);
+		
 
         var controlDiv = document.createElement("div");
         var form = document.createElement("div");
@@ -109,12 +120,26 @@ $(document).ready(function(){
 
         form.appendChild(updataPrice);
         panelFooter.appendChild(form);
-
         panel.appendChild(panelHeading);
         panel.appendChild(panelBody);
         panel.appendChild(panelFooter)
         container.appendChild(panel);
-        divname.appendChild(container);        
+        divname.appendChild(container);
+		
+		deleteDiv.addEventListener("click",function(){
+			if(confirm("Delete this item?")){
+				$.ajax({
+					url:"/delete/item",
+					type:"post",
+					data:{
+						item:item_code
+					},
+					success:function(resp){
+						document.getElementById("container-"+item_code).remove();
+					}
+				})
+			   }
+		})
         
         updataPrice.addEventListener("click", function(event) {
             var updatedPrice = document.getElementById("priceIn-" + item_code);

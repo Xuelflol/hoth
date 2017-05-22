@@ -421,6 +421,15 @@ app.post("/get/items", function(req, resp) {
     });
 });
 
+app.post("/delete/item",function(req,resp){
+	pg.connect(dbURL, function(err, client, done) {
+        client.query("DELETE FROM hoth_items WHERE item_code = $1",[req.body.item], function(err, result) {
+            done();
+            resp.send("success");
+        });
+    });
+})
+
 var imageName;
 app.post("/filename",function(req,resp){
     imageName = req.body.fileName
@@ -455,6 +464,18 @@ app.post('/get/shopstatus',function(req,resp){
 
 app.post("/open/close",function(req,resp){
     shopStatus = req.body.shopStatus;
+	if(req.body.shopStatus == 0){
+		pg.connect(dbURL,function(err,client,done){
+			client.query("UPDATE hoth_orders SET STATUS = 'C' WHERE STATUS = 'P';"),function(err,result){
+				done();
+				if(err){
+					console.log(err)
+				} else {
+					resp.send("success")
+				}
+			}
+		})
+	}
     resp.send({status:"success"})
     
 });
