@@ -10343,6 +10343,7 @@ return jQuery;
         percentageSpan = document.getElementById("percentage"),
         loadingBar = document.getElementById("timeout"),
         hotPlate = document.getElementById("hot_plate"),
+        logoutButton = document.getElementById("logout"),
         perc = 0,
         orderCount = 0,
         totalOrder = 0,
@@ -10350,7 +10351,9 @@ return jQuery;
 
     // socket connection to listen to orders
     socket.on("create message", function(orders) {
-        if (totalOrder < 10) {
+        var checkDiv = document.getElementById("order-" + orders["0"].order_id);
+
+        if (totalOrder < 10 && checkDiv == null) {
             getItems(orders["0"].item_code, orders["0"].items, orders["0"].order_id);
         }
     });
@@ -10468,6 +10471,7 @@ return jQuery;
                                                 orderid: orderid
                                             },
                                             success:function(resp) {
+                                                socket.emit("send confirmation", orderid);
                                                 var orderDiv = document.getElementById("order-" + resp.orderid);
                                                 orderDiv.className = "container-fluid alert alert-success alert-dismissable fade in";
                                                 fillButton.disabled = true;
@@ -10615,6 +10619,15 @@ return jQuery;
             }
         }
     }
+
+    logoutButton.addEventListener("click", function() {
+        $.ajax({
+            url:"/discard/all",
+            type:"post"
+        });
+
+        location.href = "/logout";
+    })
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 

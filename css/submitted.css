@@ -44,14 +44,14 @@ tr:nth-child(odd) {
 #order_list {
 	padding-left: 3vw;
 	padding-right: 3vw;
-    height: 24vh;
+    height: 70vh;
     overflow-y: auto;
 }
 
 #current_orders {
 	padding-left: 3vw;
 	padding-right: 3vw;
-    height: 50vh;
+    height: 70vh;
     overflow-y: auto;
 }
 
@@ -73,4 +73,27 @@ h3 {
     margin-top: 30px;
     text-align: center;
     font-weight: bold;
+}
+
+.order-wrapper {
+    text-align: center;
+    width: 100%;
+    margin:0px auto 0px auto;
+}
+
+.order-wrapper div {
+    display:inline-block;
+}
+
+.order-wrapper div:first-child {
+    width:15%;
+    font-size:26px;
+}
+
+.order-wrapper div:nth-child(2) {
+    width:60%;
+}
+
+.order-wrapper div:nth-child(3) {
+    width:25%;
 }
