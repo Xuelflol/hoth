@@ -10336,14 +10336,12 @@ return jQuery;
     var orderNum = document.getElementById("order_num");
     var orderList = document.getElementById("order_list");
 	var table = document.getElementById("table");
-    
     var socket = io();
     
     $.ajax({
         url:"/submit/order",
         type:"post",
         success:function(resp) {
-            console.log(resp);
             
             orderNum.innerHTML = resp["0"].order_id;
             
@@ -10363,8 +10361,59 @@ return jQuery;
             
             socket.emit("send message", resp);
         }
-    })
-})
+    });
+    
+    socket.on("order up", function(id) {
+        for (var i = 0; i < id.length; i++) {
+            if (id[i] == getId()) {
+                alert("Your order is ready");
+            }
+        }
+    });
+    
+    socket.on("new order", createCurrentOrders(document.getElementById("current_orders"), order_num));
+    
+//    This function is for getting the current orders
+    $.ajax({
+        url: "/submit/getOrdersNums",
+        type: "get",
+        success: function(resp) {
+            getCurrentOrders(document.getElementById("current_orders"), resp);
+        }
+    });
+    
+    function createCurrentOrders(div, message) {
+        var ndiv = document.createElement("div");
+        ndiv.className = "num";
+        ndiv.innerHTML = "Order #"+message;
+
+        div.appendChild(ndiv);
+    }
+    
+    function getCurrentOrders(div, arr) {
+        for (var i = 0; i < arr.length; i++) {
+            var ndiv = document.createElement("div");
+            ndiv.className = "num";
+            ndiv.innerHTML = "Order #"+arr.orders[i].id;
+
+            div.appendChild(ndiv);
+        }
+    }
+        
+    function getId() {
+        var id = 0;
+        
+        $.ajax({
+            url: "/getId",
+            type: "get",
+            success: function(gottenId) {
+                id = gottenId;
+            }
+        });
+        
+        return id;
+    }
+});
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
