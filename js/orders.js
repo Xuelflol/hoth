@@ -100,7 +100,7 @@ $(document).ready(function(){
             url:"/save/order",
             type:"post",
             data:{
-                totalPirce:totalPrice
+                totalPrice:totalPrice + tax
             },
             success:function(resp){
                 console.log(resp)
@@ -113,7 +113,8 @@ $(document).ready(function(){
                         data:{
                             name:itemName[i],
                             quantity:itemQuantity[i],
-                            id:orderId
+                            id:orderId,
+                            price:itemPrice[i]
                         },
                         success:function(res){
                             if (res.status == "success") {

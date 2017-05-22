@@ -63,12 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10328,145 +10327,101 @@ return jQuery;
 
 
 /***/ }),
-
-/***/ 7:
+/* 1 */,
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){    
-    var orderDispaly = document.getElementById("order-div");
-    var submitButton = document.getElementById("checkout-but"),
-        cancelButton = document.getElementById("cancel-but"),
-        fname = document.getElementById("f-name"),
-        userName = document.getElementById("u-name"),
-        email = document.getElementById("e-mail"),
-        foodTotal = document.getElementById("fb-t"),
-        taxCost = document.getElementById("fb-ta"),
-        orderTotal = document.getElementById("fb-ot") 
-	var im_credit = document.getElementById("im-credit");
-	var	gcs = document.getElementById("gcs");
-	var	wupi = document.getElementById("wupi");
-	var table = document.getElementById("table");
-    
-    var orders = {};
-    var itemName = [];
-    var itemPrice = [];
-    var itemQuantity = [];
-    var totalPrice = 0;
-    var tax;
-	
-	//to round to 2 dec places
-	function round2Fixed(value) {
-  		value = +value;
-		
-  	if (isNaN(value))
-    	return NaN;
-
-  	// Shift
-  	value = value.toString().split('e');
-  	value = Math.round(+(value[0] + 'e' + (value[1] ? (+value[1] + 2) : 2)));
-
-  	// Shift back
-  	value = value.toString().split('e');
-	return (+(value[0] + 'e' + (value[1] ? (+value[1] - 2) : -2))).toFixed(2);
-	}
-	
+/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {
+    var orderReportDiv = document.getElementById("order-report-div");
+    var itemReportDiv = document.getElementById("item-report-div");
+    var userTable = document.getElementById("user-table");
+    var allAccountButton = document.getElementById("show_all_accounts"),
+        custAccountButton = document.getElementById("show_customer_accounts"),
+        empAccountButton = document.getElementById("show_employee_accounts"),
+        adminAccountButton = document.getElementById("show_admin_accounts"),
+        generateOrder = document.getElementById("gen_order_report"),
+        generateItem = document.getElementById("gen_item_report");
 
     $.ajax({
-        url:"/get/orders",
+        url:"/report",
         type:"post",
-        success:function(resp){
-            console.log(resp)
-            orders = resp.orders[0];
-            getOrderItems(orders);
-            
-            for(var i=0; i<itemQuantity.length;i++){
-                var itemTotalPrice = itemPrice[i] * itemQuantity[i];
+        data: {
+            type: "order"
+        },
+        success:function(resp) {
+            for (key in resp.result) {
+                var reportWrapper = document.createElement("div");
+                reportWrapper.className = "report-wrapper";
 
-				var row = table.insertRow();
-				var cel0 = row.insertCell(0);
-				var cel1 = row.insertCell(1);
-				var cel2 = row.insertCell(2);
-				cel0.innerHTML = itemName[i];
-				cel1.innerHTML = itemQuantity[i];
-				cel2.innerHTML = " $" + round2Fixed(itemTotalPrice);
-				
-                table.appendChild(row);
-                totalPrice = totalPrice + itemTotalPrice;
+                var orderIdDiv = document.createElement("div");
+                orderIdDiv.className = "report-data";
+                var totalPriceDiv = document.createElement("div");
+                totalPriceDiv.className = "report-data";
+                var customerDiv = document.createElement("div");
+                customerDiv.className = "report-data";
+
+                orderIdDiv.innerHTML = resp.result[key].order_id;
+                totalPriceDiv.innerHTML = "$" + resp.result[key].total_price;
+                customerDiv.innerHTML = resp.result[key].customer;
+
+                reportWrapper.appendChild(orderIdDiv);
+                reportWrapper.appendChild(totalPriceDiv);
+                reportWrapper.appendChild(customerDiv);
+                orderReportDiv.appendChild(reportWrapper);
             }
-            tax = totalPrice * 0.1;
-            console.log(tax)
-            fname.innerHTML = fname.innerHTML + ' ' + resp.fname;
-            userName.innerHTML = userName.innerHTML + ' ' + resp.username;
-            email.innerHTML = email.innerHTML + ' '+ resp.email;
-            foodTotal.innerHTML = foodTotal.innerHTML + " " + round2Fixed(totalPrice);
-            taxCost.innerHTML = taxCost.innerHTML + " " + round2Fixed(tax);
-            orderTotal.innerHTML = orderTotal.innerHTML + " " + round2Fixed(tax + totalPrice);
-            console.log(tax+totalPrice)
+
+            var sumWrapper = document.createElement("div");
+            sumWrapper.className = "report-wrapper";
+            sumWrapper.innerHTML = "<h4>Total: $" + resp.result["0"].sum + "</h4>";
+            orderReportDiv.appendChild(sumWrapper);
         }
     });
-    
-   
-    function getOrderItems(orders){
-        Object.keys(orders).forEach(function(key){
-            var orderItem = key;
-            var quantity = parseInt(orders[key]);
 
-            itemQuantity.push(quantity)
+    $.ajax({
+        url:"/report",
+        type:"post",
+        data: {
+            type: "item"
+        },
+        success:function(resp) {
+            console.log(resp);
 
-            $.ajax({
-                url:"/get/price",
-                type:"post",
-                data: {
-                    item:orderItem
-                },
-                success:function(resp){
-                    itemName.push(resp.name);
-                    itemPrice.push(parseFloat(resp.price));
-                },
-                async:false
-            });
-        });
-    };
-    
-    submitButton.addEventListener("click",function(){
-        
-        $.ajax({
-            url:"/save/order",
-            type:"post",
-            data:{
-                totalPrice:totalPrice + tax
-            },
-            success:function(resp){
-                console.log(resp)
-                var orderId = resp.id;
-                
-                for(var i=0; i<itemName.length;i++){
-                    $.ajax({
-                        url:"/order/detailes",
-                        type:"post",
-                        data:{
-                            name:itemName[i],
-                            quantity:itemQuantity[i],
-                            id:orderId,
-                            price:itemPrice[i]
-                        },
-                        success:function(res){
-                            if (res.status == "success") {
-                                location.href = "/order/submitted/" + orderId;
-                            }
-                        }
-                    });
-                }
+            for (var i = 0; i < resp.length; i++) {
+                var reportWrapper = document.createElement("div");
+                reportWrapper.className = "report-wrapper";
+
+                var itemNameDiv = document.createElement("div");
+                itemNameDiv.className = "report-data";
+                var totalPriceDiv = document.createElement("div");
+                totalPriceDiv.className = "report-data";
+                var quantityDiv = document.createElement("div");
+                quantityDiv.className = "report-data";
+
+                itemNameDiv.innerHTML = resp[i].item_name;
+                totalPriceDiv.innerHTML = "$" + resp[i].price;
+                quantityDiv.innerHTML = resp[i].quantity;
+
+                reportWrapper.appendChild(itemNameDiv);
+                reportWrapper.appendChild(totalPriceDiv);
+                reportWrapper.appendChild(quantityDiv);
+                itemReportDiv.appendChild(reportWrapper);
             }
-        });
+        }
     });
-    
-    cancelButton.addEventListener("click",function(){
-        location.href = "/"
+
+    generateOrder.addEventListener("click", function() {
+        orderReportDiv.style.display = "inline";
+        itemReportDiv.style.display = "none";
+        userTable.style.display = "none";
+    });
+
+    generateItem.addEventListener("click", function() {
+        orderReportDiv.style.display = "none";
+        itemReportDiv.style.display = "inline";
+        userTable.style.display = "none";
     });
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
-
-/******/ });
+/******/ ]);

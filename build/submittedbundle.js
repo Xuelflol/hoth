@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -10329,7 +10329,7 @@ return jQuery;
 
 /***/ }),
 
-/***/ 7:
+/***/ 8:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {
@@ -10345,7 +10345,7 @@ return jQuery;
         success:function(resp) {
             console.log(resp);
             
-            orderNum.innerHTML = resp.order_id;
+            orderNum.innerHTML = resp["0"].order_id;
             
             for (key in resp) {
                 for (items in resp[key].items) {

@@ -21,26 +21,30 @@
         <link rel="stylesheet" href="/css/navigation.css"/>
         <link rel="icon" type="image/png" href="/images/Rebel-50.png"/>
         
+        <script src="/scripts/admin_userbundle.js"></script>
     </head>
     
     <body>
         <div id="nav"></div>
         
         <div id = "menu">
-            <p id = 'shop_status'> Shop is:</p>
+            <p id = 'shop_status'> Open/Close Shop:</p>
             <div>
             <label class="switch">
             <input id = 'in1' type="checkbox" >
             <div class="slider"></div>
             </label>
             </div>
-            <button id = "show_coustomer_accounts" class="button">Show coustomer accounts</button>
-            <button id = "show_employee_accounts" class="button">Show employee accounts</button>
-            <button id = "show_admin_accounts" class="button">Show admin accounts</button>
+            <button id="show_all_accounts" class="button">Show All Accounts
+            <button id = "show_customer_accounts" class="button">Show Customer Accounts</button>
+            <button id = "show_employee_accounts" class="button">Show Employee Accounts</button>
+            <button id = "show_admin_accounts" class="button">Show Admin Account</button>
+            <button id="gen_order_report" class="button">Generate Order Report</button>
+            <button id="gen_item_report" class="button">Generate Item Report</button>
         </div>
         
         <div id = "container">
-            <table class = "table">
+            <table id="user-table" class = "table">
                 <tr style="padding-left:10px">
                 <th >User name</th>   
                 <th>Email ............</th>
@@ -49,25 +53,118 @@
                 <th>Auth_level</th>
                 <th></th>
                 </tr>
+
                 <tr>
-                <td>Eray</td>   
-                <td>edwardguo12@gmail.com </td>
-                <td>edwardcwe2a</td>
-                <td>csqwdasdq</td>
-                <td><select> 
-                    <option value = "C">Customer</option>
-                    <option value = "E">Cheif</option>
-                    <option value = "A">Admin</option>
-                    
-                    </select></td>
-                <td><button>Update</button></td>
+                    <td>Eray</td>   
+                    <td>edwardguo12@gmail.com </td>
+                    <td>edwardcwe2a</td>
+                    <td>csqwdasdq</td>
+                    <td><select> 
+                        <option value = "C">Customer</option>
+                        <option value = "E">Cheif</option>
+                        <option value = "A">Admin</option>
+                        
+                        </select></td>
+                    <td><button>Update</button></td>
 
                 </tr>
             
-            
+                <tr>
+                    <td>Eray</td>   
+                    <td>edwardguo12@gmail.com </td>
+                    <td>edwardcwe2a</td>
+                    <td>csqwdasdq</td>
+                    <td><select> 
+                        <option value = "C">Customer</option>
+                        <option value = "E">Cheif</option>
+                        <option value = "A">Admin</option>
+                        
+                        </select></td>
+                    <td><button>Update</button></td>
+
+                </tr>
+
+                <tr>
+                    <td>Eray</td>   
+                    <td>edwardguo12@gmail.com </td>
+                    <td>edwardcwe2a</td>
+                    <td>csqwdasdq</td>
+                    <td><select> 
+                        <option value = "C">Customer</option>
+                        <option value = "E">Cheif</option>
+                        <option value = "A">Admin</option>
+                        
+                        </select></td>
+                    <td><button>Update</button></td>
+
+                </tr>
+
+                <tr>
+                    <td>Eray</td>   
+                    <td>edwardguo12@gmail.com </td>
+                    <td>edwardcwe2a</td>
+                    <td>csqwdasdq</td>
+                    <td><select> 
+                        <option value = "C">Customer</option>
+                        <option value = "E">Cheif</option>
+                        <option value = "A">Admin</option>
+                        
+                        </select></td>
+                    <td><button>Update</button></td>
+
+                </tr>
+
+                <tr>
+                    <td>Eray</td>   
+                    <td>edwardguo12@gmail.com </td>
+                    <td>edwardcwe2a</td>
+                    <td>csqwdasdq</td>
+                    <td><select> 
+                        <option value = "C">Customer</option>
+                        <option value = "E">Cheif</option>
+                        <option value = "A">Admin</option>
+                        
+                        </select></td>
+                    <td><button>Update</button></td>
+
+                </tr>
             </table>
             
-                    
+            <div id="order-report-div">
+                <h3>Orders Report</h3>
+
+                <div class="report-wrapper">
+                    <div class="report-data">
+                        <h4>Order Id</h4>
+                    </div>
+
+                    <div class="report-data">
+                        <h4>Total Price</h4>
+                    </div>
+
+                    <div class="report-data">
+                        <h4>Customer</h4>
+                    </div>
+                </div>
+            </div>   
+
+            <div id="item-report-div">
+                <h3>Item Report</h3>
+
+                <div class="report-wrapper">
+                    <div class="report-data">
+                        <h4>Item Name</h4>
+                    </div>
+
+                    <div class="report-data">
+                        <h4>Total Price</h4>
+                    </div>
+
+                    <div class="report-data">
+                        <h4>Quantity</h4>
+                    </div>
+                </div>
+            </div> 
         </div>
     </body>
 </html>
