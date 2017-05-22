@@ -13,12 +13,6 @@
         
         <script src="/scripts/adminbundle.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js"></script>
-        <script type="text/javascript">
-
-           $(document).ready(function(){
-               $('#foot').load('/public/footer.html');
-           });
-        </script>
         
         <link rel="stylesheet" href="/css/navigation.css"/>
 		<link rel="stylesheet" href="/css/footer.css"/>
@@ -111,6 +105,8 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
+                            <label for="item-code">Item Code:</label>
+                            <input type="text" class="form-control" id="item-code" placeholder="Item Code (no spaces)">
                             <label for="item-name">Item Name:</label>
                             <input type="text" class="form-control" id="item-name" placeholder="Item Name">
                             <label for="item-cat">Item Categories:(Select one)</label>

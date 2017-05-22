@@ -19,6 +19,20 @@ $(document).ready(function(){
     var itemQuantity = [];
     var totalPrice = 0;
     var tax;
+    var socket = io();
+    
+    $(document).ready(function(){
+       $('#foot').load('/public/footer.html');
+    });
+
+    var cancelBut = document.getElementById("cancel-but");
+
+    $(document).ready(function(){
+        cancelBut.addEventListener("click", function(){
+        location.href = "/";
+        });
+
+    });
 	
 	//to round to 2 dec places
 	function round2Fixed(value) {
@@ -41,7 +55,6 @@ $(document).ready(function(){
         url:"/get/orders",
         type:"post",
         success:function(resp){
-            console.log(resp)
             orders = resp.orders[0];
             getOrderItems(orders);
             
@@ -58,78 +71,77 @@ $(document).ready(function(){
 				
                 table.appendChild(row);
                 totalPrice = totalPrice + itemTotalPrice;
-                
             }
             tax = totalPrice * 0.1;
-            console.log(tax)
             fname.innerHTML = fname.innerHTML + ' ' + resp.fname;
             userName.innerHTML = userName.innerHTML + ' ' + resp.username;
             email.innerHTML = email.innerHTML + ' '+ resp.email;
             foodTotal.innerHTML = foodTotal.innerHTML + " " + round2Fixed(totalPrice);
             taxCost.innerHTML = taxCost.innerHTML + " " + round2Fixed(tax);
             orderTotal.innerHTML = orderTotal.innerHTML + " " + round2Fixed(tax + totalPrice);
-            console.log(tax+totalPrice)
-        }
+        },
+        async: false
     });
     
    
     function getOrderItems(orders){
         Object.keys(orders).forEach(function(key){
-                var orderItem = key;
-                var quantity = parseInt(orders[key]);
-                
-                itemQuantity.push(quantity)
-                
-                $.ajax({
-                    url:"/get/price",
-                    type:"post",
-                    data: {
-                        item:orderItem
-                    },
-                    success:function(resp){
-                        itemName.push(resp.name)
-                        itemPrice.push(parseFloat(resp.price))
-                
-                    },
-                    async:false
-                });
-            
+            var orderItem = key;
+            var quantity = parseInt(orders[key]);
+
+            itemQuantity.push(quantity)
+
+            $.ajax({
+                url:"/get/price",
+                type:"post",
+                data: {
+                    item:orderItem
+                },
+                success:function(resp){
+                    itemName.push(resp.name);
+                    itemPrice.push(parseFloat(resp.price));
+                },
+                async:false
             });
+        });
     };
     
     submitButton.addEventListener("click",function(){
         
         $.ajax({
-                url:"/save/order",
-                type:"post",
-                data:{
-                    totalPirce:totalPrice
-                    },
-                success:function(resp){
-                    console.log(resp)
-                    var orderId = resp.id;
-                    for(var i=0; i<itemName.length;i++){
-                        $.ajax({
-                            url:"/order/detailes",
-                            type:"post",
-                            data:{
-                                name:itemName[i],
-                                quantity:itemQuantity[i],
-                                id:orderId
-                            },
-                            success:function(res){
-                                if (res.status == "success") {
-                                    location.href = "/order/submitted/" + orderId;
-                                }
+            url:"/save/order",
+            type:"post",
+            data:{
+                totalPrice:totalPrice + tax
+            },
+            success:function(resp){
+                var orderId = resp.id;
+
+                socket.emit("send order", orderId);
+                
+                for(var i=0; i<itemName.length;i++){
+                    $.ajax({
+                        url:"/order/detailes",
+                        type:"post",
+                        data:{
+                            name:itemName[i],
+                            quantity:itemQuantity[i],
+                            id:orderId,
+                            price:itemPrice[i]
+                        },
+                        success:function(res){
+                            if (res.status == "success") {
+                                location.href = "/order/submitted/" + orderId;
                             }
-                        });
-                    }
+                        }
+                    });
                 }
-            })
-    })
+            },
+        async: false
+        });
+    });
     
     cancelButton.addEventListener("click",function(){
         location.href = "/"
-    })
-    
+    });
 });

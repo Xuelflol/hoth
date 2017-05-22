@@ -4,7 +4,31 @@
     
 }
 
+#table {
+  width:95%;
+}
 
+#table th, #table tr td {
+  border: 1px solid black;
+}
+
+#table tr:nth-child(1n+1) {
+  background-color:lightgray;
+}
+
+#table tr:nth-child(2n+1) {
+  background-color:lightblue;
+}
+
+#order-report-div, #item-report-div, #discarded-report-div {
+  display:none;
+}
+
+.report-data {
+  display:inline-block;
+  width:32%;
+  text-align:left;
+}
 
 .button{
     font-size: 1vw;

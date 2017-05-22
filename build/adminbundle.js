@@ -10332,7 +10332,7 @@ return jQuery;
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){
 	var addbut = document.getElementById("addbut");
-
+    var ic = document.getElementById("item-code");
 	var itemName = document.getElementById("item-name");
 	var itemCat = document.getElementById("item-cat");
 	var itemDesc = document.getElementById("item-desc");
@@ -10353,6 +10353,9 @@ return jQuery;
     var fileNameSplit;
     var fileName;
     
+    $(document).ready(function(){
+       $('#foot').load('/public/footer.html');
+   });
     
     $.ajax({
         url:"/meals",
@@ -10422,6 +10425,7 @@ return jQuery;
         var priceIn = document.createElement("input");
         priceIn.type = 'number';
         priceIn.min = '0';
+        priceIn.max = '100';
         priceIn.value = price;
         priceIn.id = "priceIn-" + item_code;
         panelFooter.appendChild(h4);
@@ -10559,7 +10563,7 @@ return jQuery;
                 url:"/adminItems",
                 type:"post",
                 data:{
-                    itemCode:itemCode,
+                    itemCode:ic.value,
                     fileName:fileName,
                     category:category,
 				    name: itemName.value,

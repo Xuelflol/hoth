@@ -15,59 +15,57 @@
                 $("#nav").replaceWith(data);
             });
         </script>
+
+        <script src="/scripts/admin_userbundle.js"></script>
         
         <link rel="stylesheet" href="/css/admin_user.css"/>
         <link rel="stylesheet" href="/css/scrollbar.css"/>
         <link rel="stylesheet" href="/css/navigation.css"/>
         <link rel="icon" type="image/png" href="/images/Rebel-50.png"/>
-        
     </head>
     
     <body>
         <div id="nav"></div>
         
         <div id = "menu">
-            <p id = 'shop_status'> Shop is:</p>
+            <p id = 'shop_status'> Open/Close Shop:</p>
             <div>
             <label class="switch">
-            <input id = 'in1' type="checkbox" >
+            <input id = 'switch' type="checkbox" >
             <div class="slider"></div>
             </label>
             </div>
-            <button id = "show_coustomer_accounts" class="button">Show coustomer accounts</button>
+          
+            <button id = "show_customer_accounts" class="button">Show customer accounts</button>
             <button id = "show_employee_accounts" class="button">Show employee accounts</button>
             <button id = "show_admin_accounts" class="button">Show admin accounts</button>
+            <!--<button id = "show_summary" class="button">Summary</button>-->
+            <button id = "show_discard_food" class="button">Generate Discard Report</button>
+            <button id="gen_order_report" class="button">Generate Order Report</button>
+            <button id="gen_item_report" class="button">Generate Item Report</button>
+            
         </div>
         
         <div id = "container">
-            <table class = "table">
-                <tr style="padding-left:10px">
-                <th >User name</th>   
-                <th>Email ............</th>
-                <th>First name</th>
-                <th>Last name</th>
-                <th>Auth_level</th>
-                <th></th>
-                </tr>
-                <tr>
-                <td>Eray</td>   
-                <td>edwardguo12@gmail.com </td>
-                <td>edwardcwe2a</td>
-                <td>csqwdasdq</td>
-                <td><select> 
-                    <option value = "C">Customer</option>
-                    <option value = "E">Cheif</option>
-                    <option value = "A">Admin</option>
-                    
-                    </select></td>
-                <td><button>Update</button></td>
+            <div id="table-div">
+                <table id ="table" class = "table">
+                </table>
+            </div>
+            
+            <div id="order-report-div">
+                <h3>Orders Report</h3>
 
-                </tr>
-            
-            
-            </table>
-            
-                    
+                <div id="order-summary">
+                </div>
+            </div>   
+
+            <div id="item-report-div">
+                <h3>Item Report</h3>
+            </div> 
+
+            <div id="discarded-report-div">
+                <h3>Discarded Item Report</h3>
+            </div>
         </div>
     </body>
 </html>

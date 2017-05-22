@@ -16,10 +16,14 @@ $(document).ready(function() {
 	var logoutDiv = document.getElementById("logout");
 	var profileDiv = document.getElementById("profile_link");
 	
+    $.get("/public/navBar.html", function(data){
+        $("#nav").replaceWith(data);
+    });
+    
 	//initial
-	profileDiv.style.display = "none";
+	/*profileDiv.style.display = "none";
 	logoutDiv.style.display = "none";
-	loginDiv.style.display = "none";
+	loginDiv.style.display = "none";*/
     
     /*regSubmit.addEventListener("click", function() {
         $.ajax({
@@ -32,7 +36,6 @@ $(document).ready(function() {
                 lname:lastName.value
             },
             success:function(resp) {
-                console.log(resp);
             }
         });
     });

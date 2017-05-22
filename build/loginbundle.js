@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10329,7 +10329,8 @@ return jQuery;
 /***/ }),
 /* 1 */,
 /* 2 */,
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {
@@ -10350,10 +10351,14 @@ return jQuery;
 	var logoutDiv = document.getElementById("logout");
 	var profileDiv = document.getElementById("profile_link");
 	
+    $.get("/public/navBar.html", function(data){
+        $("#nav").replaceWith(data);
+    });
+    
 	//initial
-	profileDiv.style.display = "none";
+	/*profileDiv.style.display = "none";
 	logoutDiv.style.display = "none";
-	loginDiv.style.display = "none";
+	loginDiv.style.display = "none";*/
     
     /*regSubmit.addEventListener("click", function() {
         $.ajax({
@@ -10366,7 +10371,6 @@ return jQuery;
                 lname:lastName.value
             },
             success:function(resp) {
-                console.log(resp);
             }
         });
     });

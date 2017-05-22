@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	var addbut = document.getElementById("addbut");
-
+    var ic = document.getElementById("item-code");
 	var itemName = document.getElementById("item-name");
 	var itemCat = document.getElementById("item-cat");
 	var itemDesc = document.getElementById("item-desc");
@@ -21,6 +21,9 @@ $(document).ready(function(){
     var fileNameSplit;
     var fileName;
     
+    $(document).ready(function(){
+       $('#foot').load('/public/footer.html');
+   });
     
     $.ajax({
         url:"/meals",
@@ -228,7 +231,7 @@ $(document).ready(function(){
                 url:"/adminItems",
                 type:"post",
                 data:{
-                    itemCode:itemCode,
+                    itemCode:ic.value,
                     fileName:fileName,
                     category:category,
 				    name: itemName.value,
