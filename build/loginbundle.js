@@ -10351,7 +10351,7 @@ return jQuery;
 	var logoutDiv = document.getElementById("logout");
 	var profileDiv = document.getElementById("profile_link");
 	
-    $.get("/public/navBar.html", function(data){
+    $.get("/public/navbar.html", function(data){
         $("#nav").replaceWith(data);
     });
     
