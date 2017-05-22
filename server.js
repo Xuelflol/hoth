@@ -750,6 +750,14 @@ app.get("/order/submitted/:orderid", function(req, resp) {
     resp.sendFile(pF + "/submitted.html");
 });
 
+app.get("/admin_page",function(req,resp){
+    if(req.session.auth == "A"){
+        resp.sendFile(pF + "/admin.html");
+    } else{
+        resp.sendFile(pF + "/main.html");
+    }
+});
+
 app.get("/adminuser",function(req,resp){
     if(req.session.auth == "A"){
         resp.sendFile(pF + "/admin_user.html");

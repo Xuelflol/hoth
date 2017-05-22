@@ -10426,7 +10426,7 @@ return jQuery;
         
         var panelHeading = document.createElement("div");
         panelHeading.className = "panel-heading head";
-        panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
+        panelHeading.innerHTML = "<h2>" + item_name + "</h2>";
     
         var imgDiv = document.createElement("div");
         imgDiv.className = "menu-imgs";
@@ -10564,6 +10564,7 @@ return jQuery;
                 orders[item_code] = parseInt(itemQty.value);
 
                 qtyDiv.innerHTML = itemQty.value + " x ";
+				
             } else if (itemQty.value > 6) {
                 warningDiv.style.display = "inline";
                 warningDiv.innerHTML = "You're ordering too much, we don't want your money!";

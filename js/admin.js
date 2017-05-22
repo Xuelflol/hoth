@@ -73,7 +73,7 @@ $(document).ready(function(){
         
         var panelHeading = document.createElement("div");
         panelHeading.className = "panel-heading head";
-        panelHeading.innerHTML = "<h3>" + item_name + "</h3>";
+        panelHeading.innerHTML = "<h2>" + item_name + "</h2>";
     
         var imgDiv = document.createElement("div");
         imgDiv.className = "menu-imgs";
