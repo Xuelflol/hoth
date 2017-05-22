@@ -56,51 +56,6 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
         "acceptSslCerts": true
       }
     },
-    "chromemac": { // browsers used on saucelabs:
-      "desiredCapabilities": {
-        "browserName": "chrome",
-        "platform": "OS X 10.11",
-        "version": "47"
-      }
-    },
-    "ie11": {
-      "desiredCapabilities": {
-        "browserName": "internet explorer",
-        "platform": "Windows 10",
-        "version": "11.0"
-      }
-    },
-    "firefox" : {
-      "desiredCapabilities": {
-        "platform": "XP",
-        "browserName": "firefox",
-        "version": "33"
-      }
-    },
-    "internet_explorer_10" : {
-      "desiredCapabilities": {
-        "platform": "Windows 7",
-        "browserName": "internet explorer",
-        "version": "10"
-      }
-    },
-    "android_s4_emulator": {
-      "desiredCapabilities": {
-        "browserName": "android",
-        "deviceOrientation": "portrait",
-        "deviceName": "Samsung Galaxy S4 Emulator",
-        "version": "4.4"
-      }
-    },
-    "iphone_6_simulator": {
-      "desiredCapabilities": {
-        "browserName": "iPhone",
-        "deviceOrientation": "portrait",
-        "deviceName": "iPhone 6",
-        "platform": "OSX 10.10",
-        "version": "8.4"
-      }
-    }
   }
 }
 module.exports = config;
