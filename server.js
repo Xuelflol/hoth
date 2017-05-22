@@ -241,7 +241,7 @@ app.post("/save/order",function(req,resp){
                 status:"fail",
                 message:"database connection err"});
         }
-        client.query("INSERT INTO hoth_orders (customer,total_price) VALUES ($1,$2) RETURNING order_id",[req.session.username,req.body.totalPirce],function(err,result){
+        client.query("INSERT INTO hoth_orders (customer,total_price) VALUES ($1,$2) RETURNING order_id",[req.session.username,req.body.totalPrice],function(err,result){
             done();
             if(err){
                 console.log(err);
