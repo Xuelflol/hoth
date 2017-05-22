@@ -8,7 +8,7 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
   ],
   "output_folder": "./node_modules/nightwatch/reports", // reports (test outcome) output by Nightwatch
   "selenium": {
-    "start_process": true,
+    "start_process": false,
     "server_path": BINPATH + "selenium.jar", // downloaded by selenium-download module (see below)
     "log_path": "",
     "host": "127.0.0.1",
@@ -17,7 +17,7 @@ const config = { // we use a nightwatch.conf.js file so we can include comments 
       "webdriver.chrome.driver" : BINPATH + "chromedriver" // also downloaded by selenium-download
     }
   },
-  "test_workers" : {"enabled" : true, "workers" : "auto"}, // perform tests in parallel where possible
+  //"test_workers" : {"enabled" : true, "workers" : "auto"}, // perform tests in parallel where possible
   "test_settings": {
     "default": {
       "launch_url": "http://ondemand.saucelabs.com:80", // we're testing a local site on Saucelabs
