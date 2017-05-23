@@ -18,3 +18,4 @@ before_install:
  
 script:
  - node server.js&
+ - npm test
