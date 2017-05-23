@@ -32,13 +32,15 @@
 
 .button{
     font-size: 1vw;
-    width:15vw;
+    width:18vw;
+	height:5vh;
     margin: 1vh 1vw 1vh 0vw;
-    text-align: center;
+    text-align:left;
+	padding-left:50px;
     overflow: hidden;
     border-radius: 30px;
     background-color: silver;
-    max-height: 25px;
+    
     
 }
 
@@ -68,14 +70,11 @@ body{
     display: inline-block;
     vertical-align: top;
     height: 100vh;
-
 }
 
 
 .switch {
   position: relative;
-
-  
   display: inline-block;
   width: 60px;
   height: 34px;

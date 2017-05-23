@@ -12,9 +12,12 @@ body {
 
 
 #closed{
+	background-color:rgba(112,128,144,0.5);
     display: none;
     font-size: 400%;
     color: red;
+	border-radius: 20px;
+	margin-bottom: 2vh;
 }
 
 #appetizers_holder, #desserts_holder, #drinks_holder, #meals_holder, #about {
@@ -35,14 +38,16 @@ body {
 
 /*Panel stylizing start*/
 .panel {
-    border: 1px solid black !important; 
-    border-radius: 0 !important;
+    border: 2px solid black !important; 
+    border-radius: 0px !important;
     transition: box-shadow 0.5s;
 }
 
 .panel:hover {
     box-shadow: 5px 0px 40px rgba(0,0,0, .2);
 }
+
+
 /*Panel stylizing end*/
 
 
@@ -50,6 +55,10 @@ body {
 .menu {
     max-width:100%;
     max-height:100%;
+	border-radius:40px;
+	border-style:outset;
+	border-color:aliceblue;
+	border-width:4px;
 }
 
 .item-label {
@@ -80,18 +89,20 @@ body {
     border-right: 0px solid transparent !important;
     border-bottom: 1px solid black !important;
     border-radius: 0px !important;
+
 }
 
 .panel-body {
     background-color: grey;
     border: 0px solid transparent !important;
+
 }
 
 .panel-footer {
     background-color: grey !important;
     border-top: 0px solid transparent !important;
-    border-radius: 0px !important;
 }
+
 
 .head {
     height: 100px;
@@ -124,8 +135,20 @@ h3 {
 }
 
 .btn:hover {
-    background-color: black;
+    background-color:aliceblue;
+	color:black;
     border: 1px solid black;
+}
+
+.btn:active{
+	background-color:yellow;
+	color:white;
+}
+
+.glyphicon-remove{
+	color:#b20000;
+	font-size:20px;
+	padding-left: 0.5vw;
 }
 /*Menu item stuff end*/
 
@@ -134,7 +157,7 @@ h3 {
 #imghoth{
     max-width:100%;
     max-height:100%;
-	border-radius: 100px;
+	border-radius: 50px;
 }
 
 #teamhoth_txt {

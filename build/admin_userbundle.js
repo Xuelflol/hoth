@@ -10455,7 +10455,7 @@ return jQuery;
                 shopDisStatus.innerHTML = "Shop is Closed";
                 shopSwitch.checked = false;
             } else{
-                shopDisStatus.innerHTML = "Shop is Opened";
+                shopDisStatus.innerHTML = "Shop is Open";
                 shopSwitch.checked = true;
             }
         }
@@ -10472,7 +10472,7 @@ return jQuery;
                 },
                 success:function(resp){
                     shopSwitch.checked = true;
-                    shopDisStatus.innerHTML = "Shop is openning";
+                    shopDisStatus.innerHTML = "Shop is Open";
                 }
             })
         } else{
