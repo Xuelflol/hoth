@@ -93,6 +93,7 @@ $(document).ready(function(){
                     item:orderItem
                 },
                 success:function(resp){
+                    console.log(resp);
                     itemName.push(resp.name);
                     itemPrice.push(parseFloat(resp.price));
                 },
