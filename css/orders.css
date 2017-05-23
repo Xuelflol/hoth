@@ -45,8 +45,6 @@ tr:nth-child(odd) {
 }
 
 #order-cust-info{
-	background-color:rgba(240,240,250,0.6);
-	border: 2px solid #333333;
     overflow: auto;
 }
 
@@ -98,6 +96,12 @@ hr.style2 {
 	margin-top:4vh;
 	height:7vh;
 	width:50%;
+}
+
+.div-font{
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+	font-size:150%;
+	font-weight:bold;
 	
 }
 
@@ -216,7 +220,7 @@ hr.style2 {
     }
     
     #cart-total-div {
-        height: 80vh;
+        height: 100vh;
     }
     
     #order-cust-info {
