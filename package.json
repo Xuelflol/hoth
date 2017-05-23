@@ -3,12 +3,9 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-        "test": "mocha",
-    "test-e2e": "nightwatch",
+    "test": "mocha",
     "start": "node server.js",
-   
-    "postinstall": "node nightwatch.conf.js",
-    "test": "./node_modules/.bin/nightwatch --env local"
+    "test": "./node_modules/.bin/nightwatch --verbose"
   },
   "repository": {
     "type": "git",

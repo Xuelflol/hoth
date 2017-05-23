@@ -24,7 +24,8 @@ var imgFolder = path.resolve(__dirname, "images");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:020298asm@localhost:5432/kitchen";
+
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
@@ -772,8 +773,6 @@ app.use("/images", express.static("images"));
 
 app.use("/css", express.static("css"));
 
-app.use("/public", express.static("public"));
-
 app.get("/", function(req, resp) {
     if(req.session.username == undefined){
         req.session.username = 'guest'
@@ -868,6 +867,7 @@ app.get("/adminuser",function(req,resp){
 app.get("/getId", function(req, resp) {
     resp.send(req.session.orderid);
 });
+
 
 //socket
 var orderRecords = [];
