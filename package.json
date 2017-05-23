@@ -5,7 +5,7 @@
   "scripts": {
     "test": "mocha",
     "start": "node server.js",
-    "test": "./node_modules/.bin/nightwatch"
+    "test": "./node_modules/.bin/nightwatch --verbose"
   },
   "repository": {
     "type": "git",
