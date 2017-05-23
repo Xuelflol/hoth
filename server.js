@@ -24,7 +24,7 @@ var imgFolder = path.resolve(__dirname, "images");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
@@ -40,6 +40,12 @@ app.use(session({
     resave:true,
     saveUninitialized:true
 }));
+
+pg.defaults.poolSize = 20;
+
+var client = new pg.Client(dbURL);
+//client.on("drain", client.end.bind(client));
+client.connect();
 
 //----------------Constraints------------------------//
 
@@ -59,17 +65,18 @@ var shopStatus = 1;
 // ajax response
 app.post("/register", function(req, resp) {
     if (nameRegex.test(req.body.fname) && nameRegex.test(req.body.lname) && passwordRegex.test(req.body.password) && emailRegex.test(req.body.email) && usernameRegex.test(req.body.uname)) {
-        pg.connect(dbURL, function(err, client, done) {
+        //pg.connect(dbURL, function(err, client, done) {
             client.query("INSERT INTO hoth_users (first_name, last_name, password, email, username) VALUES ($1, $2, $3, $4, $5)", [req.body.fname, req.body.lname, req.body.password, req.body.email, req.body.uname], function(err, result) {
-                done();
+                //done();
 
                 if (err) {
                     console.log(err);
+                    reps.send("Account exists");
+                } else {
+                    resp.redirect("/created");
                 }
-
-                resp.redirect("/created");
             });
-        });
+        //});
     } else {
         resp.send("Wrong Format");
     }
@@ -77,9 +84,9 @@ app.post("/register", function(req, resp) {
 
 app.post("/login", function(req, resp) {
     if (emailRegex.test(req.body.email) && passwordRegex.test(req.body.password)) {
-        pg.connect(dbURL, function(err, client, done) {
+        //pg.connect(dbURL, function(err, client, done) {
             client.query("SELECT * FROM hoth_users WHERE email = $1 AND password = $2", [req.body.email, req.body.password], function(err, result) {
-                done();
+                //done();
                 if (err) {
                     console.log(err);
                 }
@@ -96,82 +103,80 @@ app.post("/login", function(req, resp) {
                     resp.send("Wrong login information");
                 }
             });
-        });
+        //});
     } else {
         resp.send("Wrong format");
     }
 });
 
 app.post("/appetizers", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_items WHERE category = 'a'", function(err, result) {
-            done();
+            //done();
             
             resp.send(result.rows);
         });
-    });
+    //});
 });
 
 app.post("/drinks", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+   // //pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_items WHERE category = 'b'", function(err, result) {
-            done();
+            //done();
             
             resp.send(result.rows);
         });
-    });
+    //});
 });
 
 app.post("/desserts", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_items WHERE category = 'd'", function(err, result) {
-            done();
+            //done();
             
             resp.send(result.rows);
         });
-    });
+   // });
 });
 
 app.post("/meals", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_items WHERE category = 'm'", function(err, result) {
-            done();
+            //done();
             
             resp.send(result.rows);
         });
-    });
+    //});
 });
 
 app.post("/user-cp", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
         if (req.session.auth == "C") {
            resp.send("customer");
         } else if (req.session.auth == "E" || req.session.auth == "A") {
             resp.send("ea");
         }
-    });
 });
 
 app.post("/changeEmail", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_users SET email = $1 WHERE user_id = $2", [req.body.email, req.session.loginid], function(err, result) {
-            done();
+            //done();
             
             resp.send("Email has been changed");
             resp.end();
         });
-    });
+    //});
 });
 
 app.post("/changePassword", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_users SET password = $1 WHERE user_id = $2", [req.body.password, req.session.loginid], function(err, result) {
-            done();
+            //done();
             
             resp.send("Password has been changed");
             resp.end();
         });
-    });
+    //});
 });
 
 //---------------------------Order page --------------------//
@@ -204,15 +209,15 @@ app.post("/get/orders",function(req,resp){
 }); 
 
 app.post("/get/price",function(req,resp){
-    pg.connect(dbURL,function(err,client,done){
-        if(err){
+    //pg.connect(dbURL,function(err,client,done){
+        /*if(err){
             console.log(err);
             resp.send({
                 status:"fail"
             });
-        }
+        }*/
         client.query("SELECT item_name,price FROM hoth_items WHERE item_code = $1",[req.body.item],function(err,result){
-            done();
+            //done();
             
             if(err){
                 console.log(err);
@@ -220,6 +225,8 @@ app.post("/get/price",function(req,resp){
                     status:"faile",
                 });
             }
+
+            console.log(result.rows);
 
             if (result != undefined && result.rows.length > 0) {
                 resp.send({
@@ -229,20 +236,20 @@ app.post("/get/price",function(req,resp){
                 });
             }
         });
-    });
+    //});
 });
 
 app.post("/save/order",function(req,resp){
     console.log(req.body)
-    pg.connect(dbURL,function(err,client,done){
-        if(err){
+    //pg.connect(dbURL,function(err,client,done){
+        /*if(err){
             console.log(err);
             resp.send({
                 status:"fail",
                 message:"database connection err"});
-        }
+        }*/
         client.query("INSERT INTO hoth_orders (customer,total_price) VALUES ($1,$2) RETURNING order_id",[req.session.username,req.body.totalPrice],function(err,result){
-            done();
+            //done();
             if(err){
                 console.log(err);
                 resp.sent({
@@ -257,20 +264,20 @@ app.post("/save/order",function(req,resp){
             
             
         });
-    });
+    //});
 });
 
 app.post("/order/detailes",function(req,resp){
-    pg.connect(dbURL,function(err,client,done){
-        if(err){
+    //pg.connect(dbURL,function(err,client,done){
+        /*if(err){
             console.log(err);
             resp.send({
                 status:"fail"
             });
-        }
+        }*/
 
         client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id, price) VALUES ($1,$2,$3, $4)",[req.body.name,req.body.quantity,req.body.id,req.body.quantity*req.body.price],function(err,result){
-            done();
+            //done();
 
             if(err){
                 console.log(err);
@@ -284,14 +291,18 @@ app.post("/order/detailes",function(req,resp){
             });
 
         });
-    });
+    //});
     
 });
 
 app.post("/submit/order", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_order_details INNER JOIN hoth_items ON hoth_order_details.item_name = hoth_items.item_name WHERE hoth_order_details.order_id = $1", [req.session.orderid], function(err, result) {
-            done();
+            //done();
+
+            if (err) {
+                console.log(err);
+            }
 
             var obj = {}
 
@@ -310,15 +321,17 @@ app.post("/submit/order", function(req, resp) {
                 resp.send(obj);
             }
         });
-    });
+    //});
 });
 
 //kitchen
 app.post("/start-kitchen", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
-        client.query("SELECT hoth_order_details.*, hoth_items.item_code FROM hoth_order_details INNER JOIN hoth_items ON hoth_order_details.item_name = hoth_items.item_name WHERE hoth_order_details.status = 'P' ORDER BY hoth_order_details.order_id", function(err, result) {
-            done();
-            
+    //pg.connect(dbURL, function(err, client, done) {
+        client.query("SELECT hoth_order_details.*, hoth_items.item_code FROM hoth_order_details INNER JOIN hoth_items ON hoth_order_details.item_name = hoth_items.item_name WHERE hoth_order_details.status = 'N' AND hoth_order_details.order_id IN (SELECT order_id FROM hoth_orders WHERE status = 'N' ORDER BY order_id LIMIT $1) ORDER BY hoth_order_details.order_id", [req.body.count], function(err, result) {
+            //done();
+
+            console.log(req.body.count);
+
             var index = 0;
             var lastItem = 0;
             var obj = {};
@@ -348,13 +361,32 @@ app.post("/start-kitchen", function(req, resp) {
                 resp.send(obj);
             }
         });
-    });
+    //});
 });
 
+app.post("/update/status", function(req, resp) {
+    var orderids = req.body.orderids;
+    var oid = orderids.toString();
+
+    //pg.connect(dbURL, function(err, client, done) {
+        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'P' WHERE order_id IN (" + oid + ") RETURNING *) UPDATE hoth_order_details SET status = 'P' WHERE order_id IN (SELECT order_id FROM twotables)", function(err, result) {
+            //done();
+
+            if (err) {
+                console.log(err);
+            }
+
+            if (result != undefined && result.rows.length > 0) {
+                console.log(result.rows);
+            }
+        })
+    //})
+})
+
 app.post("/order/complete", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
-        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING *) UPDATE hoth_order_details SET status = 'F' WHERE order_id in (SELECT order_id FROM twotables)", [req.body.orderid], function(err, result) {
-            done();
+    //pg.connect(dbURL, function(err, client, done) {
+        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING *) UPDATE hoth_order_details SET status = 'F' WHERE order_id IN (SELECT order_id FROM twotables)", [req.body.orderid], function(err, result) {
+            //done();
 
             var obj = {
                 orderid: req.body.orderid
@@ -362,18 +394,18 @@ app.post("/order/complete", function(req, resp) {
 
             resp.send(obj);
         });
-    });
+    //});
 });
 
 // -----------------------Order page end ------------------//
 // -----------------------Admin operation---------------//
 app.post("/change/price",function(req,resp){
-    pg.connect(dbURL,function(err,client,done){
+    //pg.connect(dbURL,function(err,client,done){
         if(err){
             console.log(err)
         }
         client.query("UPDATE hoth_items SET price = $1 WHERE item_code = $2",[req.body.price,req.body.item],function(err,result){
-            done();
+            //done();
 
             if(err){
                 console.log(err);
@@ -382,16 +414,16 @@ app.post("/change/price",function(req,resp){
 
             }
         });
-    });
+    //});
 });
 
 app.post("/adminItems", function(req,resp){
-    pg.connect(dbURL,function(err,client,done){
+    //pg.connect(dbURL,function(err,client,done){
         if(err){
             console.log(err)
         }
         client.query("INSERT INTO hoth_items (item_code,category,description,item_name,filename,price) VALUES($1,$2,$3,$4,$5,$6)",[req.body.itemCode,req.body.category,req.body.desc,req.body.name,req.body.fileName,req.body.price],function(err,result){
-            done();
+            //done();
             if(err){
                 console.log(err);
             }else {
@@ -406,22 +438,22 @@ app.post("/adminItems", function(req,resp){
 
             }
         });
-    });
+    //});
 });
 
 app.post("/get/items", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_items ORDER BY item_name", function(err, result) {
-            done();
+            //done();
             resp.send({result: result.rows});
         });
-    });
+    //});
 });
 
 app.post("/delete/item",function(req,resp){
 	pg.connect(dbURL, function(err, client, done) {
         client.query("DELETE FROM hoth_items WHERE item_code = $1",[req.body.item], function(err, result) {
-            done();
+            //done();
             resp.send("success");
         });
     });
@@ -463,12 +495,13 @@ app.post("/open/close",function(req,resp){
     shopStatus = req.body.shopStatus;
 	if(req.body.shopStatus == 0){
 		pg.connect(dbURL,function(err,client,done){
-			client.query("UPDATE hoth_order_details SET status = 'C' WHERE status  ='P'"),function(err,result){
+			client.query("UPDATE hoth_order_details SET status = 'C' WHERE status IN ('P', 'N')"),function(err,result){
+                //done();
 				if(err){
 					console.log(err)
 				}
 			}
-			client.query("UPDATE hoth_orders SET STATUS = 'C' WHERE STATUS = 'P';"),function(err,result){
+			client.query("UPDATE hoth_orders SET STATUS = 'C' WHERE status IN ('P', 'N')"),function(err,result){
 				done();
 				if(err){
 					console.log(err)
@@ -483,22 +516,22 @@ app.post("/open/close",function(req,resp){
 });
 
 app.post("/get/accounts",function(req,resp){
-    pg.connect(dbURL,function(err,client,done){
+    //pg.connect(dbURL,function(err,client,done){
         client.query("SELECT user_id,username, email, first_name, last_name FROM hoth_users WHERE auth_level = $1",[req.body.id],function(err,result){
-            done();
+            //done();
             if(err){
                 console.log(err)
             } else if (result != undefined && result.rows.length > 0) {
                 resp.send(result.rows)
             }
         })
-    })
+    //})
 });
 
 app.post("/auth",function(req,resp){
-    pg.connect(dbURL,function(err,client,done){
+    //pg.connect(dbURL,function(err,client,done){
         client.query("UPDATE hoth_users SET auth_level = $1 WHERE user_id = $2",[req.body.auth,req.body.user],function(err,result){
-            done();
+            //done();
             if(err){
                 console.log(err)
             } else {
@@ -506,7 +539,7 @@ app.post("/auth",function(req,resp){
             }
             
         })
-    })
+    //})
     
 });
 
@@ -514,10 +547,10 @@ app.post("/auth",function(req,resp){
     var totalOrderNum;
     var totalIncome;
    
-    pg.connect(dbURL,function(err,client,done){
+    //pg.connect(dbURL,function(err,client,done){
          
         client.query("SELECT SUM(total_price) totalPrice, COUNT(order_id) ordernumber FROM hoth_orders WHERE STATUS = 'F';",function(err,result){
-            done();
+            //done();
             if(err){
                 console.log(err)
             }
@@ -527,7 +560,7 @@ app.post("/auth",function(req,resp){
         })
         
         client.query("SELECT * FROM hoth_orders WHERE status = 'F';",function(err,result){
-            done();
+            //done();
             if(err){
                 console.log(err)
             } else {
@@ -546,7 +579,7 @@ app.post("/auth",function(req,resp){
 app.post("/discard",function(req,resp){
 	pg.connect(dbURL,function(err,client,done){
         client.query("SELECT item_name,SUM(quantity) numbers FROM hoth_prepared WHERE discarded = 'Y' GROUP BY item_name;",function(err,result){
-            done();
+            //done();
             if(err){
                 console.log(err)
             } else {
@@ -562,9 +595,9 @@ app.post("/discard",function(req,resp){
 
 
 app.post("/prepare/item", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("INSERT INTO hoth_prepared (item_name, quantity, item_code) VALUES ($1, $2, $3) RETURNING *", [req.body.item, req.body.quantity, req.body.item_id], function(err, result) {
-            done();
+            //done();
     
             resp.send({
                 prep_id: result.rows[0].prep_id,
@@ -573,13 +606,13 @@ app.post("/prepare/item", function(req, resp) {
                 item_code: result.rows[0].item_code
             });
         });
-    });
+    //});
 });
 
 app.post("/discard/item", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_prepared SET discarded = 'Y' WHERE prep_id = $1", [req.body.item], function(err, result) {
-            done();
+            //done();
 
             if (err) {
                 console.log(err);
@@ -587,17 +620,17 @@ app.post("/discard/item", function(req, resp) {
 
             resp.send("success");
         });
-    });
+    //});
 });
 
 app.post("/bag/item", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("SELECT * FROM hoth_prepared WHERE item_name = $1 AND discarded = 'N' AND quantity >= $2", [req.body.item, req.body.quantity], function(err, result) {
-            done();
+            //done();
 
             if (result.rows.length > 0) {
                 client.query("WITH cte AS (SELECT prep_id FROM hoth_prepared WHERE quantity >= $1 AND item_name = $2 ORDER BY prep_id LIMIT 1) UPDATE hoth_prepared s SET quantity = quantity - $1 FROM cte WHERE s.prep_id = cte.prep_id RETURNING cte.prep_id, s.item_code, s.quantity", [req.body.quantity, req.body.item], function(err, result) {
-                    done();
+                    //done();
 
                     if (err) {
                         console.log(err);
@@ -618,16 +651,16 @@ app.post("/bag/item", function(req, resp) {
                 });
             }
         });
-    });
+    //});
 });
 
 app.post("/item/complete", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_order_details SET status = 'F' WHERE item_name = $1 and order_id = $2", [req.body.item, req.body.orderid], function(err, result) {
-            done();
+            //done();
 
             client.query("SELECT * FROM hoth_order_details WHERE order_id = $1 AND status = 'P'", [req.body.orderid], function(err, result) {
-                done();
+                //done();
 
                 if (result.rows.length == 0) {
                     resp.send({
@@ -641,27 +674,27 @@ app.post("/item/complete", function(req, resp) {
                 }
             });
         });
-    });
+    //});
 });
 
 app.post("/complete/order", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING order_id", [req.body.orderid], function(err, result) {
-            done();
+            //done();
 
             resp.send({
                 orderid: result.rows[0].order_id
             });
         });
-    });
+    //});
 });
 
 
 app.post("/report", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+    //pg.connect(dbURL, function(err, client, done) {
         if (req.body.type == "order") {
             client.query("WITH cte AS (SELECT SUM(total_price) FROM hoth_orders) SELECT * FROM hoth_orders s CROSS JOIN cte WHERE s.status = 'F' ORDER BY s.order_id", function(err, result) {
-                done();
+                //done();
 
                 if (result != undefined && result.rows.length > 0) {
                     resp.send({
@@ -671,7 +704,7 @@ app.post("/report", function(req, resp) {
             });
         } else if (req.body.type == "item") {
             client.query("SELECT item_name, sum(quantity) AS quantity, sum(price) AS price FROM (SELECT * FROM hoth_order_details) AS s WHERE s.status = 'F' GROUP BY item_name ORDER BY item_name", function(err, result) {
-                done();
+                //done();
 
                 if (result != undefined && result.rows.length > 0) {
                     resp.send(result.rows);
@@ -679,22 +712,26 @@ app.post("/report", function(req, resp) {
             }) ;
         } else if (req.body.type == "discarded") {
             client.query("SELECT p.item_name, SUM(p.quantity) AS quantity, i.price AS price FROM hoth_prepared p LEFT JOIN hoth_items i ON p.item_name = i.item_name WHERE discarded = 'Y' AND quantity > 0 GROUP BY p.item_name, price, quantity ORDER BY p.item_name", function(err, result) {
-                done();
+                //done();
 
                 if (result != undefined && result.rows.length > 0) {
                     resp.send(result.rows);
                 }
             });
         }
-    });
+    //});
 });
 
-app.post("/discard/all", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
+app.post("/reset/all", function(req, resp) {
+    //pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_prepared SET discarded = 'Y'", function(err, result) {
-            done();
+            //done();
         });
-    });
+
+        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'N' WHERE status = 'P' RETURNING *) UPDATE hoth_order_details SET status = 'N' WHERE status = 'P'", function(err, result) {
+            //done();
+        });
+    //});
 });
 
 var imageName;
@@ -740,6 +777,7 @@ app.get("/", function(req, resp) {
     if(req.session.username == undefined){
         req.session.username = 'guest'
     }
+    console.log(req.session.username);
 
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");
@@ -751,15 +789,19 @@ app.get("/", function(req, resp) {
 });
 
 app.get("/submit/getOrdersNums", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
-        client.query("SELECT * FROM hoth_orders WHERE status = 'P'", function(err, result) {
-            done();
+    //pg.connect(dbURL, function(err, client, done) {
+        client.query("SELECT * FROM hoth_orders WHERE status IN ('P','N') ORDER BY order_id", function(err, result) {
+            //done();
+
+            if (err) {
+                console.log(err);
+            }
 
             resp.send({
                 orders: result.rows
             });
         });
-    });
+    //});
 });
 
 app.get("/profile", function(req, resp) {
