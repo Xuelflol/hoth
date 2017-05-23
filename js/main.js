@@ -29,7 +29,7 @@ $(document).ready(function() {
     
     var orders = {};
     var total_price = 0;
-    
+    var ordersCount = 0;
     
     $.ajax({
         url:"/get/shopstatus",
@@ -149,12 +149,14 @@ $(document).ready(function() {
             var cartItem = document.getElementById("cart-item-" + item_code);
             var itemQty = document.getElementById("qty-" + item_code);
             
-            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6) {
+            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6 && ordersCount < 10) {
                 addToCart(item_name, item_code, price, quantityInput.value);
 
                 orders[item_code] = parseInt(itemQty.value);
                 
                 total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
+
+                ordersCount++;
             } else if (cartItem != null) {
                 warningDiv.style.display = "inline";
                 warningDiv.innerHTML = "You already have this item in the cart.";
@@ -243,6 +245,8 @@ $(document).ready(function() {
             cartItem.parentNode.removeChild(cartItem);
             
             delete orders[item_code];
+
+            ordersCount--;
         });
     }
     

@@ -10365,7 +10365,7 @@ return jQuery;
     
     var orders = {};
     var total_price = 0;
-    
+    var ordersCount = 0;
     
     $.ajax({
         url:"/get/shopstatus",
@@ -10484,6 +10484,7 @@ return jQuery;
         submitCart.addEventListener("click", function(event) {
             var cartItem = document.getElementById("cart-item-" + item_code);
             var itemQty = document.getElementById("qty-" + item_code);
+<<<<<<< HEAD
             if(currentOrderNumber < maxOrderNumber){
 				if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6) {
 					addToCart(item_name, item_code, price, quantityInput.value);
@@ -10493,6 +10494,17 @@ return jQuery;
 					total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
 					
 					currentOrderNumber++;
+=======
+            
+            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6 && ordersCount < 10) {
+                addToCart(item_name, item_code, price, quantityInput.value);
+
+                orders[item_code] = parseInt(itemQty.value);
+                
+                total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
+
+                ordersCount++;
+>>>>>>> develop
             } else if (cartItem != null) {
 					warningDiv.style.display = "inline";
 					warningDiv.innerHTML = "You already have this item in the cart.";
@@ -10589,7 +10601,12 @@ return jQuery;
             cartItem.parentNode.removeChild(cartItem);
             
             delete orders[item_code];
+<<<<<<< HEAD
 			currentOrderNumber--;
+=======
+
+            ordersCount--;
+>>>>>>> develop
         });
     }
     

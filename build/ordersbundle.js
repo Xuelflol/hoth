@@ -10427,6 +10427,7 @@ return jQuery;
                     item:orderItem
                 },
                 success:function(resp){
+                    console.log(resp);
                     itemName.push(resp.name);
                     itemPrice.push(parseFloat(resp.price));
                 },
