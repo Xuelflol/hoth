@@ -19,3 +19,5 @@ before_install:
  - sudo dpkg -i google-chrome*.deb
  - jdk_switcher use oraclejdk8
  
+script:
+ - node server.js
