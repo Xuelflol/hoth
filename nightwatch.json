@@ -1,30 +1,35 @@
-{
-  "src_folders" : ["tests"],
+ {
+  "detailed_output": true,
+  "src_folders" : ["test"],
   "output_folder" : "reports",
   "custom_commands_path" : "",
   "custom_assertions_path" : "",
   "page_objects_path" : "",
-  "globals_path" : "./global.js",
-  "detailed_output": true,
+  "globals_path" : "./globals.js",
 
-  //running ChromeDriver standalone
   "selenium" : {
-    "start_process" : false,
+    "start_process" : false
   },
+
+  "test_workers": {
+    "enabled": true,
+    "workers": "auto"
+  }, 
      
   "test_settings" : {
     "default" : {
       "selenium_port"  : 9515,
       "selenium_host"  : "localhost",
-      "default_path_prefix" : "",
-
+        "default_path_prefix" : "",
       "desiredCapabilities": {
         "browserName": "chrome",
-        "chromeOptions" : {
-          "args" : ["--no-sandbox"]
+        "chromeOptions": {
+            "args": ["--no-sandbox"]
         },
-        "acceptSslCerts": true
+            "acceptSslCerts": true
       }
+        
     }
+
   }
 }
