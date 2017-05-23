@@ -10373,8 +10373,6 @@ return jQuery;
         url:"/submit/getOrdersNums",
         type:"get",
         success:function(resp) {
-            console.log(resp);
-
             for (var i = 0; i < resp.orders.length; i++) {
                 var orderWrapper = document.createElement("div");
                 var orderIdDiv = document.createElement("div");
