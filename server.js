@@ -24,7 +24,7 @@ var imgFolder = path.resolve(__dirname, "images");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:020298asm@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
 
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
@@ -797,11 +797,9 @@ app.get("/submit/getOrdersNums", function(req, resp) {
                 console.log(err);
             }
 
-            if (result != undefined && result.rows > 0) {
-                resp.send({
-                    orders: result.rows
-                });
-            }
+            resp.send({
+                orders: result.rows
+            });
         });
     //});
 });
