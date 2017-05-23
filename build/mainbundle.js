@@ -10346,7 +10346,9 @@ return jQuery;
     var holderDiv = document.getElementById("holder");
     var warningDiv = document.getElementById("warning");
     var checkoutButton = document.getElementById("checkout");
-    var shopStatusDiv = document.getElementById("closed")
+    var shopStatusDiv = document.getElementById("closed");
+	var maxOrderNumber = 4;
+	var currentOrderNumber = 0;
     
     document.addEventListener("scroll", function() {
         warningDiv.style.display = "none";
@@ -10482,24 +10484,34 @@ return jQuery;
         submitCart.addEventListener("click", function(event) {
             var cartItem = document.getElementById("cart-item-" + item_code);
             var itemQty = document.getElementById("qty-" + item_code);
-            
-            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6) {
-                addToCart(item_name, item_code, price, quantityInput.value);
+            if(currentOrderNumber < maxOrderNumber){
+				if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6) {
+					addToCart(item_name, item_code, price, quantityInput.value);
 
-                orders[item_code] = parseInt(itemQty.value);
-                
-                total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
+					orders[item_code] = parseInt(itemQty.value);
+
+					total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
+					
+					currentOrderNumber++;
             } else if (cartItem != null) {
-                warningDiv.style.display = "inline";
-                warningDiv.innerHTML = "You already have this item in the cart.";
-                warningDiv.style.top = event.pageY - 50 + "px";
-                warningDiv.style.left = event.pageX + "px";
+					warningDiv.style.display = "inline";
+					warningDiv.innerHTML = "You already have this item in the cart.";
+					warningDiv.style.top = event.pageY - 50 + "px";
+					warningDiv.style.left = event.pageX + "px";
             } else if (quantityInput.value > 6) {
-                warningDiv.style.display = "inline";
-                warningDiv.innerHTML = "You're ordering too much, we don't want your money!";
-                warningDiv.style.top = event.pageY - 50 + "px";
-                warningDiv.style.left = event.pageX + "px";
+					warningDiv.style.display = "inline";
+					warningDiv.innerHTML = "You're ordering too much, we don't want your money!";
+					warningDiv.style.top = event.pageY - 50 + "px";
+					warningDiv.style.left = event.pageX + "px";
             }
+				
+			} else {
+					warningDiv.style.display = "inline";
+					warningDiv.innerHTML = "Maximum 10 items!";
+					warningDiv.style.top = event.pageY - 50 + "px";
+					warningDiv.style.left = event.pageX + "px";
+			}
+            
         });
     }
     
@@ -10577,6 +10589,7 @@ return jQuery;
             cartItem.parentNode.removeChild(cartItem);
             
             delete orders[item_code];
+			currentOrderNumber--;
         });
     }
     
