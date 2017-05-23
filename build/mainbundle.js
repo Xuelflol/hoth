@@ -10346,7 +10346,8 @@ return jQuery;
     var holderDiv = document.getElementById("holder");
     var warningDiv = document.getElementById("warning");
     var checkoutButton = document.getElementById("checkout");
-    var shopStatusDiv = document.getElementById("closed")
+    var shopStatusDiv = document.getElementById("closed");
+    var badge = document.getElementById("badge");
     
     document.addEventListener("scroll", function() {
         warningDiv.style.display = "none";
@@ -10491,6 +10492,7 @@ return jQuery;
                 total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
 
                 ordersCount++;
+                badge.innerHTML = ordersCount;
             } else if (cartItem != null) {
                 warningDiv.style.display = "inline";
                 warningDiv.innerHTML = "You already have this item in the cart.";
@@ -10581,6 +10583,7 @@ return jQuery;
             delete orders[item_code];
 
             ordersCount--;
+            badge.innerHTML = ordersCount;
         });
     }
     
