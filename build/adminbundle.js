@@ -63,12 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -10328,62 +10327,42 @@ return jQuery;
 
 
 /***/ }),
-
-/***/ 5:
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function() {    
-    // heroku deployment test
-    var signInButton = document.getElementById("sign_in");
-    var appetizers = document.getElementById("appetizers");
-    var desserts = document.getElementById("desserts");
-    var drinks = document.getElementById("drinks");
-    var meals = document.getElementById("meals");
-    var mealsDiv = document.getElementById("meals_div");
-    var appetizersDiv = document.getElementById("appetizers_div");
-    var dessertsDiv = document.getElementById("desserts_div");
-    var drinksDiv = document.getElementById("drinks_div");
-    var holderDiv = document.getElementById("holder");
-    var warningDiv = document.getElementById("warning");
-    var checkoutButton = document.getElementById("checkout");
-    var shopStatusDiv = document.getElementById("closed")
+/* WEBPACK VAR INJECTION */(function($) {$(document).ready(function(){
+	var addbut = document.getElementById("addbut");
+    var ic = document.getElementById("item-code");
+	var itemName = document.getElementById("item-name");
+	var itemCat = document.getElementById("item-cat");
+	var itemDesc = document.getElementById("item-desc");
+	var itemPrice = document.getElementById("item-price");
+	var itemImg = document.getElementById("item-image");
+	var okayBut = document.getElementById("okayBut");
+	var mealDiv = document.getElementById("meal-items");
+	var appDiv = document.getElementById("app-items");
+	var drinkDiv = document.getElementById("drink-items");
+	var dessertDiv = document.getElementById("dessert-items");
+    var priceUpMess = document.getElementById("price-updated");
+    var pictureUpMess = document.getElementById("picture-updated");
+    var submitBut = document.getElementById("image-submit");
     
-    document.addEventListener("scroll", function() {
-        warningDiv.style.display = "none";
-    });
+    
+    var imgSubmitCheck = 0;
+    var itemCode;
+    var fileNameSplit;
+    var fileName;
     
     $(document).ready(function(){
        $('#foot').load('/public/footer.html');
    });
     
-    var app_digit = 0;
-    var bev_digit = 0;
-    var meals_digit = 0;
-    var des_digit = 0;
-    
-    var orders = {};
-    var total_price = 0;
-    var ordersCount = 0;
-    
-    $.ajax({
-        url:"/get/shopstatus",
-        type:"post",
-        success:function(resp){
-            
-            if(resp.shopStatus == 0){
-                shopStatusDiv.style.display = "block"
-            } else{
-                shopStatusDiv.style.display = "none"
-            }
-        }
-    });
-
     $.ajax({
         url:"/meals",
         type:"post",
         success:function(resp) {
             for (var i = 0; i < resp.length; i++) {
-                createItem(i, meals, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
+                createItem(i, mealDiv, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
             }
         }
     });
@@ -10393,7 +10372,7 @@ return jQuery;
         type:"post",
         success:function(resp) {
             for (var i = 0; i < resp.length; i++) {
-                createItem(i, appetizers, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
+                createItem(i, appDiv, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
             }
         }
     });
@@ -10403,7 +10382,7 @@ return jQuery;
         type:"post",
         success:function(resp) {
             for (var i = 0; i < resp.length; i++) {
-                createItem(i, drinks, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
+                createItem(i, drinkDiv, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
             }
         }
     });
@@ -10413,7 +10392,7 @@ return jQuery;
         type:"post",
         success:function(resp) {
             for (var i = 0; i < resp.length; i++) {
-                createItem(i, desserts, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
+                createItem(i, dessertDiv, resp[i].item_name, resp[i].item_code, resp[i].price, resp[i].filename, resp[i].description)
             }
         }
     });
@@ -10421,12 +10400,19 @@ return jQuery;
     function createItem(i, divname, item_name, item_code, price, filename, description) {
         var container  = document.createElement("div");
         container.className = "col-lg-2 col-md-4 col-sm-6 col-xs-12";
+		container.id = "container-"+item_code;
         var panel = document.createElement("div");
         panel.className = "panel panel-default text-center";
         
         var panelHeading = document.createElement("div");
         panelHeading.className = "panel-heading head";
+
         panelHeading.innerHTML = "<h2>" + item_name + "</h2>";
+		var deleteDiv = document.createElement("div");
+		deleteDiv.className = "deleteDiv"
+		deleteDiv.innerHTML = "X"
+		panel.appendChild(deleteDiv);
+
     
         var imgDiv = document.createElement("div");
         imgDiv.className = "menu-imgs";
@@ -10443,183 +10429,197 @@ return jQuery;
         panelFooter.className = "panel-footer foot";
         var h4 = document.createElement("h4");
         h4.innerHTML = description;
-        var h3 = document.createElement("h3");
-        h3.innerHTML = "$" + price;
+        var priceIn = document.createElement("input");
+        priceIn.type = 'number';
+        priceIn.min = '0';
+        priceIn.max = '100';
+        priceIn.value = price;
+        priceIn.id = "priceIn-" + item_code;
+		
+		
+
+		
+		
         panelFooter.appendChild(h4);
-        panelFooter.appendChild(h3);
+        panelFooter.appendChild(priceIn);
+		
 
         var controlDiv = document.createElement("div");
-        var form = document.createElement("form");
+        var form = document.createElement("div");
         form.id = "form-" + item_code;
         form.className = "item-control-form";
-        form.action = "javascript:console.log('added');";
-        form.method = "post";
-        var quantityInput = document.createElement("input");
-        quantityInput.type = "number";
-        quantityInput.min = "1";
-        quantityInput.max = "6";
-        quantityInput.name = "qty_input";
-        quantityInput.id = "qty-" + item_code;
-        quantityInput.className = "form-control";
-        var submitCart = document.createElement("input");
-        submitCart.type = "submit";
-        submitCart.value = "Add to Cart";
-        submitCart.id = "add-" + item_code;
-        submitCart.className = "btn btn-lg";
+        
+        var updataPrice = document.createElement("input");
+        updataPrice.type = "submit";
+        updataPrice.value = "Update Price";
+        updataPrice.id = "upDate-" + item_code;
+        updataPrice.className = "btn btn-lg";
 
-        form.appendChild(quantityInput);
-        form.appendChild(submitCart);
+        form.appendChild(updataPrice);
         panelFooter.appendChild(form);
-
         panel.appendChild(panelHeading);
         panel.appendChild(panelBody);
         panel.appendChild(panelFooter)
         container.appendChild(panel);
         divname.appendChild(container);
-
-        var clearDiv = document.createElement("div");
+		
+		deleteDiv.addEventListener("click",function(){
+			if(confirm("Delete this item?")){
+				$.ajax({
+					url:"/delete/item",
+					type:"post",
+					data:{
+						item:item_code
+					},
+					success:function(resp){
+						document.getElementById("container-"+item_code).remove();
+					}
+				})
+			   }
+		})
         
-        submitCart.addEventListener("click", function(event) {
-            var cartItem = document.getElementById("cart-item-" + item_code);
-            var itemQty = document.getElementById("qty-" + item_code);
+        updataPrice.addEventListener("click", function(event) {
+            var updatedPrice = document.getElementById("priceIn-" + item_code);
+            var itemCode = item_code;
             
-            if (cartItem == null && quantityInput.value > 0 && quantityInput.value <= 6 && ordersCount < 10) {
-                addToCart(item_name, item_code, price, quantityInput.value);
-
-                orders[item_code] = parseInt(itemQty.value);
-                
-                total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
-
-                ordersCount++;
-            } else if (cartItem != null) {
-                warningDiv.style.display = "inline";
-                warningDiv.innerHTML = "You already have this item in the cart.";
-                warningDiv.style.top = event.pageY - 50 + "px";
-                warningDiv.style.left = event.pageX + "px";
-            } else if (quantityInput.value > 6) {
-                warningDiv.style.display = "inline";
-                warningDiv.innerHTML = "You're ordering too much, we don't want your money!";
-                warningDiv.style.top = event.pageY - 50 + "px";
-                warningDiv.style.left = event.pageX + "px";
+            
+            if(updatedPrice.value < 0){
+                alert("price must be positive")
+            } else {
+                $.ajax({
+                    url:"/change/price",
+                    type:"post",
+                    data:{
+                        price: parseFloat(updatedPrice.value),
+                        item:item_code
+                    },
+                    success:function(resp){
+                        priceUpMess.style.bottom = '2vh';
+                        setTimeout(function(){
+                            priceUpMess.style.bottom = '-5vh';
+                        },2000);
+                        
+                        
+                        
+                    }
+                    
+                });
             }
+            
+            
         });
     }
     
-    function addToCart(item_name, item_code, price, qty) {
-        var container = document.createElement("div");
-        container.className = "cart_items panel-default container-fluid";
-        container.id = "cart-item-" + item_code;
-        var deleteButton = document.createElement("div");
-        deleteButton.className = "remove col-lg-1 col-md-1 col-sm-2 col-xs-2";
-        deleteButton.id = "cart-delete-" + item_code;
-        var deleteIcon = document.createElement("span");
-        deleteIcon.className = "glyphicon glyphicon-remove";
-        deleteButton.appendChild(deleteIcon);
-        var itemName = document.createElement("div");
-        itemName.className = "item col-lg-8 col-md-8 col-sm-6 col-xs-6";
-        itemName.innerHTML = item_name;
-        var qtyDiv = document.createElement("div");
-        qtyDiv.className = "cart-items-qty col-lg-2 col-md-2 col-sm-3 col-xs-3";
-        qtyDiv.id = "cart-items-qty-" + item_code;
-        qtyDiv.innerHTML = qty + " x ";
-        var priceDiv = document.createElement("div");
-        priceDiv.className = "item-label col-lg-1 col-md-1 col-sm-2 col-xs-2";
-        priceDiv.id = "cart-price-" + item_code;
-        priceDiv.innerHTML = "$" + price;
-        var form = document.createElement("form");
-        form.id = "cart-form-" + item_code;
-        form.className = "item-control-form";
-        form.action = "javascript:console.log('updated');";
-        form.method = "post";
-        var cartQuantityInput = document.createElement("input");
-        cartQuantityInput.type = "number";
-        cartQuantityInput.min = "1";
-        cartQuantityInput.max = "5";
-        cartQuantityInput.name = "qty_input";
-        cartQuantityInput.id = "cart-qty-" + item_code;
-        cartQuantityInput.className = "item-control-input";
-        var updateCart = document.createElement("input");
-        updateCart.type = "submit";
-        updateCart.value = "Update";
-        updateCart.id = "cart-update-" + item_code;
-        updateCart.className = "item-control-input";
+    submitBut.addEventListener("click",function(){
         
-        form.appendChild(cartQuantityInput);
-        form.appendChild(updateCart);
         
-        container.appendChild(deleteButton);
-        container.appendChild(itemName);
-        container.appendChild(qtyDiv);
-        container.appendChild(priceDiv);
-        container.appendChild(form);
-        holderDiv.appendChild(container);
         
-        var itemUpdate = document.getElementById("cart-update-" + item_code);
-        var deleteItem = document.getElementById("cart-delete-" + item_code);
-        var cartItem = document.getElementById("cart-item-" + item_code);
-        
-        itemUpdate.addEventListener("click", function() {
-            var itemQty = document.getElementById("cart-qty-" + item_code);
-            var itemPrice = document.getElementById("cart-price-" + item_code);
-            
-            if(itemQty.value > 0 && itemQty.value <= 6) {
-                orders[item_code] = parseInt(itemQty.value);
-
-                qtyDiv.innerHTML = itemQty.value + " x ";
-				
-            } else if (itemQty.value > 6) {
-                warningDiv.style.display = "inline";
-                warningDiv.innerHTML = "You're ordering too much, we don't want your money!";
-                warningDiv.style.top = event.pageY - 50 + "px";
-                warningDiv.style.left = event.pageX + "px";
-            }
-        });
-        
-        deleteItem.addEventListener("click", function() {
-            cartItem.parentNode.removeChild(cartItem);
-            
-            delete orders[item_code];
-
-            ordersCount--;
-        });
-    }
-    
-
-    $.ajax({
-        url:"/user-cp",
-        type:"post",
-        success:function(resp) {
-            var profileLink = document.getElementById("profile_link");
-            var logoutLink = document.getElementById("logout_link");
-            var login = document.getElementById("login");
-
-            if (resp.status = "customer") {
-                profileLink.style.display = "inline";
-                logoutLink.style.display = "inline";
-                login.style.display = "none";
-            }
-        }
-    });
-    
-    checkoutButton.addEventListener("click",function(){
-        $.ajax({
-            url:"/orders",
-            type:"post",
-            data:{
-                orders:orders
-            },
-            success:function(resp){
-                if(resp.status == "success"){
-                    location.href = "/checkout";
-                } else {
-                    alert(resp.message)
+        if(itemName.value == ''){
+            alert("Must fill item information first")
+        } else{
+            itemCode = itemName.value.replace(/ /g,"_")
+            fileNameSplit = itemImg.files.item(0).name.split(".")
+            fileName = itemCode +'.'+fileNameSplit[1].toLowerCase();
+            $.ajax({
+                url:"filename",
+                type:"post",
+                data:{
+                    fileName:fileName
                 }
-            }
+            })
+        
+            var files = $(itemImg).get(0).files;
+        
+
+            if (files.length > 0){
+                var formData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    formData.append('uploads[]', file, file.name);
+                }
+                $.ajax({
+                    url: '/upload',
+                    type: 'post',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(data){
+                        console.log('upload successful!\n' + data);
+                        imgSubmitCheck = 1;
+                        pictureUpMess.style.display = 'block';
+                        setTimeout(function(){
+                            pictureUpMess.style.display = 'none';
+                        },2000);
+                        
+                        
+                    },
+      
+            
         });
-    });
+        }
+        }
+        
+        });
+        
+    
+	
+	okayBut.addEventListener("click", function(){
+        if(imgSubmitCheck == 0){
+            alert("Don't forget submit your image")
+        } else{
+            var category;
+            var targetDiv;
+            
+            if(itemCat.value == "Appetizers"){
+                category = 'a';
+                targetDiv = appDiv;
+            }
+            if(itemCat.value == "Desserts"){
+                category = 'd';
+                targetDiv = dessertDiv;
+            }
+            if(itemCat.value == "Drinks"){
+                category = 'b';
+                targetDiv = drinkDiv;
+            }
+            if(itemCat.value == "Meals"){
+                category = 'm';
+                targetDiv = mealDiv;
+            }
+            $.ajax({
+                url:"/adminItems",
+                type:"post",
+                data:{
+                    itemCode:ic.value,
+                    fileName:fileName,
+                    category:category,
+				    name: itemName.value,
+				    img:itemImg.value	,
+				    desc:itemDesc.value,
+				    price: itemPrice.value,
+				    type:"create"	
+                },
+                success:function(resp){
+                    console.log(resp);
+                    var i=1;
+				    if(resp.status == "success"){
+                        createItem(i, targetDiv, resp.name, resp.item_code, resp.price, resp.filename, resp.desc);
+                        imgSubmitCheck = 0;
+
+				}
+			}
+		});	
+            
+        }
+	
+	});
+    
+
+	
+
+	
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ })
-
-/******/ });
+/******/ ]);
