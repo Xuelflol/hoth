@@ -24,7 +24,7 @@ var imgFolder = path.resolve(__dirname, "images");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:rebelhanger@localhost:5432/kitchen";
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
@@ -40,6 +40,8 @@ app.use(session({
     resave:true,
     saveUninitialized:true
 }));
+
+pg.defaults.poolSize = 20;
 
 //----------------Constraints------------------------//
 
@@ -143,13 +145,11 @@ app.post("/meals", function(req, resp) {
 });
 
 app.post("/user-cp", function(req, resp) {
-    pg.connect(dbURL, function(err, client, done) {
         if (req.session.auth == "C") {
            resp.send("customer");
         } else if (req.session.auth == "E" || req.session.auth == "A") {
             resp.send("ea");
         }
-    });
 });
 
 app.post("/changeEmail", function(req, resp) {
@@ -293,6 +293,10 @@ app.post("/submit/order", function(req, resp) {
         client.query("SELECT * FROM hoth_order_details INNER JOIN hoth_items ON hoth_order_details.item_name = hoth_items.item_name WHERE hoth_order_details.order_id = $1", [req.session.orderid], function(err, result) {
             done();
 
+            if (err) {
+                console.log(err);
+            }
+
             var obj = {}
 
             if (result != undefined && result.rows.length > 0) {
@@ -316,9 +320,11 @@ app.post("/submit/order", function(req, resp) {
 //kitchen
 app.post("/start-kitchen", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
-        client.query("SELECT hoth_order_details.*, hoth_items.item_code FROM hoth_order_details INNER JOIN hoth_items ON hoth_order_details.item_name = hoth_items.item_name WHERE hoth_order_details.status = 'P' ORDER BY hoth_order_details.order_id", function(err, result) {
+        client.query("SELECT hoth_order_details.*, hoth_items.item_code FROM hoth_order_details INNER JOIN hoth_items ON hoth_order_details.item_name = hoth_items.item_name WHERE hoth_order_details.status = 'N' AND hoth_order_details.order_id IN (SELECT order_id FROM hoth_orders WHERE status = 'N' ORDER BY order_id LIMIT $1) ORDER BY hoth_order_details.order_id", [req.body.count], function(err, result) {
             done();
-            
+
+            console.log(req.body.count);
+
             var index = 0;
             var lastItem = 0;
             var obj = {};
@@ -351,9 +357,28 @@ app.post("/start-kitchen", function(req, resp) {
     });
 });
 
+app.post("/update/status", function(req, resp) {
+    var orderids = req.body.orderids;
+    var oid = orderids.toString();
+
+    pg.connect(dbURL, function(err, client, done) {
+        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'P' WHERE order_id IN (" + oid + ") RETURNING *) UPDATE hoth_order_details SET status = 'P' WHERE order_id IN (SELECT order_id FROM twotables)", function(err, result) {
+            done();
+
+            if (err) {
+                console.log(err);
+            }
+
+            if (result != undefined && result.rows.length > 0) {
+                console.log(result.rows);
+            }
+        })
+    })
+})
+
 app.post("/order/complete", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
-        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING *) UPDATE hoth_order_details SET status = 'F' WHERE order_id in (SELECT order_id FROM twotables)", [req.body.orderid], function(err, result) {
+        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'F' WHERE order_id = $1 RETURNING *) UPDATE hoth_order_details SET status = 'F' WHERE order_id IN (SELECT order_id FROM twotables)", [req.body.orderid], function(err, result) {
             done();
 
             var obj = {
@@ -463,12 +488,13 @@ app.post("/open/close",function(req,resp){
     shopStatus = req.body.shopStatus;
 	if(req.body.shopStatus == 0){
 		pg.connect(dbURL,function(err,client,done){
-			client.query("UPDATE hoth_order_details SET status = 'C' WHERE status  ='P'"),function(err,result){
+			client.query("UPDATE hoth_order_details SET status = 'C' WHERE status IN ('P', 'N')"),function(err,result){
+                done();
 				if(err){
 					console.log(err)
 				}
 			}
-			client.query("UPDATE hoth_orders SET STATUS = 'C' WHERE STATUS = 'P';"),function(err,result){
+			client.query("UPDATE hoth_orders SET STATUS = 'C' WHERE status IN ('P', 'N')"),function(err,result){
 				done();
 				if(err){
 					console.log(err)
@@ -689,9 +715,13 @@ app.post("/report", function(req, resp) {
     });
 });
 
-app.post("/discard/all", function(req, resp) {
+app.post("/reset/all", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         client.query("UPDATE hoth_prepared SET discarded = 'Y'", function(err, result) {
+            done();
+        });
+
+        client.query("WITH twotables AS (UPDATE hoth_orders SET status = 'N' WHERE status = 'P' RETURNING *) UPDATE hoth_order_details SET status = 'N' WHERE status = 'P'", function(err, result) {
             done();
         });
     });
@@ -740,6 +770,7 @@ app.get("/", function(req, resp) {
     if(req.session.username == undefined){
         req.session.username = 'guest'
     }
+    console.log(req.session.username);
 
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");
@@ -752,8 +783,12 @@ app.get("/", function(req, resp) {
 
 app.get("/submit/getOrdersNums", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
-        client.query("SELECT * FROM hoth_orders WHERE status = 'P'", function(err, result) {
+        client.query("SELECT * FROM hoth_orders WHERE status IN ('P','N') ORDER BY order_id", function(err, result) {
             done();
+
+            if (err) {
+                console.log(err);
+            }
 
             resp.send({
                 orders: result.rows

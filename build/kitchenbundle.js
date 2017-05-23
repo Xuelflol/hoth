@@ -10353,23 +10353,53 @@ return jQuery;
     socket.on("create message", function(orders) {
         var checkDiv = document.getElementById("order-" + orders["0"].order_id);
 
-        if (totalOrder < 10 && checkDiv == null) {
+        if (totalOrder < 10 && orderCount < 10 && checkDiv == null) {
             getItems(orders["0"].item_code, orders["0"].items, orders["0"].order_id);
+
+            //totalOrder++;
         }
     });
 
+    startKitchen(10 - orderCount);
+
     // populate kitchen with pending orders
-    $.ajax({
-        url:"/start-kitchen",
-        type:"post",
-        success:function(resp) {
-            for (key in resp) {
-                if (orderCount < 10) {
-                    getItems(resp[key].item_code, resp[key].items, resp[key].order_id);
+    function startKitchen(count) {
+        $.ajax({
+            url:"/start-kitchen",
+            type:"post",
+            data: {
+                count: count
+            },
+            success:function(resp) {
+                console.log(resp);
+                var orderids = [];
+
+                for (key in resp) {
+                    if (orderCount < 10) {
+                        var oid = resp[key].order_id;
+
+                        getItems(resp[key].item_code, resp[key].items, resp[key].order_id);
+
+                        orderids.push(oid);
+                    }
                 }
+
+                updateOrders(orderids);
+            },
+            async: true
+        });
+    }
+
+    // update orders to pending
+    function updateOrders(orderids) {
+        $.ajax({
+            url:"/update/status",
+            type:"post",
+            data: {
+                orderids: orderids
             }
-        }
-    });
+        });
+    }
 
     // function to create "bag" button
     function getItems(item_code, items, order_id) {
@@ -10396,11 +10426,7 @@ return jQuery;
 
         ordersDiv.appendChild(orderWrapper);
 
-        if (orderCount < 10) {
-            orderCount++
-        }
-
-        totalOrder++;
+        orderCount++
 
         for (key in items) {
             var itemDiv = document.createElement("div");
@@ -10418,6 +10444,13 @@ return jQuery;
             bagClick(item_code[key], order_id, items[key], key)
         }
     }
+
+    // get more orders
+    /*function getMoreOrders(count) {
+        $.ajax({
+            url:"/get"
+        })
+    }*/
 
     function bagClick(ic, oid, qty, name) {
         var getBagButton = document.getElementById("bag-" + ic + "-" + oid);
@@ -10457,25 +10490,29 @@ return jQuery;
                                 orderid: orderid,
                                 item: item_name
                             },
-                            success:function(resp) {
-                                if (resp.status == "success") {
-                                    var fillButton = document.getElementById("fill-order-" + resp.orderid);
+                            success:function(res) {
+                                if (res.status == "success") {
+                                    var fillButton = document.getElementById("fill-order-" + res.orderid);
                                     fillButton.disabled = false;
-                                    var orderid = resp.orderid;
+                                    var orderid = res.orderid;
 
                                     fillButton.addEventListener("click", function() {
+                                        orderCount--;
+
                                         $.ajax({
                                             url:"/complete/order",
                                             type:"post",
                                             data: {
                                                 orderid: orderid
                                             },
-                                            success:function(resp) {
+                                            success:function(re) {
                                                 socket.emit("send confirmation", orderid);
-                                                var orderDiv = document.getElementById("order-" + resp.orderid);
+                                                var orderDiv = document.getElementById("order-" + re.orderid);
                                                 orderDiv.className = "container-fluid alert alert-success alert-dismissable fade in";
                                                 fillButton.disabled = true;
                                                 var countdown = setInterval(buttonCountdown, 1000);
+
+                                                console.log
                                                 
                                                 var cd = 5;
 
@@ -10487,6 +10524,8 @@ return jQuery;
                                                     if (cd == 0) {
                                                         clearInterval(countdown);
                                                         orderDiv.parentNode.removeChild(orderDiv);
+                                                        
+                                                        startKitchen(10 - orderCount);
                                                     }
                                                 }
                                             }
@@ -10621,13 +10660,21 @@ return jQuery;
     }
 
     logoutButton.addEventListener("click", function() {
+        resetAll();
+
+        location.href = "/logout";
+    });
+
+    window.onbeforeunload = resetAll;
+
+    function resetAll() {
         $.ajax({
-            url:"/discard/all",
+            url:"/reset/all",
             type:"post"
         });
 
-        location.href = "/logout";
-    })
+        return "All prepared items will be discarded, do you wish to continue?";
+    }
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
