@@ -10371,7 +10371,6 @@ return jQuery;
                 count: count
             },
             success:function(resp) {
-                console.log(orderCount);
                 var orderids = [];
 
                 for (key in resp) {
@@ -10385,8 +10384,7 @@ return jQuery;
                 }
 
                 updateOrders(orderids);
-            },
-            async: false
+            }
         });
     }
 
@@ -10530,16 +10528,14 @@ return jQuery;
                                                         startKitchen(10 - orderCount);
                                                     }
                                                 }
-                                            },
-                                            async: true
+                                            }
                                         })
                                     })
                                 }
                             }
                         })
                     }
-                },
-                async: true
+                }
             });
         });
     }
