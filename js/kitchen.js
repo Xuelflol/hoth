@@ -37,7 +37,6 @@ $(document).ready(function() {
                 count: count
             },
             success:function(resp) {
-                console.log(orderCount);
                 var orderids = [];
 
                 for (key in resp) {
@@ -202,8 +201,7 @@ $(document).ready(function() {
                             }
                         })
                     }
-                },
-                async: true
+                }
             });
         });
     }
