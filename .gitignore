@@ -1,3 +1,3 @@
 node_modules/
 .vs_codes/
-.brackets.json/
+.vs_codes/launch.json

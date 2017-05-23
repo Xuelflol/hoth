@@ -230,7 +230,7 @@ app.post("/get/price",function(req,resp){
             }
         });
     });
-         });
+});
 
 app.post("/save/order",function(req,resp){
     console.log(req.body)
@@ -660,7 +660,7 @@ app.post("/complete/order", function(req, resp) {
 app.post("/report", function(req, resp) {
     pg.connect(dbURL, function(err, client, done) {
         if (req.body.type == "order") {
-            client.query("WITH cte AS (SELECT SUM(total_price) FROM hoth_orders) SELECT * FROM hoth_orders s CROSS JOIN cte WHERE s.status = 'F'", function(err, result) {
+            client.query("WITH cte AS (SELECT SUM(total_price) FROM hoth_orders) SELECT * FROM hoth_orders s CROSS JOIN cte WHERE s.status = 'F' ORDER BY s.order_id", function(err, result) {
                 done();
 
                 if (result != undefined && result.rows.length > 0) {
@@ -670,7 +670,7 @@ app.post("/report", function(req, resp) {
                 }
             });
         } else if (req.body.type == "item") {
-            client.query("SELECT item_name, sum(quantity) AS quantity, sum(price) AS price FROM (SELECT * FROM hoth_order_details) AS s WHERE s.status = 'F' GROUP BY item_name", function(err, result) {
+            client.query("SELECT item_name, sum(quantity) AS quantity, sum(price) AS price FROM (SELECT * FROM hoth_order_details) AS s WHERE s.status = 'F' GROUP BY item_name ORDER BY item_name", function(err, result) {
                 done();
 
                 if (result != undefined && result.rows.length > 0) {
@@ -678,7 +678,7 @@ app.post("/report", function(req, resp) {
                 }
             }) ;
         } else if (req.body.type == "discarded") {
-            client.query("SELECT p.item_name, p.quantity, i.price FROM hoth_prepared p LEFT JOIN hoth_items i ON p.item_name = i.item_name WHERE discarded = 'Y' AND quantity > 0", function(err, result) {
+            client.query("SELECT p.item_name, SUM(p.quantity) AS quantity, i.price AS price FROM hoth_prepared p LEFT JOIN hoth_items i ON p.item_name = i.item_name WHERE discarded = 'Y' AND quantity > 0 GROUP BY p.item_name, price, quantity ORDER BY p.item_name", function(err, result) {
                 done();
 
                 if (result != undefined && result.rows.length > 0) {

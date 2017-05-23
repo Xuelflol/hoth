@@ -21,19 +21,8 @@ $(document).ready(function(){
     var tax;
     var socket = io();
     
-    $(document).ready(function(){
-       $('#foot').load('/public/footer.html');
-    });
+    $('#foot').load('/public/footer.html');
 
-    var cancelBut = document.getElementById("cancel-but");
-
-    $(document).ready(function(){
-        cancelBut.addEventListener("click", function(){
-        location.href = "/";
-        });
-
-    });
-	
 	//to round to 2 dec places
 	function round2Fixed(value) {
   		value = +value;
@@ -73,6 +62,12 @@ $(document).ready(function(){
                 totalPrice = totalPrice + itemTotalPrice;
             }
             tax = totalPrice * 0.1;
+            
+            if (resp.username == "guest") {
+                fname.style.display = "none";
+                email.style.display = "none";
+            }
+
             fname.innerHTML = fname.innerHTML + ' ' + resp.fname;
             userName.innerHTML = userName.innerHTML + ' ' + resp.username;
             email.innerHTML = email.innerHTML + ' '+ resp.email;
