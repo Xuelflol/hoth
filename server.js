@@ -601,7 +601,7 @@ app.post("/prepare/item", function(req, resp) {
         client.query("INSERT INTO hoth_prepared (item_name, quantity, item_code) VALUES ($1, $2, $3) RETURNING *", [req.body.item, req.body.quantity, req.body.item_id], function(err, result) {
             //done();
     
-            if (result != undefined && result.rows > 0) {
+            if (result != undefined && result.rows.length > 0) {
                 resp.send({
                     prep_id: result.rows[0].prep_id,
                     item: result.rows[0].item_name,
@@ -798,7 +798,7 @@ app.get("/submit/getOrdersNums", function(req, resp) {
                 console.log(err);
             }
 
-            if (result != undefined && result.rows > 0) {
+            if (result != undefined && result.rows.length > 0) {
                 resp.send({
                     orders: result.rows
                 });
