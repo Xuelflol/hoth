@@ -10371,7 +10371,7 @@ return jQuery;
                 count: count
             },
             success:function(resp) {
-                console.log(resp);
+                console.log(orderCount);
                 var orderids = [];
 
                 for (key in resp) {
@@ -10386,7 +10386,7 @@ return jQuery;
 
                 updateOrders(orderids);
             },
-            async: true
+            async: false
         });
     }
 
@@ -10468,6 +10468,8 @@ return jQuery;
                     quantity: quantity 
                 },
                 success:function(resp) {
+                    console.log(resp);
+
                     if (resp.status == "fail") {
                         alert("You don't have enough");
                     } else if (resp.status == "success") {
@@ -10528,14 +10530,16 @@ return jQuery;
                                                         startKitchen(10 - orderCount);
                                                     }
                                                 }
-                                            }
+                                            },
+                                            async: true
                                         })
                                     })
                                 }
                             }
                         })
                     }
-                }
+                },
+                async: true
             });
         });
     }
