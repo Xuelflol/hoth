@@ -10371,7 +10371,6 @@ return jQuery;
                 count: count
             },
             success:function(resp) {
-                console.log(resp);
                 var orderids = [];
 
                 for (key in resp) {
@@ -10385,8 +10384,7 @@ return jQuery;
                 }
 
                 updateOrders(orderids);
-            },
-            async: true
+            }
         });
     }
 
@@ -10468,6 +10466,8 @@ return jQuery;
                     quantity: quantity 
                 },
                 success:function(resp) {
+                    console.log(resp);
+
                     if (resp.status == "fail") {
                         alert("You don't have enough");
                     } else if (resp.status == "success") {

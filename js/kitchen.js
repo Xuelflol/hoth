@@ -37,7 +37,6 @@ $(document).ready(function() {
                 count: count
             },
             success:function(resp) {
-                console.log(resp);
                 var orderids = [];
 
                 for (key in resp) {
@@ -51,8 +50,7 @@ $(document).ready(function() {
                 }
 
                 updateOrders(orderids);
-            },
-            async: true
+            }
         });
     }
 
@@ -134,6 +132,8 @@ $(document).ready(function() {
                     quantity: quantity 
                 },
                 success:function(resp) {
+                    console.log(resp);
+
                     if (resp.status == "fail") {
                         alert("You don't have enough");
                     } else if (resp.status == "success") {
