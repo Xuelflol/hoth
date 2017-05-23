@@ -25,7 +25,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:1991@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
@@ -181,10 +181,11 @@ app.post("/changePassword", function(req, resp) {
 });
 
 //---------------------------Order page --------------------//
-var orders = []
+
 app.post("/orders",function(req,resp){
-    while(orders.length > 0){
-        orders.pop();
+	req.session.orders = []
+    while(req.session.orders.length > 0){
+        req.session.orders.pop();
     }
     if(shopStatus == 0){
         resp.send({
@@ -192,7 +193,7 @@ app.post("/orders",function(req,resp){
             message:"Sorry we are closed, please come back later"
         })
     } else{
-        orders.push(req.body.orders)
+        req.session.orders.push(req.body.orders)
         resp.send({status:"success"})
     }
     
@@ -202,7 +203,7 @@ app.post("/orders",function(req,resp){
 app.post("/get/orders",function(req,resp){
     resp.send({
         status:"success",
-        orders:orders,
+        orders:req.session.orders,
         username: req.session.username,
         fname:req.session.fname,
         email:req.session.email
@@ -798,12 +799,9 @@ app.get("/submit/getOrdersNums", function(req, resp) {
             if (err) {
                 console.log(err);
             }
-
-<<<<<<< HEAD
-=======
             console.log(result.rows);
             
->>>>>>> develop
+
             if (result != undefined && result.rows.length > 0) {
                 resp.send({
                     orders: result.rows
