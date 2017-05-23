@@ -123,6 +123,7 @@ $(document).ready(function() {
         quantityInput.max = "6";
         quantityInput.name = "qty_input";
         quantityInput.id = "qty-" + item_code;
+        quantityInput.step = "1";
         quantityInput.className = "form-control";
         var submitCart = document.createElement("input");
         submitCart.type = "submit";
@@ -199,6 +200,7 @@ $(document).ready(function() {
         cartQuantityInput.type = "number";
         cartQuantityInput.min = "1";
         cartQuantityInput.max = "5";
+        cartQuantityInput.step = "1";
         cartQuantityInput.name = "qty_input";
         cartQuantityInput.id = "cart-qty-" + item_code;
         cartQuantityInput.className = "item-control-input";
