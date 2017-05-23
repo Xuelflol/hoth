@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <testsuites errors="0"
-            failures="1"
+            failures="0"
             tests="1">
 
   <testsuite name="functional.testcase3"
-    errors="0" failures="1" hostname="" id="" package="functional" skipped="0"
-    tests="1" time="20.05" timestamp="Tue, 23 May 2017 01:01:21 GMT">
+    errors="0" failures="0" hostname="" id="" package="functional" skipped="0"
+    tests="1" time="22.68" timestamp="Tue, 23 May 2017 16:12:31 GMT">
   
-    <testcase name="test RebelHanger Full order 2 - updates in cart" classname="functional.testcase3" time="20.05" assertions="15">
+    <testcase name="test RebelHanger Full order 2 - updates in cart" classname="functional.testcase3" time="22.68" assertions="19">
 
     
 
@@ -35,8 +35,15 @@
 
     
 
-      <failure message="Testing if element &lt;//*[@id=&quot;fb-ot&quot;]&gt; contains text: &quot;Order Total: 36.30&quot;.">    at Object.test RebelHanger Full order 2 - updates in cart (C:\Users\Harvey\Desktop\git_xuelflol\hoth\test\functional\testcase3.js:113:15)
-    at _combinedTickCallback (internal/process/next_tick.js:67:7)</failure>
+    
+
+    
+
+    
+
+    
+
+    
 
     
     </testcase>
