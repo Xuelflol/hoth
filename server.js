@@ -24,6 +24,7 @@ var imgFolder = path.resolve(__dirname, "images");
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
+
 var dbURL = process.env.DATABASE_URL || "postgres://postgres:1991@localhost:5432/kitchen";
 
 
@@ -92,7 +93,7 @@ app.post("/login", function(req, resp) {
                     console.log(err);
                 }
 
-                if (result.rows.length > 0) {
+                if (result != undefined && result.rows.length > 0) {
                     req.session.username = result.rows[0].username;
                     req.session.email = result.rows[0].email;
                     req.session.loginid = result.rows[0].user_id;
@@ -600,12 +601,14 @@ app.post("/prepare/item", function(req, resp) {
         client.query("INSERT INTO hoth_prepared (item_name, quantity, item_code) VALUES ($1, $2, $3) RETURNING *", [req.body.item, req.body.quantity, req.body.item_id], function(err, result) {
             //done();
     
-            resp.send({
-                prep_id: result.rows[0].prep_id,
-                item: result.rows[0].item_name,
-                quantity: result.rows[0].quantity,
-                item_code: result.rows[0].item_code
-            });
+            if (result != undefined && result.rows > 0) {
+                resp.send({
+                    prep_id: result.rows[0].prep_id,
+                    item: result.rows[0].item_name,
+                    quantity: result.rows[0].quantity,
+                    item_code: result.rows[0].item_code
+                });
+            }
         });
     //});
 });
@@ -629,7 +632,7 @@ app.post("/bag/item", function(req, resp) {
         client.query("SELECT * FROM hoth_prepared WHERE item_name = $1 AND discarded = 'N' AND quantity >= $2", [req.body.item, req.body.quantity], function(err, result) {
             //done();
 
-            if (result.rows.length > 0) {
+            if (result != undefined && result.rows.length > 0) {
                 client.query("WITH cte AS (SELECT prep_id FROM hoth_prepared WHERE quantity >= $1 AND item_name = $2 ORDER BY prep_id LIMIT 1) UPDATE hoth_prepared s SET quantity = quantity - $1 FROM cte WHERE s.prep_id = cte.prep_id RETURNING cte.prep_id, s.item_code, s.quantity", [req.body.quantity, req.body.item], function(err, result) {
                     //done();
 
@@ -663,7 +666,7 @@ app.post("/item/complete", function(req, resp) {
             client.query("SELECT * FROM hoth_order_details WHERE order_id = $1 AND status = 'P'", [req.body.orderid], function(err, result) {
                 //done();
 
-                if (result.rows.length == 0) {
+                if (result != undefined && result.rows.length == 0) {
                     resp.send({
                         status: "success",
                         orderid: req.body.orderid
@@ -771,9 +774,6 @@ app.use("/images", express.static("images"));
 
 app.use("/css", express.static("css"));
 
-app.use("/public", express.static("public"));
-
-
 app.get("/", function(req, resp) {
     if(req.session.username == undefined){
         req.session.username = 'guest'
@@ -798,9 +798,11 @@ app.get("/submit/getOrdersNums", function(req, resp) {
                 console.log(err);
             }
 
-            resp.send({
-                orders: result.rows
-            });
+            if (result != undefined && result.rows > 0) {
+                resp.send({
+                    orders: result.rows
+                });
+            }
         });
     //});
 });
@@ -866,6 +868,7 @@ app.get("/adminuser",function(req,resp){
 app.get("/getId", function(req, resp) {
     resp.send(req.session.orderid);
 });
+
 
 //socket
 var orderRecords = [];

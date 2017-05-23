@@ -10346,15 +10346,12 @@ return jQuery;
     var holderDiv = document.getElementById("holder");
     var warningDiv = document.getElementById("warning");
     var checkoutButton = document.getElementById("checkout");
-    var shopStatusDiv = document.getElementById("closed")
+    var shopStatusDiv = document.getElementById("closed");
+    var badge = document.getElementById("badge");
     
     document.addEventListener("scroll", function() {
         warningDiv.style.display = "none";
     });
-    
-    $(document).ready(function(){
-       $('#foot').load('/public/footer.html');
-   });
     
     var app_digit = 0;
     var bev_digit = 0;
@@ -10460,6 +10457,7 @@ return jQuery;
         quantityInput.max = "6";
         quantityInput.name = "qty_input";
         quantityInput.id = "qty-" + item_code;
+        quantityInput.step = "1";
         quantityInput.className = "form-control";
         var submitCart = document.createElement("input");
         submitCart.type = "submit";
@@ -10491,6 +10489,7 @@ return jQuery;
                 total_price = total_price + (parseInt(itemQty.value) * parseFloat(price));
 
                 ordersCount++;
+                badge.innerHTML = ordersCount;
             } else if (cartItem != null) {
                 warningDiv.style.display = "inline";
                 warningDiv.innerHTML = "You already have this item in the cart.";
@@ -10535,6 +10534,7 @@ return jQuery;
         cartQuantityInput.type = "number";
         cartQuantityInput.min = "1";
         cartQuantityInput.max = "5";
+        cartQuantityInput.step = "1";
         cartQuantityInput.name = "qty_input";
         cartQuantityInput.id = "cart-qty-" + item_code;
         cartQuantityInput.className = "item-control-input";
@@ -10581,6 +10581,7 @@ return jQuery;
             delete orders[item_code];
 
             ordersCount--;
+            badge.innerHTML = ordersCount;
         });
     }
     
