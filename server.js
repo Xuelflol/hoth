@@ -25,7 +25,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:Elelemt1@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:1991@localhost:5432/kitchen";
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
@@ -181,7 +181,6 @@ app.post("/changePassword", function(req, resp) {
 });
 
 //---------------------------Order page --------------------//
-
 app.post("/orders",function(req,resp){
 	req.session.orders = []
     while(req.session.orders.length > 0){
@@ -717,7 +716,7 @@ app.post("/report", function(req, resp) {
                 }
             }) ;
         } else if (req.body.type == "discarded") {
-            client.query("SELECT p.item_name, SUM(p.quantity) AS quantity, i.price AS price FROM hoth_prepared p LEFT JOIN hoth_items i ON p.item_name = i.item_name WHERE discarded = 'Y' AND quantity > 0 GROUP BY p.item_name, price, quantity ORDER BY p.item_name", function(err, result) {
+            client.query("SELECT p.item_name, SUM(p.quantity) AS quantity, SUM(i.price) AS price FROM hoth_prepared p LEFT JOIN hoth_items i ON p.item_name = i.item_name WHERE discarded = 'Y' AND quantity > 0 GROUP BY p.item_name, price, quantity ORDER BY p.item_name", function(err, result) {
                 //done();
 
                 if (result != undefined && result.rows.length > 0) {
