@@ -17,12 +17,15 @@ $(document).ready(function() {
 
     // socket connection to listen to orders
     socket.on("create message", function(orders) {
+        var oid = orders["0"].order_id;
         var checkDiv = document.getElementById("order-" + orders["0"].order_id);
 
         if (totalOrder < 10 && orderCount < 10 && checkDiv == null) {
             getItems(orders["0"].item_code, orders["0"].items, orders["0"].order_id);
 
             //totalOrder++;
+
+            updateOrders(oid);
         }
     });
 
