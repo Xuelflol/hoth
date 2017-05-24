@@ -25,7 +25,7 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:Elelemt1@localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:020298asm@localhost:5432/kitchen";
 
 var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
