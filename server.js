@@ -160,6 +160,7 @@ app.post("/user-cp", function(req, resp) {
 
 app.post("/changeEmail", function(req, resp) {
     //pg.connect(dbURL, function(err, client, done) {
+    if(emailRegex.test(req.body.email)) {
         client.query("UPDATE hoth_users SET email = $1 WHERE user_id = $2", [req.body.email, req.session.loginid], function(err, result) {
             //done();
             
@@ -167,6 +168,7 @@ app.post("/changeEmail", function(req, resp) {
             resp.end();
         });
     //});
+    }
 });
 
 app.post("/changePassword", function(req, resp) {
@@ -196,7 +198,6 @@ app.post("/orders",function(req,resp){
         req.session.orders.push(req.body.orders)
         resp.send({status:"success"})
     }
-    
     
 });
 
@@ -307,6 +308,8 @@ app.post("/submit/order", function(req, resp) {
             }
 
             var obj = {}
+
+            console.log(result);
 
             if (result != undefined && result.rows.length > 0) {
                 obj["0"] = {
@@ -717,7 +720,7 @@ app.post("/report", function(req, resp) {
                 }
             }) ;
         } else if (req.body.type == "discarded") {
-            client.query("SELECT p.item_name, SUM(p.quantity) AS quantity, i.price AS price FROM hoth_prepared p LEFT JOIN hoth_items i ON p.item_name = i.item_name WHERE discarded = 'Y' AND quantity > 0 GROUP BY p.item_name, price, quantity ORDER BY p.item_name", function(err, result) {
+            client.query("WITH cte AS (SELECT p.item_name AS item_name, SUM(p.quantity) AS quantity, i.price AS price FROM hoth_prepared p LEFT JOIN hoth_items i ON p.item_name = i.item_name WHERE discarded = 'Y' AND quantity > 0 GROUP BY p.item_name, price, quantity ORDER BY p.item_name) SELECT cte.item_name, SUM(cte.quantity) AS quantity, SUM(cte.price) AS price FROM cte GROUP BY cte.item_name", function(err, result) {
                 //done();
 
                 if (result != undefined && result.rows.length > 0) {
@@ -799,8 +802,6 @@ app.get("/submit/getOrdersNums", function(req, resp) {
             if (err) {
                 console.log(err);
             }
-            console.log(result.rows);
-            
 
             if (result != undefined && result.rows.length > 0) {
                 resp.send({
