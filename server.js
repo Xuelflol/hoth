@@ -25,9 +25,10 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
 
-var dbURL = process.env.DATABASE_URL || "postgres://postgres:Element1@localhost:5432/kitchen";
 
-var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:REBELHANGER@localhost:5432/kitchen";
+
+var usernameRegex = /^[a-zA-Z0-9\-_]{4,20}$/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
 var emailRegex = /^[a-zA-Z0-9\._\-]{1,50}@[a-zA-Z0-9_\-]{1,50}(.[a-zA-Z0-9_\-])?.(ca|com|org|net|info|us|cn|co.uk|se)$/;
 var passwordRegex = /^[^ \s]{4,15}$/;
@@ -835,7 +836,7 @@ app.get("/", function(req, resp) {
     if(req.session.username == undefined){
         req.session.username = 'guest'
     }
-    console.log(req.session.username);
+    
 
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");

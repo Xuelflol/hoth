@@ -93,7 +93,7 @@ $(document).ready(function(){
             var orderItem = key;
             var quantity = parseInt(orders[key]);
 			if(quantity > 6){
-				break;
+				lcation.herf = "/hellno"
 	
 			}
 
@@ -133,9 +133,9 @@ $(document).ready(function(){
             },
             success:function(resp){
 				if(resp.status == "success"){
-					console.log("get here anyway")
+					
 					var orderId = resp.id;
-					console.log(orderId)
+					
 					socket.emit("send order", orderId);
 
 					for(var i=0; i<itemName.length;i++){
@@ -153,7 +153,7 @@ $(document).ready(function(){
 									location.href = "/order/submitted/" + orderId;
 								}
 								if(res.status == "faile"){
-									console.log(res.message)
+									
 									location.href = res.message;
 								}
 							}
