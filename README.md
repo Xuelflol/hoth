@@ -6,8 +6,7 @@ A food ordering web application for the Star Wars Rebel base, on Planet Hoth.
 R.Chin, 
 R.Guo, 
 C.Lee, 
-A.Mori,  
-F.Zhang
+A.Mori, F.Zhang
 
 For support, please contact us by email <fan.cbest@gmail.com>, <clee565@my.bcit.ca>, or comment on our github page [Hoth](https://github.com/ACIT2910-HOTH/hoth)
 
