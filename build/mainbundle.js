@@ -10500,6 +10500,11 @@ return jQuery;
                 warningDiv.innerHTML = "You're ordering too much, we don't want your money!";
                 warningDiv.style.top = event.pageY - 50 + "px";
                 warningDiv.style.left = event.pageX + "px";
+            } else if (ordersCount >= 10) {
+                warningDiv.style.display = "inline";
+                warningDiv.innerHTML = "You reached your maximum number of items.";
+                warningDiv.style.top = event.pageY - 50 + "px";
+                warningDiv.style.left = event.pageX + "px";
             }
         });
     }
