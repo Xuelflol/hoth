@@ -25,12 +25,16 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 
 
+
 var dbURL = process.env.DATABASE_URL || "postgres://postgres:REBELHANGER@localhost:5432/kitchen";
 
-var usernameRegex = /[a-zA-Z0-9\-_]{4,20}/;
+var usernameRegex = /^[a-zA-Z0-9\-_]{4,20}$/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
 var emailRegex = /^[a-zA-Z0-9\._\-]{1,50}@[a-zA-Z0-9_\-]{1,50}(.[a-zA-Z0-9_\-])?.(ca|com|org|net|info|us|cn|co.uk|se)$/;
 var passwordRegex = /^[^ \s]{4,15}$/;
+var itemcodeRegex = /^[a-zA-Z0-9\-_\s]{4,20}$/;
+var priceRegex = /^[0-9\.]{0,10}$/;
+var quantityRegex = /^[0-9]{0,10}$/;
 
 app.use(bodyParser.urlencoded({
     extended:true
@@ -173,17 +177,20 @@ app.post("/changeEmail", function(req, resp) {
 
 app.post("/changePassword", function(req, resp) {
     //pg.connect(dbURL, function(err, client, done) {
-        client.query("UPDATE hoth_users SET password = $1 WHERE user_id = $2", [req.body.password, req.session.loginid], function(err, result) {
+	if(passwordRegex.test(req.body.password)){
+	   	client.query("UPDATE hoth_users SET password = $1 WHERE user_id = $2", [req.body.password, req.session.loginid], function(err, result) {
             //done();
             
             resp.send("Password has been changed");
             resp.end();
         });
+	   
+	   }
+        
     //});
 });
 
 //---------------------------Order page --------------------//
-
 app.post("/orders",function(req,resp){
 	req.session.orders = []
     while(req.session.orders.length > 0){
@@ -219,7 +226,10 @@ app.post("/get/price",function(req,resp){
                 status:"fail"
             });
         }*/
-        client.query("SELECT item_name,price FROM hoth_items WHERE item_code = $1",[req.body.item],function(err,result){
+	console.log(req.body.item)
+	if(itemcodeRegex.test(req.body.item)){
+	   if(itemcodeRegex.test(req.body.item)){
+		client.query("SELECT item_name,price FROM hoth_items WHERE item_code = $1",[req.body.item],function(err,result){
             //done();
             
             if(err){
@@ -229,7 +239,6 @@ app.post("/get/price",function(req,resp){
                 });
             }
 
-            console.log(result.rows);
 
             if (result != undefined && result.rows.length > 0) {
                 resp.send({
@@ -239,11 +248,28 @@ app.post("/get/price",function(req,resp){
                 });
             }
         });
+		
+	} else {
+		resp.send({
+			status:"bad",
+			message:"nice try"
+		})
+	}
+	   
+	   
+	   }
+        
     //});
 });
+app.post("/save/orderPrice",function(req,resp){
+	
+	req.session.finalPrice = req.body.finalPrice;
+	req.session.save();
+	
+	
+})
 
 app.post("/save/order",function(req,resp){
-    console.log(req.body)
     //pg.connect(dbURL,function(err,client,done){
         /*if(err){
             console.log(err);
@@ -251,7 +277,10 @@ app.post("/save/order",function(req,resp){
                 status:"fail",
                 message:"database connection err"});
         }*/
-        client.query("INSERT INTO hoth_orders (customer,total_price) VALUES ($1,$2) RETURNING order_id",[req.session.username,req.body.totalPrice],function(err,result){
+	
+	  if(priceRegex.test(req.body.totalPrice) && (req.body.totalPrice == req.session.finalPrice)){
+		  client.query("INSERT INTO hoth_orders (customer,total_price) VALUES ($1,$2) RETURNING order_id",[req.session.username,req.body.totalPrice],function(err,result){
+			  
             //done();
             if(err){
                 console.log(err);
@@ -259,14 +288,23 @@ app.post("/save/order",function(req,resp){
                     status:"faile"
                 });
             } else {
+				req.session.order_id = result.rows[0].order_id;
                 resp.send({
                     status:"success",
                     id:result.rows[0].order_id
+					
                 });
             }
             
             
         });
+	  } else {
+		  resp.send({
+			  status:"fail",
+			  message:"nice try"
+		  })
+	  }
+        
     //});
 });
 
@@ -278,8 +316,8 @@ app.post("/order/detailes",function(req,resp){
                 status:"fail"
             });
         }*/
-
-        client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id, price) VALUES ($1,$2,$3, $4)",[req.body.name,req.body.quantity,req.body.id,req.body.quantity*req.body.price],function(err,result){
+		if(req.body.quantity <= maxQuantity && itemcodeRegex.test(req.body.name) && priceRegex.test(req.body.price)){
+			client.query("INSERT INTO hoth_order_details (item_name,quantity,order_id, price) VALUES ($1,$2,$3, $4)",[req.body.name,req.body.quantity,req.session.order_id,req.body.quantity*req.body.price],function(err,result){
             //done();
 
             if(err){
@@ -294,6 +332,21 @@ app.post("/order/detailes",function(req,resp){
             });
 
         });
+		} else {
+			client.query("DELETE FROM hoth_orders WHERE order_id = $1",[req.session.order_id],function(err,result){
+				if(err){
+					console.log(err);
+					
+				} else {
+					resp.send({
+						status:"faile",
+						message:"/hellno"
+					})
+				}
+			})
+			
+		}
+        
     //});
     
 });
@@ -309,7 +362,6 @@ app.post("/submit/order", function(req, resp) {
 
             var obj = {}
 
-            console.log(result);
 
             if (result != undefined && result.rows.length > 0) {
                 obj["0"] = {
@@ -463,6 +515,7 @@ app.post("/delete/item",function(req,resp){
         });
     });
 })
+
 
 var imageName;
 app.post("/filename",function(req,resp){
@@ -783,7 +836,7 @@ app.get("/", function(req, resp) {
     if(req.session.username == undefined){
         req.session.username = 'guest'
     }
-    console.log(req.session.username);
+    
 
     if (req.session.auth == "A") {
         resp.sendFile(pF + "/admin.html");
@@ -874,6 +927,9 @@ app.get("/getId", function(req, resp) {
     resp.send(req.session.orderid);
 });
 
+app.get("/hellno",function(req,resp){
+	resp.sendFile(pF+"/unkind.html")
+})
 
 //socket
 var orderRecords = [];
