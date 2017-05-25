@@ -10427,7 +10427,7 @@ return jQuery;
             var orderItem = key;
             var quantity = parseInt(orders[key]);
 			if(quantity > 6){
-				lcation.herf = "/hellno"
+				location.href = "/hellno"
 	
 			}
 
