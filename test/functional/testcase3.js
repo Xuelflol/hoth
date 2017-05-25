@@ -10,7 +10,7 @@ Updates in Cart:
     2 x hoth_salad
     2 x han_froyo
     
-    Total: $ 36.30
+    Total: $ 105.60
     
     Options:
     eat-in
