@@ -19,7 +19,9 @@ $(document).ready(function(){
     var itemQuantity = [];
     var totalPrice = 0;
     var tax;
+	var finalPrice = 0;
     var socket = io();
+	
 
 	//to round to 2 dec places
 	function round2Fixed(value) {
@@ -71,16 +73,29 @@ $(document).ready(function(){
             email.innerHTML = email.innerHTML + ' '+ resp.email;
             foodTotal.innerHTML = foodTotal.innerHTML + " " + round2Fixed(totalPrice);
             taxCost.innerHTML = taxCost.innerHTML + " " + round2Fixed(tax);
-            orderTotal.innerHTML = orderTotal.innerHTML + " " + round2Fixed(tax + totalPrice);
+			finalPrice = round2Fixed(tax + totalPrice)
+            orderTotal.innerHTML = orderTotal.innerHTML + " " + finalPrice;
         },
         async: false
     });
+	
+	$.ajax({
+		url:"/save/orderPrice",
+		type:"post",
+		data:({
+			finalPrice:finalPrice
+		})
+	})
     
    
     function getOrderItems(orders){
         Object.keys(orders).forEach(function(key){
             var orderItem = key;
             var quantity = parseInt(orders[key]);
+			if(quantity > 6){
+				break;
+	
+			}
 
             itemQuantity.push(quantity)
 
@@ -91,9 +106,17 @@ $(document).ready(function(){
                     item:orderItem
                 },
                 success:function(resp){
-                    console.log(resp);
-                    itemName.push(resp.name);
-                    itemPrice.push(parseFloat(resp.price));
+					if(resp.status == "success"){
+						
+						itemName.push(resp.name);
+                    	itemPrice.push(parseFloat(resp.price));
+						
+					} else if(resp.status == "bad") {
+						alert(resp.message)
+						
+					}
+                    
+					
                 },
                 async:false
             });
@@ -106,31 +129,41 @@ $(document).ready(function(){
             url:"/save/order",
             type:"post",
             data:{
-                totalPrice:totalPrice + tax
+                totalPrice:finalPrice
             },
             success:function(resp){
-				console.log(orderId)
-                var orderId = resp.id;
+				if(resp.status == "success"){
+					console.log("get here anyway")
+					var orderId = resp.id;
+					console.log(orderId)
+					socket.emit("send order", orderId);
 
-                socket.emit("send order", orderId);
+					for(var i=0; i<itemName.length;i++){
+						$.ajax({
+							url:"/order/detailes",
+							type:"post",
+							data:{
+								name:itemName[i],
+								quantity:itemQuantity[i],
+								id:orderId,
+								price:itemPrice[i]
+							},
+							success:function(res){
+								if (res.status == "success") {
+									location.href = "/order/submitted/" + orderId;
+								}
+								if(res.status == "faile"){
+									console.log(res.message)
+									location.href = res.message;
+								}
+							}
+						});
+					}
+					
+				} else if(resp.status = "fail"){
+					alert(resp.message)
+				}
                 
-                for(var i=0; i<itemName.length;i++){
-                    $.ajax({
-                        url:"/order/detailes",
-                        type:"post",
-                        data:{
-                            name:itemName[i],
-                            quantity:itemQuantity[i],
-                            id:orderId,
-                            price:itemPrice[i]
-                        },
-                        success:function(res){
-                            if (res.status == "success") {
-                                location.href = "/order/submitted/" + orderId;
-                            }
-                        }
-                    });
-                }
             },
         async: false
         });
