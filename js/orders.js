@@ -93,7 +93,7 @@ $(document).ready(function(){
             var orderItem = key;
             var quantity = parseInt(orders[key]);
 			if(quantity > 6){
-				location.href = "/hellno"
+				lcation.herf = "/hellno"
 	
 			}
 

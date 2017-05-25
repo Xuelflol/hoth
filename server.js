@@ -26,7 +26,7 @@ const io = require("socket.io")(server);
 
 
 
-var dbURL = process.env.DATABASE_URL || "postgres://localhost:5432/kitchen";
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:REBELHANGER@localhost:5432/kitchen";
 
 var usernameRegex = /^[a-zA-Z0-9\-_]{4,20}$/;
 var nameRegex = /^[a-zA-Z]{1,15}$/;
